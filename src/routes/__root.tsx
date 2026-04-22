@@ -35,13 +35,20 @@ export const Route = createRootRoute({
         content:
           "A decision-support tool helping cities identify the minimum datasets and Earth Observation inputs needed to develop Urban Digital Twins for urban environmental management.",
       },
-      { property: "og:title", content: "UrbanTwinReadiness" },
+      { property: "og:title", content: "UrbanTwinReadiness — Data Requirements for Urban Digital Twins" },
       {
         property: "og:description",
         content:
           "Assessing the minimum data requirements for Urban Digital Twins in urban environmental management.",
       },
       { property: "og:type", content: "website" },
+      { name: "twitter:title", content: "UrbanTwinReadiness — Data Requirements for Urban Digital Twins" },
+      { name: "description", content: "UrbanTwinReadiness assesses minimum data and EO needs for Urban Digital Twins in environmental management." },
+      { property: "og:description", content: "UrbanTwinReadiness assesses minimum data and EO needs for Urban Digital Twins in environmental management." },
+      { name: "twitter:description", content: "UrbanTwinReadiness assesses minimum data and EO needs for Urban Digital Twins in environmental management." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/bcb206c5-d8be-46df-a88a-018596ea5e04/id-preview-dcf6548b--4cc2f126-1d58-4e1a-9550-02913e5d1557.lovable.app-1776872212161.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/bcb206c5-d8be-46df-a88a-018596ea5e04/id-preview-dcf6548b--4cc2f126-1d58-4e1a-9550-02913e5d1557.lovable.app-1776872212161.png" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
