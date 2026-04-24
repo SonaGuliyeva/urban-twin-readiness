@@ -16,6 +16,18 @@ export interface Dataset {
   source: SourceType;
   priority: Priority;
   examples: string[];
+  provider?: string;
+  resolution?: string;
+  access?: string;
+}
+
+export interface OpenSpatialLayer {
+  name: string;
+  description: string;
+  provider: string;
+  coverage: string;
+  access: string;
+  url: string;
 }
 
 export const POLICY_THEMES: { theme: string; objectives: PolicyObjective[] }[] = [
