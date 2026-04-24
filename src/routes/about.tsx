@@ -18,54 +18,51 @@ function AboutPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
       <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">About</p>
-      <h1 className="mt-2 text-4xl text-foreground sm:text-5xl">A research-driven prototype</h1>
+      <h1 className="mt-2 text-4xl text-foreground sm:text-5xl">What this tool is — and isn't</h1>
 
       <div className="mt-8 space-y-6 text-base leading-relaxed text-foreground/85">
         <p>
-          UrbanTwinReadiness is a decision-support tool that helps cities identify the minimum datasets
-          and Earth Observation inputs needed to develop Urban Digital Twins (UDT) for urban
-          environmental management.
+          UrbanTwinReadiness is a friendly starting point for cities that want to build a digital
+          twin for the environment but don't know where to begin. It cuts through the jargon and
+          shows you, in plain language, what data you'll actually need.
         </p>
         <p>
-          The application is intentionally focused. Rather than addressing the full breadth of smart
-          city topics, it concentrates on the environmental dimension — air, water, climate, land, and
-          ecosystems — where Earth Observation provides distinctive analytical value.
+          A "digital twin" sounds futuristic, but in everyday terms it's just a living, digital copy
+          of your city that helps decision-makers see what's happening — and try out ideas before
+          spending real money on them. We focus only on the environment side: air, water, heat,
+          green spaces, and how the city is changing.
         </p>
         <p>
-          For each combination of policy objectives and implementation level, the tool produces a
-          structured readiness profile: a curated list of minimum datasets, their priority and source
-          type, the role of satellite and EO data, key European and international platforms, and a
-          short implementation pathway describing what is feasible today and what is required to
-          progress further.
-        </p>
-
-        <h2 className="!mt-12 font-serif text-2xl text-foreground">Methodology</h2>
-        <p>
-          The mappings between policy objectives and datasets are based on a review of European urban
-          environmental policy frameworks, Copernicus services documentation, and academic literature
-          on Urban Digital Twins. They are designed to be transparent, conservative, and easy to update
-          as the field evolves.
+          You tell us what your city wants to improve and where you stand today. We give you back a
+          short, clear plan: the data you need, where to find it, how satellites can help, and what
+          to work on next.
         </p>
 
-        <h2 className="!mt-12 font-serif text-2xl text-foreground">Intended use</h2>
+        <h2 className="!mt-12 font-serif text-2xl text-foreground">Where the advice comes from</h2>
         <p>
-          The tool is intended for municipal practitioners, urban planners, researchers, and policy
-          officers who are scoping Urban Digital Twin initiatives. It supports early-stage discussions
-          and feasibility scoping. It does not replace detailed technical assessments or procurement
-          studies.
+          The recommendations are based on European environmental policies, the free Copernicus
+          satellite programme, and recent research on urban digital twins. We've kept things
+          conservative and transparent, and we update the guidance as the field moves on.
+        </p>
+
+        <h2 className="!mt-12 font-serif text-2xl text-foreground">Who it's for</h2>
+        <p>
+          City staff, urban planners, students, researchers, and anyone who's curious about digital
+          twins. It's a great way to start the conversation in your team or with partners. It is
+          <em> not</em> a replacement for a proper technical study before launching a real project.
         </p>
       </div>
 
       <div className="mt-12 rounded-xl border border-border bg-card p-6 shadow-card">
-        <h3 className="font-serif text-xl text-foreground">Try the configurator</h3>
+        <h3 className="font-serif text-xl text-foreground">Give it a try</h3>
         <p className="mt-2 text-sm text-muted-foreground">
-          Generate a readiness profile in about two minutes.
+          Two minutes is all it takes to get your first plan.
         </p>
         <Link
           to="/configure"
           className="mt-4 inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
         >
-          Start the assessment
+          Start now
           <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" stroke="currentColor" strokeWidth="2">
             <path d="M5 12h14M13 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
           </svg>

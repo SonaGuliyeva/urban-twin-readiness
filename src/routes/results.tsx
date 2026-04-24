@@ -79,15 +79,15 @@ function ResultsPage() {
   if (selected.length === 0) {
     return (
       <div className="mx-auto max-w-2xl px-6 py-24 text-center">
-        <h1 className="font-serif text-3xl text-foreground">No objectives selected</h1>
+        <h1 className="font-serif text-3xl text-foreground">Looks like you skipped a step</h1>
         <p className="mt-3 text-muted-foreground">
-          Please return to the configurator and choose at least one policy objective.
+          Head back and pick at least one goal so we can build your plan.
         </p>
         <Link
           to="/configure"
           className="mt-6 inline-flex items-center justify-center rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90"
         >
-          Back to configurator
+          Go back
         </Link>
       </div>
     );
@@ -104,15 +104,15 @@ function ResultsPage() {
       {/* Header */}
       <header className="border-b border-border pb-8">
         <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-          Readiness profile
+          Your plan
         </p>
         <h1 className="mt-2 text-4xl text-foreground sm:text-5xl">
-          {city ? `${city} — ` : ""}Urban Digital Twin readiness
+          {city ? `${city}'s ` : "Your "}digital twin starter pack
         </h1>
         <p className="mt-3 max-w-3xl text-base text-muted-foreground">
-          Generated from {selected.length} policy objective{selected.length === 1 ? "" : "s"} at{" "}
-          <span className="font-medium text-foreground">{levelInfo.title.split(" — ")[0]}</span>{" "}
-          implementation level.
+          Based on the {selected.length} goal{selected.length === 1 ? "" : "s"} you picked, with a{" "}
+          <span className="font-medium text-foreground">{levelInfo.title.split(" — ")[0].toLowerCase()}</span>{" "}
+          starting point.
         </p>
 
         <div className="mt-6 flex flex-wrap gap-2">
@@ -131,14 +131,14 @@ function ResultsPage() {
             to="/configure"
             className="inline-flex items-center gap-2 rounded-md border border-border bg-surface-elevated px-4 py-2 text-xs font-medium text-foreground transition-colors hover:bg-muted"
           >
-            ← Adjust configuration
+            ← Change my answers
           </Link>
           <button
             type="button"
             onClick={() => window.print()}
             className="inline-flex items-center gap-2 rounded-md border border-border bg-surface-elevated px-4 py-2 text-xs font-medium text-foreground transition-colors hover:bg-muted"
           >
-            Export / Print
+            Save or print
           </button>
         </div>
       </header>
@@ -146,28 +146,28 @@ function ResultsPage() {
       {/* Summary */}
       <section className="mt-10 grid gap-6 lg:grid-cols-[2fr_1fr]">
         <article className="rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
-          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">Summary</p>
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">In a nutshell</p>
           <h2 className="mt-2 font-serif text-2xl text-foreground">{levelInfo.title}</h2>
           <p className="mt-4 text-base leading-relaxed text-foreground/80">{levelInfo.short}</p>
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-            For the selected policy objectives, this profile identifies{" "}
-            <span className="font-medium text-foreground">{datasets.length} minimum datasets</span>,
-            of which <span className="font-medium text-foreground">{essentialCount} are essential</span>{" "}
-            and <span className="font-medium text-foreground">{satelliteCount} are derived from Earth Observation</span>.
+            To reach your goals, you'll need{" "}
+            <span className="font-medium text-foreground">{datasets.length} types of data</span>.{" "}
+            <span className="font-medium text-foreground">{essentialCount} are must-haves</span>, and{" "}
+            <span className="font-medium text-foreground">{satelliteCount} can come straight from satellites</span> — often for free.
           </p>
         </article>
 
         <aside className="grid grid-cols-2 gap-4 lg:grid-cols-1">
-          <StatCard label="Minimum datasets" value={datasets.length} />
-          <StatCard label="Essential datasets" value={essentialCount} accent="essential" />
-          <StatCard label="EO-derived datasets" value={satelliteCount} accent="eo" />
-          <StatCard label="EO platforms" value={platforms.length} />
+          <StatCard label="Datasets you need" value={datasets.length} />
+          <StatCard label="Must-haves" value={essentialCount} accent="essential" />
+          <StatCard label="From satellites" value={satelliteCount} accent="eo" />
+          <StatCard label="Places to find data" value={platforms.length} />
         </aside>
       </section>
 
       {/* Datasets */}
       <section className="mt-12">
-        <SectionHeading eyebrow="Data inventory" title="Minimum required datasets" />
+        <SectionHeading eyebrow="Your data checklist" title="The data you'll need" />
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           {datasets.map((d) => (
             <DatasetCard key={d.name} dataset={d} />
@@ -178,26 +178,26 @@ function ResultsPage() {
       {/* EO Role */}
       <section className="mt-16 rounded-xl border border-border bg-surface p-6 shadow-card sm:p-8">
         <SectionHeading
-          eyebrow="Earth Observation"
-          title="Role of satellite and Earth Observation data"
+          eyebrow="Eyes in the sky"
+          title="How satellites help your city"
           inline
         />
         <p className="mt-4 max-w-3xl text-base leading-relaxed text-foreground/80">
-          Satellite Earth Observation provides the only consistent, comparable, and continuously updated
-          view of urban environmental conditions across cities. For your selected objectives, EO contributes
-          to monitoring atmospheric composition, surface temperature, land cover dynamics, vegetation
-          health, surface water, and exposure indicators that ground sensors alone cannot deliver at scale.
+          Satellites see the whole city at once, every few days, and they keep doing it for years. That
+          gives you a fair, up-to-date picture of things that are hard to measure on the ground —
+          like air pollution across neighbourhoods, how hot different streets get in summer, where
+          vegetation is healthy, and how built-up areas change over time.
         </p>
         <p className="mt-3 max-w-3xl text-base leading-relaxed text-foreground/80">
-          EO data should be combined with ground measurements and administrative records to ensure local
-          accuracy and policy relevance. The Copernicus programme, with its open data policy and Sentinel
-          missions, constitutes the backbone of an operational European urban digital twin.
+          Satellite data works best when you combine it with your own local sensors and city records.
+          Europe's Copernicus programme is a great place to start: the data is free, open to everyone,
+          and trusted by cities across the continent.
         </p>
       </section>
 
       {/* Platforms */}
       <section className="mt-12">
-        <SectionHeading eyebrow="Resources" title="Key Earth Observation platforms" />
+        <SectionHeading eyebrow="Where to find data" title="Useful places to get started" />
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {platforms.map((p) => (
             <a
@@ -227,20 +227,20 @@ function ResultsPage() {
 
       {/* Implementation pathway */}
       <section className="mt-16">
-        <SectionHeading eyebrow="Pathway" title="Recommended implementation pathway" />
+        <SectionHeading eyebrow="Your roadmap" title="What's next for your city" />
 
         <div className="mt-6 grid gap-4 md:grid-cols-3">
-          <PathwayCard title="What the city can achieve" tone="accent" items={levelInfo.capable} />
-          <PathwayCard title="What is still missing" tone="muted" items={levelInfo.missing} />
-          <PathwayCard title="To reach the next level" tone="primary" items={levelInfo.nextSteps} />
+          <PathwayCard title="What you can do today" tone="accent" items={levelInfo.capable} />
+          <PathwayCard title="What's still out of reach" tone="muted" items={levelInfo.missing} />
+          <PathwayCard title="How to level up" tone="primary" items={levelInfo.nextSteps} />
         </div>
       </section>
 
       {/* Footer note */}
       <p className="mt-16 border-t border-border pt-6 text-xs text-muted-foreground">
-        This readiness profile is generated from a curated, expert-defined mapping between policy
-        objectives, datasets, and Earth Observation sources. It is intended to support discussion,
-        scoping and planning — not as a substitute for detailed technical feasibility studies.
+        This plan is a starting point built from research and expert advice. Use it to spark
+        conversations and shape your project — but talk to specialists before making big technical
+        or budget decisions.
       </p>
     </div>
   );

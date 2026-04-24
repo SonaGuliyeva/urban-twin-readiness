@@ -19,21 +19,21 @@ export const Route = createFileRoute("/configure")({
 const LEVELS: { id: ImplementationLevel; title: string; tag: string; desc: string }[] = [
   {
     id: "beginner",
-    title: "Beginner",
-    tag: "Static foundation",
-    desc: "Basic 2D/3D twin, mainly open data, limited integration. For cities starting from scratch.",
+    title: "Just getting started",
+    tag: "First steps",
+    desc: "You're starting from scratch. You'll mostly use free open data and build a simple map of your city.",
   },
   {
     id: "moderate",
-    title: "Moderate",
-    tag: "Semi-dynamic",
-    desc: "Periodic satellite updates, local sensor integration, basic analytics and monitoring.",
+    title: "Already on the way",
+    tag: "Some systems in place",
+    desc: "You collect some data already and use a few sensors. You're ready to add satellite updates and basic analysis.",
   },
   {
     id: "advanced",
-    title: "Advanced",
-    tag: "Operational",
-    desc: "Real-time twin with AI analytics, multi-source data fusion, and operational decision support.",
+    title: "Running advanced systems",
+    tag: "Real-time & AI",
+    desc: "You have live data flowing in and use AI to support decisions. You're ready to combine many sources together.",
   },
 ];
 
@@ -72,25 +72,25 @@ function ConfigurePage() {
     <div className="mx-auto max-w-6xl px-6 py-14">
       <header className="mb-10">
         <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-          Step 1 — Configure your assessment
+          Step 1 — Tell us about your city
         </p>
-        <h1 className="mt-2 text-4xl text-foreground sm:text-5xl">Configurator</h1>
+        <h1 className="mt-2 text-4xl text-foreground sm:text-5xl">Build your plan</h1>
         <p className="mt-3 max-w-2xl text-base text-muted-foreground">
-          Select the policy objectives relevant to your city and indicate the maturity of your current
-          digital infrastructure. The tool will derive a minimum data requirements profile.
+          Pick the goals that matter most to your city and tell us where you stand today. We'll do
+          the rest and put together a clear list of the data you'll need.
         </p>
       </header>
 
       {/* Policy objectives */}
       <section className="rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
         <div className="flex items-baseline justify-between">
-          <h2 className="font-serif text-2xl text-foreground">Policy objectives</h2>
+          <h2 className="font-serif text-2xl text-foreground">What does your city want to improve?</h2>
           <span className="font-mono text-xs text-muted-foreground">
             {totalSelected} selected
           </span>
         </div>
         <p className="mt-2 text-sm text-muted-foreground">
-          Choose one or more policy objectives. They are grouped by theme for clarity.
+          Pick as many goals as you like. They're sorted by topic to make it easier to find what you need.
         </p>
 
         <div className="mt-8 space-y-8">
@@ -145,9 +145,9 @@ function ConfigurePage() {
 
       {/* Implementation level */}
       <section className="mt-8 rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
-        <h2 className="font-serif text-2xl text-foreground">Implementation level</h2>
+        <h2 className="font-serif text-2xl text-foreground">Where is your city today?</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Indicate the current maturity of your digital infrastructure for environmental management.
+          Don't overthink it — pick the option that best describes where you are right now.
         </p>
 
         <div className="mt-6 grid gap-4 md:grid-cols-3">
@@ -184,10 +184,10 @@ function ConfigurePage() {
         <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
           <div>
             <label htmlFor="city" className="font-serif text-2xl text-foreground">
-              City <span className="text-sm font-sans text-muted-foreground">(optional)</span>
+              Your city's name <span className="text-sm font-sans text-muted-foreground">(optional)</span>
             </label>
             <p className="mt-2 text-sm text-muted-foreground">
-              Adding a city name personalises the readiness profile. No data is stored.
+              Adding a name makes your plan feel more personal. We don't save anything.
             </p>
             <input
               id="city"
@@ -204,7 +204,7 @@ function ConfigurePage() {
             disabled={!canSubmit}
             className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow-card transition-all hover:bg-primary/90 hover:shadow-elevated disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
           >
-            Generate readiness profile
+            Show me my plan
             <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" stroke="currentColor" strokeWidth="2">
               <path d="M5 12h14M13 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
@@ -212,7 +212,7 @@ function ConfigurePage() {
         </div>
         {!canSubmit && (
           <p className="mt-4 text-xs text-muted-foreground">
-            Select at least one policy objective to continue.
+            Pick at least one goal above to continue.
           </p>
         )}
       </section>
