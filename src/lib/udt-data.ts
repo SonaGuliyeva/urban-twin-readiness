@@ -261,7 +261,9 @@ export function getDatasetsForObjectives(ids: string[], level: ImplementationLev
     datasets = datasets.filter((d) => d.priority !== "optional");
   }
 
-  return datasets.sort((a, b) => priorityRank(a.priority) - priorityRank(b.priority));
+  return datasets
+    .sort((a, b) => priorityRank(a.priority) - priorityRank(b.priority))
+    .map(enrichDataset);
 }
 
 function priorityRank(p: Priority): number {
