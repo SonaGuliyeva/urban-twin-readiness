@@ -1,11 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   EO_PLATFORMS,
+  FUTURE_ROADMAP,
   LEVEL_DESCRIPTIONS,
+  OPEN_SPATIAL_LAYERS,
   POLICY_THEMES,
   getDatasetsForObjectives,
   type Dataset,
   type ImplementationLevel,
+  type OpenSpatialLayer,
   type Priority,
   type SourceType,
 } from "@/lib/udt-data";
