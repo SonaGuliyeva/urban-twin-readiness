@@ -16,6 +16,18 @@ export interface Dataset {
   source: SourceType;
   priority: Priority;
   examples: string[];
+  provider?: string;
+  resolution?: string;
+  access?: string;
+}
+
+export interface OpenSpatialLayer {
+  name: string;
+  description: string;
+  provider: string;
+  coverage: string;
+  access: string;
+  url: string;
 }
 
 export const POLICY_THEMES: { theme: string; objectives: PolicyObjective[] }[] = [
@@ -85,8 +97,33 @@ export const POLICY_THEMES: { theme: string; objectives: PolicyObjective[] }[] =
   },
 ];
 
-const D = (name: string, description: string, source: SourceType, priority: Priority, examples: string[]): Dataset =>
-  ({ name, description, source, priority, examples });
+const D = (
+  name: string,
+  description: string,
+  source: SourceType,
+  priority: Priority,
+  examples: string[],
+  meta?: { provider?: string; resolution?: string; access?: string },
+): Dataset => ({ name, description, source, priority, examples, ...meta });
+
+// Default metadata applied per source type when a dataset does not specify its own.
+const DEFAULT_META: Record<SourceType, { provider: string; resolution: string; access: string }> = {
+  satellite: { provider: "ESA / Copernicus / NASA", resolution: "10–1000 m, daily to monthly revisit", access: "Open access (Copernicus / Earthdata)" },
+  ground: { provider: "National agency or municipality", resolution: "Point measurements, sub-hourly to daily", access: "Open data portal or API (varies)" },
+  "open-data": { provider: "EU / international open data initiative", resolution: "Variable", access: "Open access download or API" },
+  administrative: { provider: "Local or national authority", resolution: "Administrative units, annual updates", access: "Restricted or on request" },
+};
+
+function enrichDataset(d: Dataset): Dataset {
+  const def = DEFAULT_META[d.source];
+  return {
+    ...d,
+    provider: d.provider ?? def.provider,
+    resolution: d.resolution ?? def.resolution,
+    access: d.access ?? def.access,
+  };
+}
+
 
 const DATASETS_BY_OBJECTIVE: Record<string, Dataset[]> = {
   "air-quality": [
@@ -224,7 +261,9 @@ export function getDatasetsForObjectives(ids: string[], level: ImplementationLev
     datasets = datasets.filter((d) => d.priority !== "optional");
   }
 
-  return datasets.sort((a, b) => priorityRank(a.priority) - priorityRank(b.priority));
+  return datasets
+    .sort((a, b) => priorityRank(a.priority) - priorityRank(b.priority))
+    .map(enrichDataset);
 }
 
 function priorityRank(p: Priority): number {
@@ -307,3 +346,82 @@ export const EO_PLATFORMS: { name: string; description: string; url: string }[] 
   { name: "Google Earth Engine", description: "Cloud-based EO analytics over multi-decadal archives.", url: "https://earthengine.google.com" },
   { name: "ESA Earth Online", description: "ESA mission data, third-party missions and tools.", url: "https://earth.esa.int" },
 ];
+
+export const OPEN_SPATIAL_LAYERS: OpenSpatialLayer[] = [
+  {
+    name: "OpenStreetMap",
+    description: "Collaborative base map with road network, buildings, land use and points of interest.",
+    provider: "OpenStreetMap Foundation",
+    coverage: "Global, vector, continuously updated",
+    access: "Open access (ODbL) — direct download, Overpass API, tile services",
+    url: "https://www.openstreetmap.org",
+  },
+  {
+    name: "Copernicus Urban Atlas",
+    description: "Harmonised land use and land cover for European Functional Urban Areas, including street tree layer and building heights.",
+    provider: "Copernicus Land Monitoring Service",
+    coverage: "EEA-39 cities, ~10 m, updated every ~6 years",
+    access: "Open access via Copernicus Land portal",
+    url: "https://land.copernicus.eu/local/urban-atlas",
+  },
+  {
+    name: "Copernicus DEM (GLO-30 / EEA-10)",
+    description: "Global and European digital elevation models supporting hydrology, line-of-sight and 3D city modelling.",
+    provider: "ESA / Copernicus",
+    coverage: "30 m global, 10 m over EEA-39",
+    access: "Open access via Copernicus Data Space",
+    url: "https://dataspace.copernicus.eu",
+  },
+  {
+    name: "GADM / EU Administrative Boundaries (GISCO)",
+    description: "Reference administrative boundaries (countries, regions, municipalities) for spatial aggregation and reporting.",
+    provider: "Eurostat GISCO / GADM",
+    coverage: "Global and European, multiple administrative levels",
+    access: "Open access download (shapefile, GeoJSON)",
+    url: "https://ec.europa.eu/eurostat/web/gisco",
+  },
+  {
+    name: "Microsoft / Google Open Building Footprints",
+    description: "AI-derived building footprints filling gaps in OSM, useful for density and exposure analysis.",
+    provider: "Microsoft / Google Research",
+    coverage: "Global, vector polygons",
+    access: "Open access (ODbL / CDLA)",
+    url: "https://github.com/microsoft/GlobalMLBuildingFootprints",
+  },
+  {
+    name: "Local Open Data Portals",
+    description: "Municipal and regional portals publishing cadastres, transport networks, environmental sensors and planning layers.",
+    provider: "Local authorities",
+    coverage: "City / regional scale, varies",
+    access: "Open data portals, often CKAN-based, with APIs",
+    url: "https://data.europa.eu",
+  },
+];
+
+export const FUTURE_ROADMAP: { version: string; title: string; description: string; status: "current" | "planned" }[] = [
+  {
+    version: "V1.0",
+    title: "Minimum dataset readiness",
+    description: "Identifies the minimum datasets, source types and Earth Observation inputs required for a given combination of policy objectives and implementation level.",
+    status: "current",
+  },
+  {
+    version: "V2.0",
+    title: "Integration of Open Spatial (OS) layers",
+    description: "Couples each policy objective with a curated set of open spatial layers (OSM, Urban Atlas, DEM, administrative boundaries, local portals) ready for ingestion.",
+    status: "planned",
+  },
+  {
+    version: "V3.0",
+    title: "Discovery catalog with metadata and access",
+    description: "Adds a structured catalog with provider, resolution, temporal coverage, licence and access endpoint for every dataset and layer.",
+    status: "planned",
+  },
+  {
+    version: "V4.0",
+    title: "Interactive visualizer",
+    description: "Embeds an interactive map allowing users to explore datasets, inspect metadata and preview integration into an Urban Digital Twin.",
+    status: "planned",
+  },
+];
+
