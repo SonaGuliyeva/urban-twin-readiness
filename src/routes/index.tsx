@@ -23,26 +23,26 @@ function HomePage() {
         <div className="relative mx-auto max-w-6xl px-6 pb-24 pt-20 sm:pt-28">
           <div className="max-w-3xl">
             <span className="inline-flex items-center gap-2 rounded-full border border-border bg-surface-elevated px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" /> A simple guide for cities · Research prototype
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" /> Decision-support tool · Research prototype
             </span>
             <h1 className="mt-6 text-5xl leading-[1.05] text-foreground sm:text-6xl">
               UrbanTwinReadiness
             </h1>
             <p className="mt-5 max-w-2xl font-serif text-xl leading-snug text-muted-foreground sm:text-2xl">
-              Find out what data your city needs to build a digital twin for the environment.
+              Assessing the minimum data requirements for Urban Digital Twins in urban environmental management.
             </p>
             <p className="mt-6 max-w-2xl text-base leading-relaxed text-foreground/80">
-              Building a digital twin can feel overwhelming. This tool makes it simple: tell us what
-              your city wants to improve — like cleaner air, less flooding, or more green space — and
-              we'll show you exactly which datasets you need, where to find them, and how satellite
-              data from space can help.
+              UrbanTwinReadiness helps cities and public authorities identify the datasets, data
+              sources, and Earth Observation inputs needed to develop an Urban Digital Twin. Select
+              your policy objectives and implementation level to generate a structured, evidence-based
+              data requirement profile.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-3">
               <Link
                 to="/configure"
                 className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-card transition-all hover:bg-primary/90 hover:shadow-elevated"
               >
-                Start now — it's free
+                Start the assessment
                 <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" stroke="currentColor" strokeWidth="2">
                   <path d="M5 12h14M13 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
@@ -59,10 +59,10 @@ function HomePage() {
           {/* Stat row */}
           <dl className="mt-20 grid grid-cols-2 gap-6 border-t border-border/70 pt-8 sm:grid-cols-4">
             {[
-              { k: "24", v: "City goals to choose from" },
-              { k: "8", v: "Environmental themes" },
-              { k: "3", v: "Levels of readiness" },
-              { k: "Open", v: "Built on free EU data" },
+              { k: "24", v: "Policy objectives" },
+              { k: "8", v: "Thematic domains" },
+              { k: "3", v: "Implementation levels" },
+              { k: "Open", v: "Grounded in EU open data" },
             ].map((s) => (
               <div key={s.v}>
                 <dt className="font-serif text-3xl text-foreground">{s.k}</dt>
@@ -82,7 +82,7 @@ function HomePage() {
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
               How it works
             </p>
-            <h2 className="mt-2 text-3xl text-foreground sm:text-4xl">Three steps, about two minutes</h2>
+            <h2 className="mt-2 text-3xl text-foreground sm:text-4xl">A three-step assessment</h2>
           </div>
           <div className="hidden h-px flex-1 bg-border sm:block" />
         </div>
@@ -91,18 +91,18 @@ function HomePage() {
           {[
             {
               n: "01",
-              t: "Pick your city's goals",
-              d: "Choose what matters most — cleaner air, flood protection, cooler streets, more green space, and more.",
+              t: "Select policy objectives",
+              d: "Choose one or more environmental priorities, from air quality and flood risk to urban heat and green infrastructure.",
             },
             {
               n: "02",
-              t: "Tell us where you stand",
-              d: "Are you just getting started, already collecting some data, or running advanced systems? Pick the level that fits.",
+              t: "Define implementation level",
+              d: "Indicate the city's current capacity — beginner, moderate, or advanced — to align recommendations with realistic conditions.",
             },
             {
               n: "03",
-              t: "Get your action plan",
-              d: "We'll show you the data you need, where to get it, how satellites can help, and what to do next.",
+              t: "Review the data profile",
+              d: "Receive a structured profile of required datasets, source types, Earth Observation platforms, and an implementation pathway.",
             },
           ].map((s) => (
             <li
@@ -121,23 +121,24 @@ function HomePage() {
       <section className="border-y border-border bg-surface">
         <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-2">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">What we focus on</p>
-            <h2 className="mt-2 font-serif text-3xl text-foreground">The city's environment, not everything at once</h2>
+            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Scope</p>
+            <h2 className="mt-2 font-serif text-3xl text-foreground">Focused on urban environmental management</h2>
             <p className="mt-4 text-base leading-relaxed text-foreground/80">
-              We deliberately stay focused on what shapes daily life in cities: the air people breathe,
-              water and flooding, heat and climate, green spaces, and how land is used. That focus
-              keeps the advice clear and actionable instead of overwhelming.
+              The tool deliberately concentrates on the environmental dimension of urban systems —
+              air quality, water and flood risk, urban climate, green infrastructure, and land use.
+              This focus keeps the recommendations operational and methodologically consistent.
             </p>
           </div>
           <div>
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              Why satellites matter
+              Earth Observation
             </p>
-            <h2 className="mt-2 font-serif text-3xl text-foreground">A view from above, free and open</h2>
+            <h2 className="mt-2 font-serif text-3xl text-foreground">A central role for satellite data</h2>
             <p className="mt-4 text-base leading-relaxed text-foreground/80">
-              Europe's Copernicus satellites give every city free access to data that used to be out of
-              reach: pollution maps, surface temperature, vegetation, and more. We show you which
-              satellite sources fit your goals — alongside local sensors and city records.
+              Copernicus and complementary Earth Observation programmes provide cities with open,
+              continuous, and standardised data — from atmospheric composition to land surface
+              temperature. The tool maps these sources to each policy objective and integrates them
+              with ground sensors and administrative data.
             </p>
           </div>
         </div>
@@ -146,16 +147,17 @@ function HomePage() {
       {/* CTA */}
       <section className="mx-auto max-w-6xl px-6 py-20 text-center">
         <h2 className="font-serif text-3xl text-foreground sm:text-4xl">
-          Ready to see what your city needs?
+          Generate your data requirement profile
         </h2>
         <p className="mx-auto mt-3 max-w-xl text-base text-muted-foreground">
-          It only takes about two minutes. You'll get a clear, shareable plan you can use right away.
+          A short configuration produces a structured profile you can review, share, and use as a
+          starting point for technical scoping.
         </p>
         <Link
           to="/configure"
           className="mt-8 inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-card transition-all hover:bg-primary/90 hover:shadow-elevated"
         >
-          Start now
+          Start the assessment
           <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" stroke="currentColor" strokeWidth="2">
             <path d="M5 12h14M13 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
