@@ -97,8 +97,33 @@ export const POLICY_THEMES: { theme: string; objectives: PolicyObjective[] }[] =
   },
 ];
 
-const D = (name: string, description: string, source: SourceType, priority: Priority, examples: string[]): Dataset =>
-  ({ name, description, source, priority, examples });
+const D = (
+  name: string,
+  description: string,
+  source: SourceType,
+  priority: Priority,
+  examples: string[],
+  meta?: { provider?: string; resolution?: string; access?: string },
+): Dataset => ({ name, description, source, priority, examples, ...meta });
+
+// Default metadata applied per source type when a dataset does not specify its own.
+const DEFAULT_META: Record<SourceType, { provider: string; resolution: string; access: string }> = {
+  satellite: { provider: "ESA / Copernicus / NASA", resolution: "10–1000 m, daily to monthly revisit", access: "Open access (Copernicus / Earthdata)" },
+  ground: { provider: "National agency or municipality", resolution: "Point measurements, sub-hourly to daily", access: "Open data portal or API (varies)" },
+  "open-data": { provider: "EU / international open data initiative", resolution: "Variable", access: "Open access download or API" },
+  administrative: { provider: "Local or national authority", resolution: "Administrative units, annual updates", access: "Restricted or on request" },
+};
+
+function enrichDataset(d: Dataset): Dataset {
+  const def = DEFAULT_META[d.source];
+  return {
+    ...d,
+    provider: d.provider ?? def.provider,
+    resolution: d.resolution ?? def.resolution,
+    access: d.access ?? def.access,
+  };
+}
+
 
 const DATASETS_BY_OBJECTIVE: Record<string, Dataset[]> = {
   "air-quality": [
