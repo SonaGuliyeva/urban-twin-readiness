@@ -228,14 +228,89 @@ function ResultsPage() {
         </div>
       </section>
 
-      {/* Implementation pathway */}
+      {/* Open Spatial Layers */}
       <section className="mt-16">
-        <SectionHeading eyebrow="Implementation pathway" title="Capabilities, gaps, and next steps" />
+        <SectionHeading eyebrow="Open Spatial Layers (OS Layers)" title="Open spatial layers for integration" />
+        <p className="mt-4 max-w-3xl text-base leading-relaxed text-foreground/80">
+          The following open spatial datasets provide a foundational geospatial baseline for an
+          Urban Digital Twin. They complement Earth Observation products by adding street networks,
+          buildings, terrain and administrative reference layers — and are typically free to access.
+        </p>
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          {OPEN_SPATIAL_LAYERS.map((layer) => (
+            <OSLayerCard key={layer.name} layer={layer} />
+          ))}
+        </div>
+      </section>
 
+      {/* Interpretation for the City */}
+      <section className="mt-16">
+        <SectionHeading eyebrow="Interpretation for the city" title="What this means in practice" />
+        <p className="mt-4 max-w-3xl text-base leading-relaxed text-foreground/80">
+          The interpretation below translates the selected implementation level into operational
+          terms: what the city can realistically achieve today, where the main limitations lie, and
+          what would be required to progress to the next maturity stage.
+        </p>
         <div className="mt-6 grid gap-4 md:grid-cols-3">
-          <PathwayCard title="What this level enables" tone="accent" items={levelInfo.capable} />
-          <PathwayCard title="Current limitations" tone="muted" items={levelInfo.missing} />
-          <PathwayCard title="Path to the next level" tone="primary" items={levelInfo.nextSteps} />
+          <PathwayCard title="What the city can realistically achieve" tone="accent" items={levelInfo.capable} />
+          <PathwayCard title="Key limitations" tone="muted" items={levelInfo.missing} />
+          <PathwayCard title="Requirements to reach the next level" tone="primary" items={levelInfo.nextSteps} />
+        </div>
+      </section>
+
+      {/* Future Integration Pathway */}
+      <section className="mt-16 rounded-xl border border-border bg-surface p-6 shadow-card sm:p-8">
+        <SectionHeading eyebrow="Roadmap" title="Future integration pathway" inline />
+        <p className="mt-4 max-w-3xl text-base leading-relaxed text-foreground/80">
+          UrbanTwinReadiness is developed iteratively as a doctoral research prototype. Each version
+          extends the scope from minimum dataset readiness toward a discoverable, visual and
+          integrated decision-support environment.
+        </p>
+        <ol className="mt-6 space-y-4">
+          {FUTURE_ROADMAP.map((step) => (
+            <li
+              key={step.version}
+              className="grid gap-3 rounded-lg border border-border bg-card p-5 shadow-card sm:grid-cols-[120px_1fr] sm:gap-6"
+            >
+              <div>
+                <p className="font-mono text-xs uppercase tracking-[0.18em] text-accent">
+                  {step.version}
+                </p>
+                <span
+                  className={`mt-2 inline-block rounded-full border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] ${
+                    step.status === "current"
+                      ? "border-primary/30 bg-primary/10 text-primary"
+                      : "border-border bg-muted text-muted-foreground"
+                  }`}
+                >
+                  {step.status === "current" ? "Current" : "Planned"}
+                </span>
+              </div>
+              <div>
+                <h3 className="font-serif text-lg text-foreground">{step.title}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                  {step.description}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* Future Data Visualization */}
+      <section className="mt-12 rounded-xl border border-dashed border-border bg-surface-elevated p-6 sm:p-8">
+        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">
+          Future data visualization
+        </p>
+        <h2 className="mt-2 font-serif text-2xl text-foreground">An interactive visualizer is planned</h2>
+        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-foreground/80">
+          Future versions of UrbanTwinReadiness will include an interactive map for exploring the
+          recommended datasets and Open Spatial Layers, inspecting their metadata (provider,
+          resolution, access) and previewing how they combine within an Urban Digital Twin. The
+          visualizer is not part of the current research prototype.
+        </p>
+        <div className="mt-5 flex h-32 items-center justify-center rounded-md border border-dashed border-border bg-card text-xs font-mono uppercase tracking-[0.18em] text-muted-foreground">
+          Interactive map · planned for V4.0
         </div>
       </section>
 
@@ -245,6 +320,45 @@ function ResultsPage() {
         scoping and stakeholder discussion, not to replace a formal technical feasibility study.
       </p>
     </div>
+  );
+}
+
+function OSLayerCard({ layer }: { layer: OpenSpatialLayer }) {
+  return (
+    <a
+      href={layer.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group flex h-full flex-col rounded-lg border border-border bg-card p-5 shadow-card transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-elevated"
+    >
+      <div className="flex items-start justify-between gap-3">
+        <h3 className="font-serif text-lg leading-snug text-foreground">{layer.name}</h3>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          className="mt-1 h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-accent"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path d="M7 17L17 7M9 7h8v8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </div>
+      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{layer.description}</p>
+      <dl className="mt-4 grid grid-cols-1 gap-2 border-t border-border pt-3 text-xs">
+        <div className="flex gap-2">
+          <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">Provider</dt>
+          <dd className="text-foreground/85">{layer.provider}</dd>
+        </div>
+        <div className="flex gap-2">
+          <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">Coverage</dt>
+          <dd className="text-foreground/85">{layer.coverage}</dd>
+        </div>
+        <div className="flex gap-2">
+          <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">Access</dt>
+          <dd className="text-foreground/85">{layer.access}</dd>
+        </div>
+      </dl>
+    </a>
   );
 }
 
