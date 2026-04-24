@@ -298,8 +298,31 @@ function DatasetCard({ dataset }: { dataset: Dataset }) {
         </span>
       </div>
 
+      {(dataset.provider || dataset.resolution || dataset.access) && (
+        <dl className="mt-4 grid grid-cols-1 gap-2 border-t border-border pt-3 text-xs">
+          {dataset.provider && (
+            <div className="flex gap-2">
+              <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">Provider</dt>
+              <dd className="text-foreground/85">{dataset.provider}</dd>
+            </div>
+          )}
+          {dataset.resolution && (
+            <div className="flex gap-2">
+              <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">Resolution</dt>
+              <dd className="text-foreground/85">{dataset.resolution}</dd>
+            </div>
+          )}
+          {dataset.access && (
+            <div className="flex gap-2">
+              <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">Access</dt>
+              <dd className="text-foreground/85">{dataset.access}</dd>
+            </div>
+          )}
+        </dl>
+      )}
+
       {dataset.examples.length > 0 && (
-        <div className="mt-4 border-t border-border pt-3">
+        <div className="mt-3 border-t border-border pt-3">
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
             Example sources
           </p>
