@@ -1,12 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   EO_PLATFORMS,
+  EO_SENSOR_FAMILIES,
+  EO_INDICATORS,
+  EO_HYDRO_SERVICES,
+  HYDRO_INTEGRATION_APPROACHES,
+  HYDRO_REFERENCE,
   FUTURE_ROADMAP,
   LEVEL_DESCRIPTIONS,
   OPEN_SPATIAL_LAYERS,
   POLICY_THEMES,
   getDatasetsForObjectives,
   type Dataset,
+  type Hazard,
   type ImplementationLevel,
   type OpenSpatialLayer,
   type Priority,
