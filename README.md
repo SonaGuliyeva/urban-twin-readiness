@@ -35,7 +35,7 @@ However, there is often a gap between **data availability** and **operational us
 
 ---
 
-## ⚙️ How It Works
+## How It Works
 
 ### 1. Select Policy Objectives
 Users choose one or more environmental goals, such as:
