@@ -146,7 +146,10 @@ function AboutThisTool() {
             </p>
             <p className="text-sm text-foreground">Sona Guliyeva</p>
             <p className="text-xs text-muted-foreground">
-              PhD Candidate, Politecnico di Torino
+              PhD Candidate, Urban and Regional Development
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Politecnico di Torino, Italy
             </p>
           </div>
 
@@ -161,13 +164,17 @@ function AboutThisTool() {
             </p>
           </div>
 
-          <div className="space-y-1 md:col-span-2">
+          <div className="space-y-1 md:col-span-3">
             <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
               Research reference
             </p>
-            <p className="text-sm text-foreground">
+            <p className="text-sm leading-relaxed text-foreground">
               Guliyeva, S., &amp; Boccardo, P. (2026).{" "}
-              <span className="italic">Geospatial Technologies for Flood and Drought Management.</span>{" "}
+              <span className="italic">
+                Geospatial Technologies for Flood and Drought Management: A Narrative
+                Review of Earth Observation Data, Procedures, and Their Operational
+                Effectiveness.
+              </span>{" "}
               Aerotecnica Missili &amp; Spazio.
             </p>
             <a
@@ -182,20 +189,49 @@ function AboutThisTool() {
 
           <div className="space-y-1">
             <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+              Prototype
+            </p>
+            <a
+              href="https://urban-twin-ready.lovable.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-primary underline-offset-4 hover:underline break-all"
+            >
+              urban-twin-ready.lovable.app
+            </a>
+          </div>
+
+          <div className="space-y-1">
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
               Repository
             </p>
             <a
               href="https://github.com/SonaGuliyeva/urban-twin-readiness"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm text-primary underline-offset-4 hover:underline"
+              className="inline-flex items-center gap-1.5 text-sm text-primary underline-offset-4 hover:underline break-all"
             >
-              <svg viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5">
+              <svg viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5 shrink-0">
                 <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.25 3.34.95.1-.74.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.4-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z" />
               </svg>
               github.com/SonaGuliyeva/urban-twin-readiness
             </a>
           </div>
+
+          <div className="space-y-1">
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+              Version
+            </p>
+            <p className="text-sm text-foreground">1.0</p>
+            <p className="text-xs text-muted-foreground">Research Prototype</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t border-border/70">
+        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+          <p>UrbanTwinReadiness · Research prototype for urban environmental management.</p>
+          <p className="font-mono uppercase tracking-[0.18em]">v1.0 · Research Prototype</p>
         </div>
       </div>
 
