@@ -108,6 +108,22 @@ function ResultsPage() {
   // Curate EO platforms shown — for beginner show core Copernicus, otherwise all
   const platforms = level === "beginner" ? EO_PLATFORMS.slice(0, 5) : EO_PLATFORMS;
 
+  // Hydrological hazards focus — surfaced when flood-risk and/or drought are selected
+  const hydroHazards: Hazard[] = [
+    ...(ids.includes("flood-risk") ? (["flood"] as Hazard[]) : []),
+    ...(ids.includes("drought") ? (["drought"] as Hazard[]) : []),
+  ];
+  const showHydro = hydroHazards.length > 0;
+  const hydroSensors = EO_SENSOR_FAMILIES.filter((f) =>
+    f.roles.some((r) => hydroHazards.includes(r.hazard)),
+  );
+  const hydroIndicators = EO_INDICATORS.filter((i) =>
+    hydroHazards.some((h) => (h === "flood" ? i.flood : i.drought)),
+  );
+  const hydroServices = EO_HYDRO_SERVICES.filter((s) =>
+    s.hazards.some((h) => hydroHazards.includes(h)),
+  );
+
   return (
     <div className="mx-auto max-w-6xl px-6 py-14">
       {/* Header */}
