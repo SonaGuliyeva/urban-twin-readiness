@@ -1,12 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   EO_PLATFORMS,
+  EO_SENSOR_FAMILIES,
+  EO_INDICATORS,
+  EO_HYDRO_SERVICES,
+  HYDRO_INTEGRATION_APPROACHES,
+  HYDRO_REFERENCE,
   FUTURE_ROADMAP,
   LEVEL_DESCRIPTIONS,
   OPEN_SPATIAL_LAYERS,
   POLICY_THEMES,
   getDatasetsForObjectives,
   type Dataset,
+  type Hazard,
   type ImplementationLevel,
   type OpenSpatialLayer,
   type Priority,
@@ -102,6 +108,22 @@ function ResultsPage() {
   // Curate EO platforms shown — for beginner show core Copernicus, otherwise all
   const platforms = level === "beginner" ? EO_PLATFORMS.slice(0, 5) : EO_PLATFORMS;
 
+  // Hydrological hazards focus — surfaced when flood-risk and/or drought are selected
+  const hydroHazards: Hazard[] = [
+    ...(ids.includes("flood-risk") ? (["flood"] as Hazard[]) : []),
+    ...(ids.includes("drought") ? (["drought"] as Hazard[]) : []),
+  ];
+  const showHydro = hydroHazards.length > 0;
+  const hydroSensors = EO_SENSOR_FAMILIES.filter((f) =>
+    f.roles.some((r) => hydroHazards.includes(r.hazard)),
+  );
+  const hydroIndicators = EO_INDICATORS.filter((i) =>
+    hydroHazards.some((h) => (h === "flood" ? i.flood : i.drought)),
+  );
+  const hydroServices = EO_HYDRO_SERVICES.filter((s) =>
+    s.hazards.some((h) => hydroHazards.includes(h)),
+  );
+
   return (
     <div className="mx-auto max-w-6xl px-6 py-14">
       {/* Header */}
@@ -177,6 +199,173 @@ function ResultsPage() {
           ))}
         </div>
       </section>
+
+      {/* Hydrological hazards focus — flood and/or drought */}
+      {showHydro && (
+        <section className="mt-16">
+          <SectionHeading
+            eyebrow="Hydrological hazards focus"
+            title={
+              hydroHazards.length === 2
+                ? "Flood and drought — EO operational reference"
+                : hydroHazards[0] === "flood"
+                  ? "Flood — EO operational reference"
+                  : "Drought — EO operational reference"
+            }
+          />
+          <p className="mt-4 max-w-3xl text-base leading-relaxed text-foreground/80">
+            The synthesis below is adapted from a peer-reviewed review of Earth Observation for
+            flood and drought management (Guliyeva &amp; Boccardo, 2026). It maps EO sensor
+            families, derived indicators, multi-source integration approaches and operational
+            services to the selected hazard(s), supporting evidence-based scoping of the Urban
+            Digital Twin.
+          </p>
+
+          <div className="mt-8">
+            <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
+              EO sensor families and operational roles
+            </h3>
+            <div className="mt-4 overflow-x-auto rounded-lg border border-border bg-card shadow-card">
+              <table className="w-full min-w-[720px] text-left text-sm">
+                <thead className="border-b border-border bg-surface-elevated">
+                  <tr className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                    <th className="px-4 py-3">Sensor family</th>
+                    <th className="px-4 py-3">Key missions</th>
+                    <th className="px-4 py-3">Resolution / revisit</th>
+                    <th className="px-4 py-3">Operational role</th>
+                    <th className="px-4 py-3">Limitations</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {hydroSensors.map((f) => (
+                    <tr key={f.family} className="border-b border-border/60 align-top last:border-0">
+                      <td className="px-4 py-3 font-medium text-foreground">{f.family}</td>
+                      <td className="px-4 py-3 text-muted-foreground">{f.missions.join(", ")}</td>
+                      <td className="px-4 py-3 text-muted-foreground">{f.resolution}</td>
+                      <td className="px-4 py-3 text-foreground/85">
+                        <ul className="space-y-1">
+                          {f.roles
+                            .filter((r) => hydroHazards.includes(r.hazard))
+                            .map((r) => (
+                              <li key={r.hazard}>
+                                <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-accent">
+                                  {r.hazard}
+                                </span>{" "}
+                                — {r.description}
+                              </li>
+                            ))}
+                        </ul>
+                      </td>
+                      <td className="px-4 py-3 text-muted-foreground">{f.limitations}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="mt-10">
+            <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
+              EO-derived indicators for hydrological monitoring
+            </h3>
+            <div className="mt-4 overflow-x-auto rounded-lg border border-border bg-card shadow-card">
+              <table className="w-full min-w-[720px] text-left text-sm">
+                <thead className="border-b border-border bg-surface-elevated">
+                  <tr className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                    <th className="px-4 py-3">Group</th>
+                    <th className="px-4 py-3">Indicator</th>
+                    {hydroHazards.includes("flood") && <th className="px-4 py-3">Flood</th>}
+                    {hydroHazards.includes("drought") && <th className="px-4 py-3">Drought</th>}
+                    <th className="px-4 py-3">EO sources</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {hydroIndicators.map((i) => (
+                    <tr key={i.indicator} className="border-b border-border/60 align-top last:border-0">
+                      <td className="px-4 py-3 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+                        {i.group}
+                      </td>
+                      <td className="px-4 py-3 font-medium text-foreground">{i.indicator}</td>
+                      {hydroHazards.includes("flood") && (
+                        <td className="px-4 py-3 text-foreground/85">{i.flood ?? "—"}</td>
+                      )}
+                      {hydroHazards.includes("drought") && (
+                        <td className="px-4 py-3 text-foreground/85">{i.drought ?? "—"}</td>
+                      )}
+                      <td className="px-4 py-3 text-muted-foreground">{i.sources.join(", ")}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="mt-10">
+            <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
+              Multi-source EO integration approaches
+            </h3>
+            <div className="mt-4 grid gap-4 md:grid-cols-2">
+              {HYDRO_INTEGRATION_APPROACHES.map((a) => (
+                <div key={a.approach} className="rounded-lg border border-border bg-card p-5 shadow-card">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <h4 className="font-serif text-base text-foreground">{a.approach}</h4>
+                    <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+                      {a.scale}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-sm text-foreground/85">{a.data}</p>
+                  <p className="mt-2 text-xs italic text-muted-foreground">Example — {a.example}</p>
+                  <p className="mt-3 border-t border-border pt-3 text-xs text-muted-foreground">
+                    {a.performance}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-10">
+            <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
+              Operational EO services for{" "}
+              {hydroHazards.length === 2 ? "flood and drought" : hydroHazards[0]}
+            </h3>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {hydroServices.map((s) => (
+                <a
+                  key={s.name}
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group rounded-lg border border-border bg-card p-5 shadow-card transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-elevated"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <h4 className="font-serif text-base leading-tight text-foreground">{s.name}</h4>
+                    <span className="shrink-0 rounded-full border border-border bg-surface-elevated px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+                      {s.scope}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-sm text-muted-foreground">{s.description}</p>
+                  <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.12em] text-accent">
+                    {s.hazards.join(" · ")}
+                  </p>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <p className="mt-6 text-xs text-muted-foreground">
+            Adapted from{" "}
+            <a
+              href={HYDRO_REFERENCE.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline decoration-dotted underline-offset-2 hover:text-foreground"
+            >
+              {HYDRO_REFERENCE.citation}
+            </a>{" "}
+            (DOI: {HYDRO_REFERENCE.doi}).
+          </p>
+        </section>
+      )}
 
       {/* EO Role */}
       <section className="mt-16 rounded-xl border border-border bg-surface p-6 shadow-card sm:p-8">
