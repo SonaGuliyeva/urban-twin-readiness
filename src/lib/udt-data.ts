@@ -189,8 +189,14 @@ const DATASETS_BY_OBJECTIVE: Record<string, Dataset[]> = {
     D("Water Supply & Consumption Records", "Utility metering data.", "administrative", "recommended", ["Water utilities"]),
   ],
   "drought": [
-    D("Soil Moisture & Vegetation Indices", "NDVI, NDWI, SMOS soil moisture for stress.", "satellite", "essential", ["Sentinel-2", "Sentinel-1", "SMOS", "EDO"]),
-    D("Standardized Precipitation Index", "Meteorological drought indicators.", "open-data", "essential", ["Copernicus EDO", "C3S CDS"]),
+    D("Soil Moisture & Root-Zone Anomalies", "Early deficit detection — passive microwave soil moisture frequently anticipates vegetation stress by several weeks (extending forecast lead times).", "satellite", "essential", ["SMAP", "SMOS", "ASCAT", "AMSR-2", "H SAF NRT SM/RZSM"], { provider: "NASA / ESA / EUMETSAT H SAF", resolution: "5–50 km, sub-daily to daily", access: "Open access" }),
+    D("Vegetation Condition Indices (NDVI / VCI / VHI)", "Canopy stress detection at field to regional scale; NDVI time series enables retrospective drought-impact analysis.", "satellite", "essential", ["MODIS", "VIIRS", "AVHRR", "Sentinel-2", "Landsat 8/9"], { provider: "NASA / ESA / NOAA", resolution: "10–1000 m, daily to 16-day", access: "Open access (Earthdata / Copernicus)" }),
+    D("Land Surface Temperature & Evaporative Stress (ESI)", "Thermal anomalies and evapotranspiration deficits — ECOSTRESS-derived ESI has detected drought onset ~2 weeks before SPI.", "satellite", "essential", ["ECOSTRESS", "MODIS LST", "Landsat TIRS", "Sentinel-3 SLSTR"], { provider: "NASA / ESA", resolution: "70 m – 1 km, daily to 16-day", access: "Open access" }),
+    D("Standardized Precipitation Indices (SPI / SPEI)", "Meteorological drought indicators combining satellite precipitation and reanalysis temperature for severity classification.", "open-data", "essential", ["Copernicus EDO", "GPM IMERG", "ERA5", "C3S CDS"]),
+    D("Total Water Storage Anomalies", "Groundwater depletion and basin-scale water loss signals from gravimetric satellite missions.", "satellite", "recommended", ["GRACE", "GRACE-FO"], { provider: "NASA / DLR", resolution: "~300 km, monthly", access: "Open access" }),
+    D("Surface Water Extent (Reservoirs & Lakes)", "Long-term monitoring of reservoir and lake shrinkage as a hydrological drought signal.", "satellite", "recommended", ["Sentinel-2", "Sentinel-1 SAR", "Landsat", "Sentinel-3 / Jason-3 / SWOT altimetry"]),
+    D("Solar-Induced Chlorophyll Fluorescence (SIF)", "Highly sensitive early indicator of physiological plant stress, often preceding NDVI anomalies.", "satellite", "optional", ["Sentinel-5P", "OCO-2 / OCO-3"], { provider: "ESA / NASA", resolution: "3.5–7 km, daily", access: "Open access" }),
+    D("Ground Soil Moisture & Agro-Meteorological Network", "In-situ validation network supporting calibration of satellite products and operational drought bulletins.", "ground", "recommended", ["National agro-meteorological networks", "ISMN", "Local irrigation district sensors"]),
   ],
   "green-infra": [
     D("Urban Tree Canopy & Green Space Maps", "Vegetation cover and connectivity.", "satellite", "essential", ["Sentinel-2 NDVI", "Copernicus Urban Atlas Street Tree Layer"]),
