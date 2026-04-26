@@ -136,7 +136,7 @@ function AboutThisTool() {
               <path d="M12 8v.01M11 12h1v4h1" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </span>
-          <h2 className="font-serif text-lg text-foreground">About this tool</h2>
+          <h2 className="font-serif text-lg text-foreground">Credits</h2>
         </div>
 
         <div className="grid gap-8 md:grid-cols-3">
@@ -155,7 +155,7 @@ function AboutThisTool() {
 
           <div className="space-y-1 md:col-span-2">
             <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-              Description
+              Short description
             </p>
             <p className="text-sm leading-relaxed text-muted-foreground">
               UrbanTwinReadiness is a research-driven prototype that supports cities in
