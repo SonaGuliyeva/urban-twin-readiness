@@ -234,13 +234,6 @@ function AboutThisTool() {
           <p className="font-mono uppercase tracking-[0.18em]">v1.0 · Research Prototype</p>
         </div>
       </div>
-
-      <div className="border-t border-border/70">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>UrbanTwinReadiness · Research prototype for urban environmental management.</p>
-          <p className="font-mono uppercase tracking-[0.18em]">v0.1 · MVP</p>
-        </div>
-      </div>
     </section>
   );
 }
