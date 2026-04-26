@@ -1,10 +1,10 @@
-# 🌍 UrbanTwinReadiness
+# UrbanTwinReadiness
 
 **A Decision-Support Prototype for Urban Digital Twin Development in Urban Environmental Management**
 
 ---
 
-## 📌 Overview
+## Overview
 
 **UrbanTwinReadiness** is a research-driven web application designed to support cities, planners, and institutions in identifying the **minimum data requirements** for developing **Urban Digital Twins (UDTs)** focused on **urban environmental management**.
 
@@ -17,7 +17,7 @@ The tool translates academic research into a practical interface that links:
 
 ---
 
-## 🎯 Purpose
+## Purpose
 
 Cities increasingly need data-driven tools to address environmental challenges such as:
 
@@ -65,16 +65,16 @@ Users choose one or more environmental goals, such as:
 
 The application produces:
 
-- 📊 **Summary of requirements**
-- 🗂️ **Minimum required datasets**
-- 🛰️ **Role of Earth Observation (EO) data**
-- 🔗 **Example data sources and platforms**
-- 🧠 **Interpretation for the city**
-- 🌐 **Open Spatial Layers (OS layers)**
+- **Summary of requirements**
+- **Minimum required datasets**
+- **Role of Earth Observation (EO) data**
+- **Example data sources and platforms**
+- **Interpretation for the city**
+- **Open Spatial Layers (OS layers)**
 
 ---
 
-## 🧩 Output Structure
+## Output Structure
 
 Each dataset includes:
 
@@ -97,7 +97,7 @@ Additional outputs:
 
 ---
 
-## 🚀 Roadmap
+## Roadmap
 
 This prototype is designed as a staged system:
 
@@ -122,7 +122,7 @@ Interactive spatial interface integrating datasets and metadata into a unified e
 
 ---
 
-## 🛠️ Development Approach
+## Development Approach
 
 The prototype was developed through an **iterative workflow**:
 
@@ -140,7 +140,7 @@ The prototype was developed through an **iterative workflow**:
 
 ---
 
-## 🧠 Research Context
+## Research Context
 
 This application is part of ongoing doctoral research in:
 
@@ -157,7 +157,7 @@ The tool represents a **prototype**, not a full operational UDT system.
 
 ---
 
-## ⚠️ Limitations
+## Limitations
 
 - Prototype-level application  
 - Outputs are indicative, not prescriptive  
@@ -167,7 +167,7 @@ The tool represents a **prototype**, not a full operational UDT system.
 
 ---
 
-## 📌 Future Directions
+## Future Directions
 
 - Integration with real EO data services  
 - Development of structured dataset catalog  
@@ -177,20 +177,20 @@ The tool represents a **prototype**, not a full operational UDT system.
 
 ---
 
-## 📜 License
+## License
 
 (To be defined — e.g. MIT, CC BY-NC)
 
 ---
 
-## 🤝 Acknowledgments
+## Acknowledgments
 
 Developed within doctoral research in Urban and Regional Development,  
 with academic supervision and interdisciplinary support.
 
 ---
 
-## 📬 Contact
+## Contact
 
 **Sona Guliyeva**  
 PhD Candidate – Politecnico di Torino  
