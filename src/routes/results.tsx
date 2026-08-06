@@ -11,13 +11,14 @@ import {
   OPEN_SPATIAL_LAYERS,
   POLICY_THEMES,
   getDatasetsForObjectives,
-  type Dataset,
   type Hazard,
   type ImplementationLevel,
-  type OpenSpatialLayer,
-  type Priority,
-  type SourceType,
-} from "@/lib/udt-data";
+} from "@/data";
+import { SectionHeading } from "@/components/common/section-heading";
+import { StatCard } from "@/components/common/stat-card";
+import { DatasetCard } from "@/components/results/dataset-card";
+import { OSLayerCard } from "@/components/results/os-layer-card";
+import { PathwayCard } from "@/components/results/pathway-card";
 
 type Search = {
   objectives: string;
@@ -48,30 +49,6 @@ export const Route = createFileRoute("/results")({
   }),
   component: ResultsPage,
 });
-
-const PRIORITY_LABEL: Record<Priority, string> = {
-  essential: "Essential",
-  recommended: "Recommended",
-  optional: "Optional",
-};
-
-const SOURCE_LABEL: Record<SourceType, string> = {
-  satellite: "Satellite / EO",
-  ground: "Ground sensor",
-  "open-data": "Open data",
-  administrative: "Administrative",
-};
-
-function priorityClasses(p: Priority): string {
-  if (p === "essential") return "border-essential/30 bg-essential/10 text-essential";
-  if (p === "recommended") return "border-recommended/30 bg-recommended/10 text-recommended";
-  return "border-optional/30 bg-optional/10 text-optional";
-}
-
-function sourceClasses(s: SourceType): string {
-  if (s === "satellite") return "border-eo/30 bg-eo/10 text-eo";
-  return "border-border bg-muted text-muted-foreground";
-}
 
 function ResultsPage() {
   const { objectives, level, city } = Route.useSearch();
@@ -136,7 +113,9 @@ function ResultsPage() {
         </h1>
         <p className="mt-3 max-w-3xl text-base text-muted-foreground">
           Generated from {selected.length} policy objective{selected.length === 1 ? "" : "s"} at the{" "}
-          <span className="font-medium text-foreground">{levelInfo.title.split(" — ")[0].toLowerCase()}</span>{" "}
+          <span className="font-medium text-foreground">
+            {levelInfo.title.split(" — ")[0].toLowerCase()}
+          </span>{" "}
           implementation level.
         </p>
 
@@ -176,9 +155,13 @@ function ResultsPage() {
           <p className="mt-4 text-base leading-relaxed text-foreground/80">{levelInfo.short}</p>
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
             The selected configuration requires{" "}
-            <span className="font-medium text-foreground">{datasets.length} datasets</span>, of which{" "}
+            <span className="font-medium text-foreground">{datasets.length} datasets</span>, of
+            which{" "}
             <span className="font-medium text-foreground">{essentialCount} are essential</span> and{" "}
-            <span className="font-medium text-foreground">{satelliteCount} can be sourced from Earth Observation</span>.
+            <span className="font-medium text-foreground">
+              {satelliteCount} can be sourced from Earth Observation
+            </span>
+            .
           </p>
         </article>
 
@@ -238,7 +221,10 @@ function ResultsPage() {
                 </thead>
                 <tbody>
                   {hydroSensors.map((f) => (
-                    <tr key={f.family} className="border-b border-border/60 align-top last:border-0">
+                    <tr
+                      key={f.family}
+                      className="border-b border-border/60 align-top last:border-0"
+                    >
                       <td className="px-4 py-3 font-medium text-foreground">{f.family}</td>
                       <td className="px-4 py-3 text-muted-foreground">{f.missions.join(", ")}</td>
                       <td className="px-4 py-3 text-muted-foreground">{f.resolution}</td>
@@ -281,7 +267,10 @@ function ResultsPage() {
                 </thead>
                 <tbody>
                   {hydroIndicators.map((i) => (
-                    <tr key={i.indicator} className="border-b border-border/60 align-top last:border-0">
+                    <tr
+                      key={i.indicator}
+                      className="border-b border-border/60 align-top last:border-0"
+                    >
                       <td className="px-4 py-3 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
                         {i.group}
                       </td>
@@ -306,7 +295,10 @@ function ResultsPage() {
             </h3>
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               {HYDRO_INTEGRATION_APPROACHES.map((a) => (
-                <div key={a.approach} className="rounded-lg border border-border bg-card p-5 shadow-card">
+                <div
+                  key={a.approach}
+                  className="rounded-lg border border-border bg-card p-5 shadow-card"
+                >
                   <div className="flex items-baseline justify-between gap-3">
                     <h4 className="font-serif text-base text-foreground">{a.approach}</h4>
                     <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
@@ -369,11 +361,7 @@ function ResultsPage() {
 
       {/* EO Role */}
       <section className="mt-16 rounded-xl border border-border bg-surface p-6 shadow-card sm:p-8">
-        <SectionHeading
-          eyebrow="Earth Observation"
-          title="Role of satellite and EO data"
-          inline
-        />
+        <SectionHeading eyebrow="Earth Observation" title="Role of satellite and EO data" inline />
         <p className="mt-4 max-w-3xl text-base leading-relaxed text-foreground/80">
           Earth Observation provides repeated, spatially consistent measurements across the entire
           urban area. It supports the monitoring of variables that are difficult to capture with
@@ -419,7 +407,10 @@ function ResultsPage() {
 
       {/* Open Spatial Layers */}
       <section className="mt-16">
-        <SectionHeading eyebrow="Open Spatial Layers (OS Layers)" title="Open spatial layers for integration" />
+        <SectionHeading
+          eyebrow="Open Spatial Layers (OS Layers)"
+          title="Open spatial layers for integration"
+        />
         <p className="mt-4 max-w-3xl text-base leading-relaxed text-foreground/80">
           The following open spatial datasets provide a foundational geospatial baseline for an
           Urban Digital Twin. They complement Earth Observation products by adding street networks,
@@ -441,9 +432,17 @@ function ResultsPage() {
           what would be required to progress to the next maturity stage.
         </p>
         <div className="mt-6 grid gap-4 md:grid-cols-3">
-          <PathwayCard title="What the city can realistically achieve" tone="accent" items={levelInfo.capable} />
+          <PathwayCard
+            title="What the city can realistically achieve"
+            tone="accent"
+            items={levelInfo.capable}
+          />
           <PathwayCard title="Key limitations" tone="muted" items={levelInfo.missing} />
-          <PathwayCard title="Requirements to reach the next level" tone="primary" items={levelInfo.nextSteps} />
+          <PathwayCard
+            title="Requirements to reach the next level"
+            tone="primary"
+            items={levelInfo.nextSteps}
+          />
         </div>
       </section>
 
@@ -491,7 +490,9 @@ function ResultsPage() {
         <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">
           Future data visualization
         </p>
-        <h2 className="mt-2 font-serif text-2xl text-foreground">An interactive visualizer is planned</h2>
+        <h2 className="mt-2 font-serif text-2xl text-foreground">
+          An interactive visualizer is planned
+        </h2>
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-foreground/80">
           Future versions of UrbanTwinReadiness will include an interactive map for exploring the
           recommended datasets and Open Spatial Layers, inspecting their metadata (provider,
@@ -508,162 +509,6 @@ function ResultsPage() {
         This profile is a research-based decision-support output. It is intended to inform early
         scoping and stakeholder discussion, not to replace a formal technical feasibility study.
       </p>
-    </div>
-  );
-}
-
-function OSLayerCard({ layer }: { layer: OpenSpatialLayer }) {
-  return (
-    <a
-      href={layer.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group flex h-full flex-col rounded-lg border border-border bg-card p-5 shadow-card transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-elevated"
-    >
-      <div className="flex items-start justify-between gap-3">
-        <h3 className="font-serif text-lg leading-snug text-foreground">{layer.name}</h3>
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          className="mt-1 h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-accent"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="M7 17L17 7M9 7h8v8" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </div>
-      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{layer.description}</p>
-      <dl className="mt-4 grid grid-cols-1 gap-2 border-t border-border pt-3 text-xs">
-        <div className="flex gap-2">
-          <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">Provider</dt>
-          <dd className="text-foreground/85">{layer.provider}</dd>
-        </div>
-        <div className="flex gap-2">
-          <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">Coverage</dt>
-          <dd className="text-foreground/85">{layer.coverage}</dd>
-        </div>
-        <div className="flex gap-2">
-          <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">Access</dt>
-          <dd className="text-foreground/85">{layer.access}</dd>
-        </div>
-      </dl>
-    </a>
-  );
-}
-
-function SectionHeading({ eyebrow, title, inline = false }: { eyebrow: string; title: string; inline?: boolean }) {
-  return (
-    <div className={inline ? "" : "flex items-end justify-between gap-6"}>
-      <div>
-        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">{eyebrow}</p>
-        <h2 className="mt-2 font-serif text-2xl text-foreground sm:text-3xl">{title}</h2>
-      </div>
-      {!inline && <div className="hidden h-px flex-1 bg-border sm:block" />}
-    </div>
-  );
-}
-
-function StatCard({ label, value, accent }: { label: string; value: number; accent?: "essential" | "eo" }) {
-  const accentClass =
-    accent === "essential" ? "text-essential" : accent === "eo" ? "text-eo" : "text-foreground";
-  return (
-    <div className="rounded-lg border border-border bg-card p-5 shadow-card">
-      <div className={`font-serif text-3xl ${accentClass}`}>{value}</div>
-      <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-        {label}
-      </div>
-    </div>
-  );
-}
-
-function DatasetCard({ dataset }: { dataset: Dataset }) {
-  return (
-    <article className="flex h-full flex-col rounded-lg border border-border bg-card p-5 shadow-card transition-shadow hover:shadow-elevated">
-      <div className="flex items-start justify-between gap-3">
-        <h3 className="font-serif text-lg leading-snug text-foreground">{dataset.name}</h3>
-        <span
-          className={`shrink-0 rounded-full border px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] ${priorityClasses(
-            dataset.priority,
-          )}`}
-        >
-          {PRIORITY_LABEL[dataset.priority]}
-        </span>
-      </div>
-      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{dataset.description}</p>
-
-      <div className="mt-4 flex flex-wrap items-center gap-2">
-        <span
-          className={`rounded-md border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] ${sourceClasses(
-            dataset.source,
-          )}`}
-        >
-          {SOURCE_LABEL[dataset.source]}
-        </span>
-      </div>
-
-      {(dataset.provider || dataset.resolution || dataset.access) && (
-        <dl className="mt-4 grid grid-cols-1 gap-2 border-t border-border pt-3 text-xs">
-          {dataset.provider && (
-            <div className="flex gap-2">
-              <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">Provider</dt>
-              <dd className="text-foreground/85">{dataset.provider}</dd>
-            </div>
-          )}
-          {dataset.resolution && (
-            <div className="flex gap-2">
-              <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">Resolution</dt>
-              <dd className="text-foreground/85">{dataset.resolution}</dd>
-            </div>
-          )}
-          {dataset.access && (
-            <div className="flex gap-2">
-              <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">Access</dt>
-              <dd className="text-foreground/85">{dataset.access}</dd>
-            </div>
-          )}
-        </dl>
-      )}
-
-      {dataset.examples.length > 0 && (
-        <div className="mt-3 border-t border-border pt-3">
-          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-            Example sources
-          </p>
-          <p className="mt-1 text-sm text-foreground/80">{dataset.examples.join(" · ")}</p>
-        </div>
-      )}
-    </article>
-  );
-}
-
-function PathwayCard({
-  title,
-  items,
-  tone,
-}: {
-  title: string;
-  items: string[];
-  tone: "accent" | "muted" | "primary";
-}) {
-  const toneClasses =
-    tone === "accent"
-      ? "border-accent/30 bg-accent/5"
-      : tone === "primary"
-      ? "border-primary/30 bg-primary/5"
-      : "border-border bg-surface";
-  const dotClass =
-    tone === "accent" ? "bg-accent" : tone === "primary" ? "bg-primary" : "bg-muted-foreground";
-  return (
-    <div className={`rounded-lg border p-6 shadow-card ${toneClasses}`}>
-      <h3 className="font-serif text-lg text-foreground">{title}</h3>
-      <ul className="mt-4 space-y-3">
-        {items.map((it) => (
-          <li key={it} className="flex gap-3 text-sm leading-relaxed text-foreground/85">
-            <span className={`mt-2 h-1.5 w-1.5 shrink-0 rounded-full ${dotClass}`} />
-            <span>{it}</span>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
