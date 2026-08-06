@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { POLICY_THEMES, type ImplementationLevel } from "@/lib/udt-data";
+import { POLICY_THEMES, type ImplementationLevel } from "@/data";
 
 export const Route = createFileRoute("/configure")({
   head: () => ({
@@ -85,9 +85,7 @@ function ConfigurePage() {
       <section className="rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
         <div className="flex items-baseline justify-between">
           <h2 className="font-serif text-2xl text-foreground">Policy objectives</h2>
-          <span className="font-mono text-xs text-muted-foreground">
-            {totalSelected} selected
-          </span>
+          <span className="font-mono text-xs text-muted-foreground">{totalSelected} selected</span>
         </div>
         <p className="mt-2 text-sm text-muted-foreground">
           Select one or more objectives, grouped by thematic domain.
@@ -128,7 +126,13 @@ function ConfigurePage() {
                         aria-hidden
                       >
                         {active && (
-                          <svg viewBox="0 0 24 24" fill="none" className="h-3 w-3" stroke="currentColor" strokeWidth="3">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            className="h-3 w-3"
+                            stroke="currentColor"
+                            strokeWidth="3"
+                          >
                             <path d="M5 12l5 5 9-11" strokeLinecap="round" strokeLinejoin="round" />
                           </svg>
                         )}
@@ -205,7 +209,13 @@ function ConfigurePage() {
             className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow-card transition-all hover:bg-primary/90 hover:shadow-elevated disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
           >
             Generate profile
-            <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" stroke="currentColor" strokeWidth="2">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              className="h-4 w-4"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
               <path d="M5 12h14M13 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
