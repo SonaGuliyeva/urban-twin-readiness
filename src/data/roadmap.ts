@@ -8,7 +8,7 @@ export const FUTURE_ROADMAP: {
     version: "V1.0",
     title: "Minimum dataset readiness",
     description:
-      "Identifies the minimum datasets, source types and Earth Observation inputs required for a given combination of policy objectives and implementation level.",
+      "Identifies the minimum datasets, source types and Earth Observation inputs required for a given combination of policy objectives and technical maturity level.",
     status: "current",
   },
   {

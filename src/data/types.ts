@@ -1,4 +1,4 @@
-export type ImplementationLevel = "beginner" | "moderate" | "advanced";
+export type ImplementationLevel = "status" | "informative" | "predictive" | "optimisation" | "autonomous";
 
 export type Priority = "essential" | "recommended" | "optional";
 
@@ -47,6 +47,26 @@ export interface EOIndicator {
   flood: string | null;
   drought: string | null;
   sources: string[];
+}
+
+export interface TurinSegment {
+  id: number;
+  street: string;
+  lst: number;
+  ndviAir: number;
+  imperviousPct: number;
+  distRiverM: number;
+  envStressed: boolean;
+  droughtStressed: boolean;
+  thermalStressed: boolean;
+}
+
+export interface CaseStudy {
+  name: string;
+  city: string;
+  summary: string;
+  relatedObjectives: string[];
+  source: string;
 }
 
 export interface EOService {

@@ -289,22 +289,6 @@ const DATASETS_BY_OBJECTIVE: Record<string, Dataset[]> = {
       "Citizen weather stations",
     ]),
   ],
-  "climate-adaptation": [
-    D(
-      "Multi-Hazard Climate Indicators",
-      "Heat, drought, flood and storm indices.",
-      "open-data",
-      "essential",
-      ["Copernicus C3S European Climate Adaptation"],
-    ),
-    D(
-      "Land Cover Change Time Series",
-      "Long-term urban expansion and green loss.",
-      "satellite",
-      "recommended",
-      ["Copernicus Global/Local Land Cover"],
-    ),
-  ],
   "thermal-comfort": [
     D(
       "Land Surface Temperature & Humidity",
@@ -612,14 +596,7 @@ const DATASETS_BY_OBJECTIVE: Record<string, Dataset[]> = {
       "DSO/utility data",
     ]),
   ],
-  "climate-neutrality": [
-    D(
-      "Baseline Emission Inventory",
-      "Reference year sectoral emissions.",
-      "administrative",
-      "essential",
-      ["SECAP baseline", "GPC"],
-    ),
+  "renewable-energy": [
     D(
       "Renewable Energy & Grid Data",
       "Generation, storage and grid mix.",
@@ -627,24 +604,203 @@ const DATASETS_BY_OBJECTIVE: Record<string, Dataset[]> = {
       "recommended",
       ["TSO/DSO open data"],
     ),
-    D("Land Carbon & Vegetation Stocks", "Urban carbon sinks.", "satellite", "recommended", [
-      "Sentinel-2 biomass proxies",
-    ]),
-  ],
-  "sustainable-development": [
     D(
-      "SDG-Aligned Urban Indicators",
-      "Cross-sectoral monitoring framework.",
-      "open-data",
+      "Solar Irradiance & Rooftop Potential",
+      "Surface-level solar resource mapping for rooftop and ground-mounted PV siting.",
+      "satellite",
       "essential",
-      ["UN-Habitat City Prosperity", "Eurostat SDG"],
+      ["Copernicus Atmosphere Monitoring Service", "PVGIS"],
     ),
     D(
-      "Land Cover & Urban Form",
-      "Compactness, sprawl and green ratios.",
+      "Geothermal & Building-Level Energy Atlas",
+      "Building energy demand and geothermal potential by depth.",
+      "administrative",
+      "recommended",
+      ["National geothermal registers", "Municipal energy atlases"],
+    ),
+  ],
+  "energy-efficiency": [
+    D(
+      "Building Energy Performance Certificates",
+      "Consumption, heating systems and retrofit status by building.",
+      "administrative",
+      "essential",
+      ["National EPC registers", "Municipal building databases"],
+    ),
+    D(
+      "Land Surface Temperature (Building-Scale)",
+      "Thermal anomalies indicating heat loss and retrofit priority.",
       "satellite",
       "recommended",
-      ["Copernicus Urban Atlas"],
+      ["Landsat 8/9 TIRS", "Airborne thermal survey"],
+    ),
+    D(
+      "Smart Meter Consumption Data",
+      "Sub-daily electricity and gas consumption by sector.",
+      "ground",
+      "optional",
+      ["DSO smart meter feeds"],
+    ),
+  ],
+  "wastewater-sanitation": [
+    D(
+      "Sewer & Wastewater Network Maps",
+      "Network topology, capacity and treatment plant locations.",
+      "administrative",
+      "essential",
+      ["Municipal utility registers"],
+    ),
+    D(
+      "Wastewater Treatment Performance Data",
+      "Effluent quality and treatment plant load.",
+      "administrative",
+      "recommended",
+      ["National environmental agency reporting"],
+    ),
+    D(
+      "Combined Sewer Overflow Monitoring",
+      "Overflow event frequency and volume, linked to rainfall.",
+      "ground",
+      "optional",
+      ["Utility SCADA/telemetry"],
+    ),
+  ],
+  "early-warning": [
+    D(
+      "Multi-Hazard Alert Feeds",
+      "Real-time hazard notifications for flood, storm and heat.",
+      "open-data",
+      "essential",
+      ["Copernicus Emergency Management Service", "National meteorological services"],
+    ),
+    D(
+      "Weather Radar & Nowcasting",
+      "Short-range precipitation forecasting for rapid-onset events.",
+      "satellite",
+      "recommended",
+      ["EUMETSAT", "National radar networks"],
+    ),
+    D(
+      "Population & Asset Exposure Layers",
+      "Who and what is exposed within alert zones.",
+      "administrative",
+      "recommended",
+      ["Census grids", "Building registers"],
+    ),
+  ],
+  "public-safety": [
+    D(
+      "Incident & Crime Reporting Data",
+      "Geolocated incident records for spatial risk analysis.",
+      "administrative",
+      "essential",
+      ["Municipal/police open data portals"],
+    ),
+    D(
+      "Public Lighting & CCTV Coverage",
+      "Streetlight and camera coverage informing safety planning.",
+      "administrative",
+      "recommended",
+      ["Municipal asset registers"],
+    ),
+    D(
+      "Footfall & Public Space Usage",
+      "Pedestrian activity patterns for risk-informed design.",
+      "ground",
+      "optional",
+      ["Municipal mobility counters"],
+    ),
+  ],
+  "critical-infrastructure": [
+    D(
+      "Critical Infrastructure Asset Register",
+      "Locations and interdependencies of key facilities.",
+      "administrative",
+      "essential",
+      ["National critical infrastructure inventories"],
+    ),
+    D(
+      "Infrastructure Exposure to Hazards",
+      "Overlay of assets with flood, heat and seismic hazard layers.",
+      "open-data",
+      "recommended",
+      ["Copernicus hazard layers", "National risk atlases"],
+    ),
+    D(
+      "Network Redundancy & Downtime Records",
+      "Historical outage data for resilience assessment.",
+      "administrative",
+      "optional",
+      ["Utility incident logs"],
+    ),
+  ],
+  "emergency-coordination": [
+    D(
+      "Emergency Services Facility Locations",
+      "Police, fire, ambulance and hospital coverage areas.",
+      "administrative",
+      "essential",
+      ["Municipal/regional civil protection registers"],
+    ),
+    D(
+      "Real-Time Situational Awareness Feeds",
+      "Live incident, traffic and hazard data for dispatch coordination.",
+      "ground",
+      "recommended",
+      ["Emergency CAD systems", "Traffic management centres"],
+    ),
+    D(
+      "Response Time & Coverage Analysis",
+      "Historical response times against service-area targets.",
+      "administrative",
+      "optional",
+      ["Civil protection performance records"],
+    ),
+  ],
+  "healthcare-access": [
+    D(
+      "Healthcare Facility Locations & Capacity",
+      "Hospitals, clinics and their catchment capacity.",
+      "administrative",
+      "essential",
+      ["National health facility registers"],
+    ),
+    D(
+      "Population Demographics & Density",
+      "Age structure and density for accessibility modelling.",
+      "open-data",
+      "essential",
+      ["National census", "Eurostat"],
+    ),
+    D(
+      "Transport Accessibility to Care",
+      "Travel time to nearest facility by mode.",
+      "open-data",
+      "recommended",
+      ["OpenStreetMap routing", "GTFS transit feeds"],
+    ),
+  ],
+  "social-vulnerability": [
+    D(
+      "Socio-Economic Vulnerability Indices",
+      "Income, age, housing quality and deprivation indicators.",
+      "open-data",
+      "essential",
+      ["Eurostat", "National statistical offices"],
+    ),
+    D(
+      "Vulnerable Facility Locations",
+      "Schools, elderly care and social housing needing priority protection.",
+      "administrative",
+      "essential",
+      ["Municipal facility registers"],
+    ),
+    D(
+      "Environmental Exposure Overlay",
+      "Heat, flood and air-quality exposure cross-referenced with vulnerability.",
+      "satellite",
+      "recommended",
+      ["Combined LST / AQ / flood layers"],
     ),
   ],
 };
@@ -665,17 +821,26 @@ export function getDatasetsForObjectives(ids: string[], level: ImplementationLev
   });
   let datasets = Array.from(map.values());
 
-  if (level === "beginner") {
+  if (level === "status") {
     datasets = datasets.filter((d) => d.priority === "essential" || d.source === "open-data");
-  } else if (level === "moderate") {
+  } else if (level === "informative") {
     datasets = datasets.filter((d) => d.priority !== "optional");
   }
+  // predictive, optimisation and autonomous levels draw on the full dataset pool;
+  // what distinguishes them is analytical/governance capacity, not data breadth
+  // (see LEVEL_DESCRIPTIONS — consistent with Masoumi et al., 2023, who note that
+  // higher-maturity twins are differentiated less by which data they hold than by
+  // what they do with it).
 
   return datasets
     .sort((a, b) => priorityRank(a.priority) - priorityRank(b.priority))
     .map(enrichDataset);
 }
 
+// Technical Maturity Levels, as used in the author's related Urban Digital Twin
+// survey instrument (national and subnational government questionnaires),
+// broadly consistent with the maturity staging described in the wider
+// literature (e.g. Liu et al., 2024; Masoumi et al., 2023).
 export const LEVEL_DESCRIPTIONS: Record<
   ImplementationLevel,
   {
@@ -686,18 +851,18 @@ export const LEVEL_DESCRIPTIONS: Record<
     nextSteps: string[];
   }
 > = {
-  beginner: {
-    title: "Beginner — Static Foundation",
+  status: {
+    title: "Level 1 — Static Digital Model",
     short:
-      "A basic 2D/3D digital twin built primarily on open data, with limited integration. Suitable for cities starting from scratch.",
+      "Provides 3D or 2D visualization with limited analytics; relies on mostly static data and is used primarily for basic visualization and communication.",
     capable: [
       "Visualise the city in 2D/3D using open base maps and building footprints.",
-      "Overlay periodic open environmental indicators (e.g. land cover, basic air quality).",
+      "Overlay static or periodically refreshed environmental layers (e.g. land cover, basic air quality).",
       "Communicate baseline diagnostics to decision-makers and the public.",
     ],
     missing: [
-      "Continuous data flows from sensors and operational systems.",
-      "Analytical and modelling capacity for what-if scenarios.",
+      "Any continuous or automated data connection to real-world conditions.",
+      "Analytical or modelling capacity beyond visualisation.",
       "Interoperability across municipal departments.",
     ],
     nextSteps: [
@@ -706,44 +871,83 @@ export const LEVEL_DESCRIPTIONS: Record<
       "Pilot one thematic use case (e.g. heat islands or flood risk).",
     ],
   },
-  moderate: {
-    title: "Moderate — Semi-Dynamic Twin",
+  informative: {
+    title: "Level 2 — Analytical Digital Twin",
     short:
-      "Periodic satellite updates combined with local sensor integration and basic analytics. Suitable for cities with established GIS capacity.",
+      "Integrates multiple datasets and leverages dashboards and analytics to perform limited scenario analysis.",
     capable: [
       "Update environmental layers on a regular cadence (daily to monthly).",
-      "Integrate municipal IoT sensors and SCADA feeds for selected domains.",
+      "Integrate data across several institutional and open sources for a given domain.",
       "Run descriptive analytics, dashboards and trend monitoring.",
     ],
     missing: [
-      "Real-time data fusion across multiple operational systems.",
-      "AI-driven predictive models and decision-support workflows.",
+      "Real-time or near-real-time data fusion.",
+      "Forecasting or predictive modelling capacity.",
       "Standardised APIs aligned with international interoperability frameworks.",
     ],
     nextSteps: [
       "Deploy a city data platform with standardised APIs (e.g. OGC, FIWARE).",
-      "Develop predictive models for priority objectives.",
-      "Strengthen cross-departmental governance and data sharing agreements.",
+      "Begin piloting predictive analytics for one priority domain.",
+      "Formalise cross-departmental data-sharing agreements.",
     ],
   },
-  advanced: {
-    title: "Advanced — Operational Digital Twin",
+  predictive: {
+    title: "Level 3 — Predictive Digital Twin",
     short:
-      "Real-time or near-real-time twin with AI-supported analytics, multi-source data fusion, and operational decision support.",
+      "Incorporates predictive modeling, forecasting, or simulation of urban systems and trends.",
     capable: [
       "Fuse satellite, sensor and administrative data in near real-time.",
-      "Run AI/ML models for forecasting, anomaly detection and scenario testing.",
-      "Support operational decisions across departments through shared services.",
+      "Run forecasting and scenario-testing models for priority domains.",
+      "Support early-warning and situational-awareness functions.",
     ],
     missing: [
+      "Logic that translates forecasts into recommended actions (prescriptive capacity).",
+      "Two-way interaction with physical urban systems.",
       "Continuous validation against ground truth and uncertainty quantification.",
-      "Long-term funding and skills sustainability.",
+    ],
+    nextSteps: [
+      "Develop AI/ML forecasting models for priority objectives.",
+      "Build decision-support views that turn forecasts into option sets for planners.",
+      "Establish a validation routine against ground-truth or independent reference data.",
+    ],
+  },
+  optimisation: {
+    title: "Level 4 — Prescriptive Digital Twin",
+    short:
+      "Employs advanced simulations and scenario planning specifically designed to support policy or operational decisions.",
+    capable: [
+      "Run AI/ML models for optimisation and anomaly detection across domains.",
+      "Generate prescriptive recommendations to support policy and operational decisions.",
+      "Trigger automated alerts or limited actuation in selected systems.",
+    ],
+    missing: [
+      "Full closed-loop automation across all connected systems.",
+      "Long-term funding and technical-skills sustainability.",
       "Citizen-facing transparency and participatory layers.",
     ],
     nextSteps: [
       "Institutionalise the twin as core municipal infrastructure.",
-      "Extend interoperability with regional and EU data spaces.",
-      "Embed ethical AI, transparency and citizen engagement mechanisms.",
+      "Extend interoperability with regional and national data spaces.",
+      "Embed ethical-AI, transparency and citizen-engagement mechanisms.",
+    ],
+  },
+  autonomous: {
+    title: "Level 5 — Autonomous Digital Twin",
+    short:
+      "Features real-time data integration, artificial intelligence (AI), and automated decision support to trigger interventions.",
+    capable: [
+      "Operate continuous bidirectional physical–digital feedback loops.",
+      "Autonomously adjust selected operational systems within governed limits.",
+      "Self-monitor performance and recalibrate underlying models over time.",
+    ],
+    missing: [
+      "Full-scale deployment remains rare even among leading global cities.",
+      "Mature governance, liability and public-trust frameworks for autonomous actuation.",
+    ],
+    nextSteps: [
+      "Establish clear governance and liability frameworks before enabling autonomous actuation.",
+      "Pilot autonomous control in low-risk domains before scaling further.",
+      "Maintain human-in-the-loop oversight and override mechanisms at all times.",
     ],
   },
 };

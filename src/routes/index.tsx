@@ -34,7 +34,7 @@ function HomePage() {
             <p className="mt-6 max-w-2xl text-base leading-relaxed text-foreground/80">
               UrbanTwinReadiness helps cities and public authorities identify the datasets, data
               sources, and Earth Observation inputs needed to develop an Urban Digital Twin. Select
-              your policy objectives and implementation level to generate a structured, evidence-based
+              your policy objectives and technical maturity level to generate a structured, evidence-based
               data requirement profile.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-3">
@@ -59,10 +59,10 @@ function HomePage() {
           {/* Stat row */}
           <dl className="mt-20 grid grid-cols-2 gap-6 border-t border-border/70 pt-8 sm:grid-cols-4">
             {[
-              { k: "24", v: "Policy objectives" },
-              { k: "8", v: "Thematic domains" },
-              { k: "3", v: "Implementation levels" },
-              { k: "Open", v: "Grounded in EU open data" },
+              { k: "30", v: "Policy objectives" },
+              { k: "10", v: "Thematic domains" },
+              { k: "5", v: "Technical maturity levels" },
+              { k: "Open", v: "Grounded in open Earth Observation data" },
             ].map((s) => (
               <div key={s.v}>
                 <dt className="font-serif text-3xl text-foreground">{s.k}</dt>
@@ -96,8 +96,8 @@ function HomePage() {
             },
             {
               n: "02",
-              t: "Define implementation level",
-              d: "Indicate the city's current capacity — beginner, moderate, or advanced — to align recommendations with realistic conditions.",
+              t: "Define technical maturity level",
+              d: "Indicate the city's current capacity — from a static digital model through to a fully autonomous twin — to align recommendations with realistic conditions.",
             },
             {
               n: "03",
@@ -122,11 +122,12 @@ function HomePage() {
         <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-2">
           <div>
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Scope</p>
-            <h2 className="mt-2 font-serif text-3xl text-foreground">Focused on urban environmental management</h2>
+            <h2 className="mt-2 font-serif text-3xl text-foreground">Ten domains within urban environmental management</h2>
             <p className="mt-4 text-base leading-relaxed text-foreground/80">
-              The tool deliberately concentrates on the environmental dimension of urban systems —
-              air quality, water and flood risk, urban climate, green infrastructure, and land use.
-              This focus keeps the recommendations operational and methodologically consistent.
+              From urban planning and mobility to energy, disaster management, public safety, and
+              health, the tool spans ten thematic domains that together shape a city&rsquo;s
+              environmental management capacity — keeping every recommendation grounded in the same
+              operational, evidence-based methodology.
             </p>
           </div>
           <div>

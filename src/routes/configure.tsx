@@ -9,7 +9,7 @@ export const Route = createFileRoute("/configure")({
       {
         name: "description",
         content:
-          "Select your policy objectives and implementation level to generate a minimum data requirements profile for your Urban Digital Twin.",
+          "Select your policy objectives and technical maturity level to generate a minimum data requirements profile for your Urban Digital Twin.",
       },
     ],
   }),
@@ -18,29 +18,44 @@ export const Route = createFileRoute("/configure")({
 
 const LEVELS: { id: ImplementationLevel; title: string; tag: string; desc: string }[] = [
   {
-    id: "beginner",
-    title: "Beginner",
-    tag: "Static 2D / 3D twin",
-    desc: "Limited integration, primarily based on open data. Suitable for cities starting from scratch with foundational mapping.",
+    id: "status",
+    title: "1 · Static Digital Model",
+    tag: "3D/2D visualization",
+    desc: "Provides 3D or 2D visualization with limited analytics; relies on mostly static data and is used primarily for basic visualization and communication.",
   },
   {
-    id: "moderate",
-    title: "Moderate",
-    tag: "Semi-dynamic twin",
-    desc: "Periodic satellite updates combined with local sensor integration and basic analytical capacity.",
+    id: "informative",
+    title: "2 · Analytical Digital Twin",
+    tag: "Dashboards & analytics",
+    desc: "Integrates multiple datasets and leverages dashboards and analytics to perform limited scenario analysis.",
   },
   {
-    id: "advanced",
-    title: "Advanced",
-    tag: "Real-time & AI",
-    desc: "Near real-time data flows, AI-supported analytics, multi-source data fusion, and operational decision support.",
+    id: "predictive",
+    title: "3 · Predictive Digital Twin",
+    tag: "Forecasting & simulation",
+    desc: "Incorporates predictive modeling, forecasting, or simulation of urban systems and trends.",
+  },
+  {
+    id: "optimisation",
+    title: "4 · Prescriptive Digital Twin",
+    tag: "Scenario planning",
+    desc: "Employs advanced simulations and scenario planning specifically designed to support policy or operational decisions.",
+  },
+  {
+    id: "autonomous",
+    title: "5 · Autonomous Digital Twin",
+    tag: "Real-time & automated",
+    desc: "Features real-time data integration, artificial intelligence (AI), and automated decision support to trigger interventions.",
   },
 ];
+
+// Technical Maturity Levels, as used in the author's related Urban Digital Twin survey
+// instrument (national and subnational government questionnaires).
 
 function ConfigurePage() {
   const navigate = useNavigate();
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [level, setLevel] = useState<ImplementationLevel>("moderate");
+  const [level, setLevel] = useState<ImplementationLevel>("predictive");
   const [city, setCity] = useState("");
 
   const toggle = (id: string) =>
@@ -147,14 +162,14 @@ function ConfigurePage() {
         </div>
       </section>
 
-      {/* Implementation level */}
+      {/* Technical maturity level */}
       <section className="mt-8 rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
-        <h2 className="font-serif text-2xl text-foreground">Implementation level</h2>
+        <h2 className="font-serif text-2xl text-foreground">Technical maturity level</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           Select the option that best reflects your city's current digital and analytical capacity.
         </p>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-3">
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {LEVELS.map((l) => {
             const active = level === l.id;
             return (
@@ -170,12 +185,10 @@ function ConfigurePage() {
                 ].join(" ")}
                 aria-pressed={active}
               >
-                <div className="flex items-baseline justify-between">
-                  <span className="font-serif text-xl text-foreground">{l.title}</span>
-                  <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-                    {l.tag}
-                  </span>
-                </div>
+                <span className="font-serif text-xl text-foreground">{l.title}</span>
+                <span className="mt-1 block font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                  {l.tag}
+                </span>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{l.desc}</p>
               </button>
             );

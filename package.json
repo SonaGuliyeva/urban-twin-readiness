@@ -1,5 +1,6 @@
 {
-  "name": "tanstack_start_ts",
+  "name": "urban-twin-readiness",
+  "description": "Decision-support tool for assessing minimum data requirements for Urban Digital Twins in environmental management.",
   "private": true,
   "sideEffects": false,
   "type": "module",

@@ -17,7 +17,7 @@ export const OPEN_SPATIAL_LAYERS: OpenSpatialLayer[] = [
     provider: "Copernicus Land Monitoring Service",
     coverage: "EEA-39 cities, ~10 m, updated every ~6 years",
     access: "Open access via Copernicus Land portal",
-    url: "https://land.copernicus.eu/local/urban-atlas",
+    url: "https://land.copernicus.eu/en/products/urban-atlas",
   },
   {
     name: "Copernicus DEM (GLO-30 / EEA-10)",
@@ -26,7 +26,7 @@ export const OPEN_SPATIAL_LAYERS: OpenSpatialLayer[] = [
     provider: "ESA / Copernicus",
     coverage: "30 m global, 10 m over EEA-39",
     access: "Open access via Copernicus Data Space",
-    url: "https://dataspace.copernicus.eu",
+    url: "https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM",
   },
   {
     name: "GADM / EU Administrative Boundaries (GISCO)",
@@ -35,7 +35,7 @@ export const OPEN_SPATIAL_LAYERS: OpenSpatialLayer[] = [
     provider: "Eurostat GISCO / GADM",
     coverage: "Global and European, multiple administrative levels",
     access: "Open access download (shapefile, GeoJSON)",
-    url: "https://ec.europa.eu/eurostat/web/gisco",
+    url: "https://ec.europa.eu/eurostat/web/gisco/geodata",
   },
   {
     name: "Microsoft / Google Open Building Footprints",

@@ -4,7 +4,7 @@ export function StatCard({
   accent,
 }: {
   label: string;
-  value: number;
+  value: number | string;
   accent?: "essential" | "eo";
 }) {
   const accentClass =

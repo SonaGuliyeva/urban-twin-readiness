@@ -5,3 +5,5 @@ export * from "@/data/eo-platforms";
 export * from "@/data/open-spatial-layers";
 export * from "@/data/roadmap";
 export * from "@/data/hydro";
+export * from "@/data/case-studies";
+export * from "@/data/turin-case";

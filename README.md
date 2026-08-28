@@ -1,179 +1,121 @@
 # UrbanTwinReadiness
 
-**A Decision-Support Prototype for Urban Digital Twin Development in Urban Environmental Management**
+**A Decision-Support Tool for Assessing Minimum Data Requirements for Urban Digital Twins in Environmental Management**
+
+**Live app:** https://urban-twin-readiness.sona-guliyeva.workers.dev/
 
 ---
 
 ## Overview
 
-**UrbanTwinReadiness** is a research-driven web application designed to support cities, planners, and institutions in identifying the **minimum data requirements** for developing **Urban Digital Twins (UDTs)** focused on **urban environmental management**.
+**UrbanTwinReadiness** is a research-driven web application that helps cities, planners, and institutions identify the **minimum data requirements** for developing **Urban Digital Twins (UDTs)** for environmental management and disaster resilience.
 
-The tool translates academic research into a practical interface that links:
-
-- **Policy objectives**
-- **Implementation levels**
-- **Required datasets**
-- **Earth Observation (EO) capabilities**
+Given a set of policy objectives and a declared technical maturity level, the tool generates a structured profile: required datasets, source typologies, priority levels, relevant Earth Observation (EO) platforms, real-world reference deployments, and a phased, city-specific acquisition roadmap.
 
 ---
 
 ## Purpose
 
-Cities increasingly need data-driven tools to address environmental challenges such as:
-
-- Flood risk and disaster management  
-- Air quality and emissions  
-- Urban heat and climate adaptation  
-- Water resource management  
-- Land use and urban planning  
-
-However, there is often a gap between **data availability** and **operational use**.
-
-**UrbanTwinReadiness** helps bridge this gap by providing a structured way to understand:
-
-> What data is minimally required to develop a functional Urban Digital Twin for specific environmental objectives.
+Cities increasingly need data-driven tools to address environmental and resilience challenges across a wide range of domains, from air quality and flood risk to energy, public safety, and health. The gap is rarely data availability, it is knowing **what to acquire first, in what order, and from where**. UrbanTwinReadiness closes that gap by translating stated priorities directly into a concrete, sourced, prioritised data-acquisition plan, rather than a general readiness score.
 
 ---
 
 ## How It Works
 
 ### 1. Select Policy Objectives
-Users choose one or more environmental goals, such as:
-- Improve Air Quality  
-- Flood Risk Reduction  
-- Urban Heat Island Mitigation  
-- Water Resource Management  
-- Green Infrastructure Planning  
-- Climate Neutrality Targets  
 
----
+Users choose one or more objectives across **10 thematic domains** (30 objectives in total):
 
-### 2. Select Implementation Level
+- Urban Planning & Development
+- Mobility & Transport
+- Water & Sanitation
+- Green Spaces & Environment
+- Air Quality
+- Disaster Management
+- Energy
+- Public Safety & Security
+- Health & Social Services
+- Climate Risk & Resilience
 
-- **Beginner**  
-  Basic static UDT using open data
+### 2. Select Technical Maturity Level
 
-- **Moderate**  
-  Semi-dynamic UDT integrating sensors and periodic satellite data
-
-- **Advanced**  
-  Near real-time UDT with AI-supported analytics and multi-source data fusion
-
----
+- **1 · Static Digital Model** — 3D/2D visualization, limited analytics, mostly static data
+- **2 · Analytical Digital Twin** — integrated datasets, dashboards, limited scenario analysis
+- **3 · Predictive Digital Twin** — predictive modeling, forecasting, simulation
+- **4 · Prescriptive Digital Twin** — advanced simulations and scenario planning for decisions
+- **5 · Autonomous Digital Twin** — real-time data, AI, automated decision support
 
 ### 3. Generate Results
 
 The application produces:
 
-- **Summary of requirements**
-- **Minimum required datasets**
-- **Role of Earth Observation (EO) data**
-- **Example data sources and platforms**
-- **Interpretation for the city**
-- **Open Spatial Layers (OS layers)**
+- **Summary** of the selected maturity level (what the city can realistically achieve)
+- **Minimum required datasets**, each tagged by priority (essential / recommended / optional) and source type (satellite/EO, ground sensor, open data, administrative)
+- **Role of Earth Observation data**, with 9 EO reference platforms linked directly to their data-access interfaces (Copernicus Data Space Ecosystem, Copernicus Land Monitoring Service, CAMS, C3S, Copernicus Emergency Management Service, NASA Earthdata, USGS EarthExplorer, Google Earth Engine, ESA Earth Online)
+- **Open Spatial Layers** — 6 open foundational layers (OpenStreetMap, Copernicus Urban Atlas, Copernicus DEM, GISCO administrative boundaries, open building footprints, local open data portals)
+- **Real-world case studies** (Rotterdam, Helsinki, Antwerp, Digital Twin Victoria), surfaced when relevant to the selected objectives
+- **Key limitations** at the selected maturity level
+- **A phased, city-specific roadmap** (Phase 1: essential datasets to start with, Phase 2: recommended datasets to build capacity, Phase 3: qualitative steps to reach the next maturity level)
 
 ---
 
-## Output Structure
+## Turin — Next Development Step
 
-Each dataset includes:
-
-- Name  
-- Description  
-- Source type:
-  - Satellite  
-  - Ground  
-  - Open Data  
-  - Administrative  
-- Priority:
-  - Essential  
-  - Recommended  
-  - Optional  
-- Examples (e.g. Sentinel-2, OpenStreetMap)
-
-Additional outputs:
-- EO capabilities and key platforms  
-- Practical interpretation (what the city can achieve)  
-
----
-
-## Roadmap
-
-This prototype is designed as a staged system:
-
-### **V1.0 — Current Version**
-Minimum dataset readiness tool based on policy objectives and implementation levels  
-
-### **V2.0 — Open Spatial Layers**
-Integration of open datasets such as:
-- OpenStreetMap  
-- Copernicus datasets  
-- Local open data  
-
-### **V3.0 — Discovery Catalog**
-Metadata-driven system including:
-- dataset providers  
-- resolution  
-- access methods  
-- licensing  
-
-### **V4.0 — Visualizer Tool**
-Interactive spatial interface integrating datasets and metadata into a unified environment  
+Integration of a fully worked, object-level city case, based on independently produced Turin road-network data (82 segments, enriched with airborne, Sentinel-2 and SDGSAT-1 land surface temperature), is planned as the platform's next development milestone. Until then, the tool's dataset recommendations remain illustrative rather than empirically cross-checked against measured conditions for a specific city.
 
 ---
 
 ## Development Approach
 
-The prototype was developed through an **iterative workflow**:
+UrbanTwinReadiness was built iteratively across three platforms:
 
-- **Concept & Research:**  
-  Based on PhD research on Earth Observation and Urban Digital Twins  
+1. **base44** (no-code) — initial prototype, to validate the core interaction (objectives in → data profile out) before any real engineering investment.
+2. **Lovable** (AI-assisted development) — substantial rebuild into a real, inspectable codebase (React / TanStack Start), hosted on Lovable's own infrastructure.
+3. **Independent, open-source, self-hosted** — the codebase was migrated to this repository and deployed independently on Cloudflare Workers, removing dependence on any third-party platform. All subsequent development (the 5-level maturity model, the 10-domain/30-objective taxonomy, direct EO/open-layer deep links, roadmap logic) was built directly against this independent codebase.
 
-- **Logic Prototyping:**  
-  Initial testing of dataset recommendation logic using AI-assisted tools  
+### Tech stack
 
-- **Interface Development:**  
-  MVP interface generated and refined using modern frontend tools  
+- [TanStack Start](https://tanstack.com/start) (React) + Vite
+- Tailwind CSS
+- Deployed on [Cloudflare Workers](https://developers.cloudflare.com/workers/)
 
-- **Version Control:**  
-  GitHub used for transparency, iteration, and future scalability  
+### Running locally
+
+```bash
+npm install
+npm run dev
+```
+
+### Deploying
+
+```bash
+npm run build
+npx wrangler deploy
+```
+
+---
+
+## Roadmap
+
+- **V1.0 — Current.** Minimum dataset readiness across 30 objectives / 10 domains and 5 technical maturity levels.
+- **V2.0 — Turin object-level case study.** Real, measured environmental data for a fully worked city example.
+- **V3.0 — Discovery catalog.** Metadata-driven dataset browsing (provider, resolution, access, licensing).
+- **V4.0 — Interactive visualizer.** A spatial interface for exploring recommended datasets and layers directly.
 
 ---
 
 ## Research Context
 
-This application is part of ongoing doctoral research in:
-
-**Urban and Regional Development**  
-Politecnico di Torino  
-
-Focus:
-- Earth Observation (EO)  
-- Urban Digital Twins (UDTs)  
-- Environmental data integration  
-- Policy-oriented decision support  
-
-The tool represents a **prototype**, not a full operational UDT system.
+This application is part of ongoing doctoral research in **Urban and Regional Development** at **Politecnico di Torino**, focused on Earth Observation, Urban Digital Twins, environmental data integration, and policy-oriented decision support. It is a research prototype, not a full operational UDT system.
 
 ---
 
 ## Limitations
 
-- Prototype-level application  
-- Outputs are indicative, not prescriptive  
-- Not connected to real-time data sources  
-- No live GIS or simulation engine  
-- Not validated through municipal deployment  
-
----
-
-## Future Directions
-
-- Integration with real EO data services  
-- Development of structured dataset catalog  
-- Interactive spatial visualization  
-- Institutional readiness assessment module  
-- Expansion toward a full UDT support platform  
+- Research prototype; outputs are indicative, not prescriptive.
+- Dataset recommendation logic is expert-curated, not derived from a systematic survey of municipal practice.
+- Not yet tested prospectively with municipal users.
+- Not connected to real-time data sources; no live GIS or simulation engine.
 
 ---
 
@@ -183,17 +125,8 @@ The tool represents a **prototype**, not a full operational UDT system.
 
 ---
 
-## Acknowledgments
-
-Developed within doctoral research in Urban and Regional Development,  
-with academic supervision and interdisciplinary support.
-
----
-
 ## Contact
 
-**Sona Guliyeva**  
-PhD Candidate – Politecnico di Torino  
-Urban Digital Twins | Earth Observation | Environmental Management  
-
----
+**Sona Guliyeva**
+PhD Candidate — Politecnico di Torino
+Urban Digital Twins | Earth Observation | Environmental Management

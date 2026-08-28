@@ -156,3 +156,41 @@
     background-size: 32px 32px;
   }
 }
+
+@media print {
+  /* Print a clean document: no chrome, no shadows, no decorative background */
+  header:has(nav),
+  nav[aria-label="Sections in this profile"],
+  footer,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  .grid-paper {
+    background-image: none !important;
+  }
+
+  * {
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  a {
+    color: black !important;
+    text-decoration: none !important;
+  }
+
+  .shadow-card,
+  .shadow-elevated {
+    border: 1px solid oklch(0.85 0 0) !important;
+  }
+
+  section {
+    break-inside: avoid;
+  }
+}
