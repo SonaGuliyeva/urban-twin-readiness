@@ -3,6 +3,7 @@
 **A Decision-Support Prototype for Urban Digital Twin Development in Urban Environmental Management**
 
 **Live application:** https://urban-twin-readiness.sona-guliyeva.workers.dev/
+**License:** MIT (open-source)
 
 ---
 
@@ -73,7 +74,7 @@ UrbanTwinReadiness was developed iteratively across three platforms, each chosen
 
 1. **base44** (no-code) — an initial prototype used to test whether the core interaction (objectives in → data profile out) made sense to a user, before investing further effort.
 2. **Lovable** (AI-assisted development) — a substantial rebuild into a real, inspectable React/TypeScript codebase. Lovable's built-in GitHub integration made it possible to move the prototype's logic into a version-controlled repository within minutes, enabling the five-level maturity model and dataset recommendation rules to be developed as real, extensible code rather than no-code configuration.
-3. **Independent deployment** — the Lovable-generated codebase was migrated into this openly accessible GitHub repository and subsequently developed and deployed outside the Lovable platform. The application is currently deployed as a **Cloudflare Worker** on Cloudflare's **Workers Free plan**, under the author's own Cloudflare account. This removes dependence on base44 or Lovable for application hosting and credit-metered development, while the application still runs on managed serverless infrastructure (Cloudflare) rather than a privately owned server. All subsequent development, the 5-level maturity model, the 10-domain/30-objective taxonomy, direct EO/open-layer deep links, and the roadmap logic, was built directly against this independent codebase.
+3. **Independent deployment** — the Lovable-generated codebase was migrated into this **open-source** (MIT-licensed) GitHub repository and subsequently developed and deployed outside the Lovable platform. The application is currently deployed as a **Cloudflare Worker** on Cloudflare's **Workers Free plan**, under the author's own Cloudflare account. This removes dependence on base44 or Lovable for application hosting and credit-metered development, while the application still runs on managed serverless infrastructure (Cloudflare) rather than a privately owned server. All subsequent development, the 5-level maturity model, the 10-domain/30-objective taxonomy, direct EO/open-layer deep links, and the roadmap logic, was built directly against this independent codebase.
 
 ### Tech stack
 
@@ -125,7 +126,7 @@ This application is part of ongoing doctoral research in **Urban and Regional De
 
 ## License
 
-(To be defined. An open-source licence, e.g. MIT, is recommended so the "publicly accessible source code" can be accurately described as open-source; until a licence file is added, the code should be treated as source-available rather than formally open-source.)
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
 ---
 
