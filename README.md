@@ -100,10 +100,10 @@ npx wrangler deploy
 
 ## Roadmap
 
-- **V1.0 — Current.** Minimum dataset readiness across 30 objectives / 10 domains and 5 technical maturity levels.
-- **V2.0 — Turin object-level case study.** Real, measured environmental data for a fully worked city example.
-- **V3.0 — Discovery catalog.** Metadata-driven dataset browsing (provider, resolution, access, licensing).
-- **V4.0 — Interactive visualizer.** A spatial interface for exploring recommended datasets and layers directly.
+- **V1.0 — Current.** Minimum dataset readiness. Identifies the minimum datasets, source types and Earth Observation inputs required for a given combination of policy objectives and technical maturity level.
+- **V2.0 — Planned.** Integration of Open Spatial (OS) layers. Couples each policy objective with a curated set of open spatial layers (OSM, Urban Atlas, DEM, administrative boundaries, local portals) ready for ingestion.
+- **V3.0 — Planned.** Discovery catalog with metadata and access. Adds a structured catalog with provider, resolution, temporal coverage, licence and access endpoint for every dataset and layer.
+- **V4.0 — Planned.** Interactive visualizer. Embeds an interactive map allowing users to explore datasets, inspect metadata and preview integration into an Urban Digital Twin.
 
 ---
 
