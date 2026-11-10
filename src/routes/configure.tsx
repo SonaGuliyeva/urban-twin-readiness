@@ -1,61 +1,34 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { POLICY_THEMES, type ImplementationLevel } from "@/data";
 
 export const Route = createFileRoute("/configure")({
   head: () => ({
     meta: [
-      { title: "Configurator — UrbanTwinReadiness" },
+      { title: "Start — UrbanTwinReadiness" },
       {
         name: "description",
-        content:
-          "Select your policy objectives and technical maturity level to generate a minimum data requirements profile for your Urban Digital Twin.",
+        content: "Pick your goals and your city's current level to get a minimum data list.",
       },
     ],
   }),
   component: ConfigurePage,
 });
 
-const LEVELS: { id: ImplementationLevel; title: string; tag: string; desc: string }[] = [
-  {
-    id: "status",
-    title: "1 · Static Digital Model",
-    tag: "3D/2D visualization",
-    desc: "Provides 3D or 2D visualization with limited analytics; relies on mostly static data and is used primarily for basic visualization and communication.",
-  },
-  {
-    id: "informative",
-    title: "2 · Analytical Digital Twin",
-    tag: "Dashboards & analytics",
-    desc: "Integrates multiple datasets and leverages dashboards and analytics to perform limited scenario analysis.",
-  },
-  {
-    id: "predictive",
-    title: "3 · Predictive Digital Twin",
-    tag: "Forecasting & simulation",
-    desc: "Incorporates predictive modeling, forecasting, or simulation of urban systems and trends.",
-  },
-  {
-    id: "optimisation",
-    title: "4 · Prescriptive Digital Twin",
-    tag: "Scenario planning",
-    desc: "Employs advanced simulations and scenario planning specifically designed to support policy or operational decisions.",
-  },
-  {
-    id: "autonomous",
-    title: "5 · Autonomous Digital Twin",
-    tag: "Real-time & automated",
-    desc: "Features real-time data integration, artificial intelligence (AI), and automated decision support to trigger interventions.",
-  },
+// Technical maturity levels (same 5-level model as the author's UDT survey),
+// described here in one plain sentence each.
+const LEVELS: { id: ImplementationLevel; n: number; title: string; desc: string }[] = [
+  { id: "status", n: 1, title: "Static model", desc: "We have a 2D/3D map of the city." },
+  { id: "informative", n: 2, title: "Analytical", desc: "We combine data in dashboards." },
+  { id: "predictive", n: 3, title: "Predictive", desc: "We forecast or simulate." },
+  { id: "optimisation", n: 4, title: "Prescriptive", desc: "We test scenarios to decide." },
+  { id: "autonomous", n: 5, title: "Autonomous", desc: "Real-time data triggers actions." },
 ];
-
-// Technical Maturity Levels, as used in the author's related Urban Digital Twin survey
-// instrument (national and subnational government questionnaires).
 
 function ConfigurePage() {
   const navigate = useNavigate();
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [level, setLevel] = useState<ImplementationLevel>("predictive");
+  const [level, setLevel] = useState<ImplementationLevel>("status");
   const [city, setCity] = useState("");
 
   const toggle = (id: string) =>
@@ -67,9 +40,6 @@ function ConfigurePage() {
     });
 
   const canSubmit = selected.size > 0;
-  const totalSelected = selected.size;
-
-  const themes = useMemo(() => POLICY_THEMES, []);
 
   const handleGenerate = () => {
     if (!canSubmit) return;
@@ -84,161 +54,153 @@ function ConfigurePage() {
   };
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-14">
-      <header className="mb-10">
-        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-          Configurator
-        </p>
-        <h1 className="mt-2 text-4xl text-foreground sm:text-5xl">Define your assessment</h1>
-        <p className="mt-3 max-w-2xl text-base text-muted-foreground">
-          Select the policy objectives relevant to your city and indicate the current implementation
-          level. The tool will generate a structured data requirement profile.
-        </p>
-      </header>
+    <div className="mx-auto max-w-3xl px-6 py-14">
+      <h1 className="text-4xl text-foreground sm:text-5xl">Your city</h1>
 
-      {/* Policy objectives */}
-      <section className="rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
-        <div className="flex items-baseline justify-between">
-          <h2 className="font-serif text-2xl text-foreground">Policy objectives</h2>
-          <span className="font-mono text-xs text-muted-foreground">{totalSelected} selected</span>
-        </div>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Select one or more objectives, grouped by thematic domain.
-        </p>
-
-        <div className="mt-8 space-y-8">
-          {themes.map((group) => (
-            <div key={group.theme}>
-              <div className="mb-3 flex items-center gap-3">
-                <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
-                  {group.theme}
-                </h3>
-                <div className="h-px flex-1 bg-border" />
-              </div>
-              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                {group.objectives.map((obj) => {
-                  const active = selected.has(obj.id);
-                  return (
-                    <button
-                      key={obj.id}
-                      type="button"
-                      onClick={() => toggle(obj.id)}
-                      className={[
-                        "group flex items-start gap-3 rounded-md border px-4 py-3 text-left text-sm transition-all",
-                        active
-                          ? "border-primary bg-primary/5 text-foreground shadow-card"
-                          : "border-border bg-surface-elevated text-foreground hover:border-primary/40 hover:bg-muted",
-                      ].join(" ")}
-                      aria-pressed={active}
+      {/* Step 1 — goals, grouped by domain, each domain collapsed */}
+      <section className="mt-10">
+        <StepTitle n={1} title="What do you want to manage?" note={`${selected.size} selected`} />
+        <div className="mt-4 space-y-2">
+          {POLICY_THEMES.map((group) => {
+            const count = group.objectives.filter((o) => selected.has(o.id)).length;
+            return (
+              <details
+                key={group.theme}
+                className="group rounded-lg border border-border bg-card [&_summary::-webkit-details-marker]:hidden"
+              >
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3">
+                  <span className="text-sm font-medium text-foreground">{group.theme}</span>
+                  <span className="flex items-center gap-2">
+                    {count > 0 && (
+                      <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-medium text-primary-foreground">
+                        {count}
+                      </span>
+                    )}
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      className="h-4 w-4 text-muted-foreground transition-transform group-open:rotate-180"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      aria-hidden
                     >
-                      <span
+                      <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                </summary>
+                <div className="flex flex-wrap gap-2 border-t border-border px-4 py-3">
+                  {group.objectives.map((obj) => {
+                    const active = selected.has(obj.id);
+                    return (
+                      <button
+                        key={obj.id}
+                        type="button"
+                        onClick={() => toggle(obj.id)}
+                        aria-pressed={active}
                         className={[
-                          "mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border transition-colors",
+                          "rounded-full border px-3 py-1.5 text-sm transition-colors",
                           active
                             ? "border-primary bg-primary text-primary-foreground"
-                            : "border-border bg-background",
+                            : "border-border bg-surface-elevated text-foreground hover:border-primary/40",
                         ].join(" ")}
-                        aria-hidden
                       >
-                        {active && (
-                          <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            className="h-3 w-3"
-                            stroke="currentColor"
-                            strokeWidth="3"
-                          >
-                            <path d="M5 12l5 5 9-11" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        )}
-                      </span>
-                      <span className="leading-snug">{obj.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
+                        {obj.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </details>
+            );
+          })}
         </div>
       </section>
 
-      {/* Technical maturity level */}
-      <section className="mt-8 rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
-        <h2 className="font-serif text-2xl text-foreground">Technical maturity level</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Select the option that best reflects your city's current digital and analytical capacity.
-        </p>
-
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      {/* Step 2 — maturity level */}
+      <section className="mt-12">
+        <StepTitle n={2} title="Where is your city today?" />
+        <div className="mt-4 space-y-2" role="radiogroup">
           {LEVELS.map((l) => {
             const active = level === l.id;
             return (
               <button
                 key={l.id}
                 type="button"
+                role="radio"
+                aria-checked={active}
                 onClick={() => setLevel(l.id)}
                 className={[
-                  "rounded-lg border p-5 text-left transition-all",
+                  "flex w-full items-center gap-4 rounded-lg border px-4 py-3 text-left transition-colors",
                   active
-                    ? "border-primary bg-primary/5 shadow-card"
-                    : "border-border bg-surface-elevated hover:border-primary/40 hover:bg-muted",
+                    ? "border-primary bg-primary/5"
+                    : "border-border bg-card hover:border-primary/40",
                 ].join(" ")}
-                aria-pressed={active}
               >
-                <span className="font-serif text-xl text-foreground">{l.title}</span>
-                <span className="mt-1 block font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-                  {l.tag}
+                <span
+                  className={[
+                    "flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-medium",
+                    active
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground",
+                  ].join(" ")}
+                >
+                  {l.n}
                 </span>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{l.desc}</p>
+                <span className="min-w-0">
+                  <span className="block text-sm font-medium text-foreground">{l.title}</span>
+                  <span className="block text-sm text-muted-foreground">{l.desc}</span>
+                </span>
               </button>
             );
           })}
         </div>
       </section>
 
-      {/* City + Generate */}
-      <section className="mt-8 rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
-        <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
-          <div>
-            <label htmlFor="city" className="font-serif text-2xl text-foreground">
-              City name <span className="text-sm font-sans text-muted-foreground">(optional)</span>
-            </label>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Used only to label the generated profile. No data is stored.
-            </p>
-            <input
-              id="city"
-              type="text"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              placeholder="e.g. Bologna, Lisbon, Helsinki"
-              className="mt-4 w-full rounded-md border border-input bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/40"
-            />
-          </div>
-          <button
-            type="button"
-            onClick={handleGenerate}
-            disabled={!canSubmit}
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow-card transition-all hover:bg-primary/90 hover:shadow-elevated disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
-          >
-            Generate profile
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              className="h-4 w-4"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M5 12h14M13 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-        </div>
-        {!canSubmit && (
-          <p className="mt-4 text-xs text-muted-foreground">
-            Select at least one policy objective to continue.
-          </p>
-        )}
+      {/* Step 3 — city + go */}
+      <section className="mt-12">
+        <StepTitle n={3} title="City name" note="optional" />
+        <input
+          id="city"
+          type="text"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          placeholder="e.g. Turin"
+          aria-label="City name"
+          className="mt-4 w-full rounded-md border border-input bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/40"
+        />
       </section>
+
+      <div className="mt-10 flex flex-wrap items-center gap-4">
+        <button
+          type="button"
+          onClick={handleGenerate}
+          disabled={!canSubmit}
+          className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow-card transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          Show my data list
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            className="h-4 w-4"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M5 12h14M13 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+        {!canSubmit && <p className="text-xs text-muted-foreground">Pick at least one goal.</p>}
+      </div>
+    </div>
+  );
+}
+
+function StepTitle({ n, title, note }: { n: number; title: string; note?: string }) {
+  return (
+    <div className="flex items-baseline justify-between gap-3">
+      <h2 className="font-serif text-2xl text-foreground">
+        <span className="mr-2 text-accent">{n}.</span>
+        {title}
+      </h2>
+      {note && <span className="text-xs text-muted-foreground">{note}</span>}
     </div>
   );
 }

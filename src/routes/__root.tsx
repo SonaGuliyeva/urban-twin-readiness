@@ -7,7 +7,9 @@ function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">Error 404</p>
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          Error 404
+        </p>
         <h1 className="mt-3 text-5xl text-foreground">Page not found</h1>
         <p className="mt-3 text-sm text-muted-foreground">
           The page you are looking for does not exist or has been moved.
@@ -36,19 +38,43 @@ export const Route = createRootRoute({
         content:
           "A decision-support tool helping cities identify the minimum datasets and Earth Observation inputs needed to develop Urban Digital Twins for urban environmental management.",
       },
-      { property: "og:title", content: "UrbanTwinReadiness — Data Requirements for Urban Digital Twins" },
+      {
+        property: "og:title",
+        content: "UrbanTwinReadiness — Data Requirements for Urban Digital Twins",
+      },
       {
         property: "og:description",
         content:
           "Assessing the minimum data requirements for Urban Digital Twins in urban environmental management.",
       },
       { property: "og:type", content: "website" },
-      { name: "twitter:title", content: "UrbanTwinReadiness — Data Requirements for Urban Digital Twins" },
-      { name: "description", content: "UrbanTwinReadiness assesses minimum data and EO needs for Urban Digital Twins in environmental management." },
-      { property: "og:description", content: "UrbanTwinReadiness assesses minimum data and EO needs for Urban Digital Twins in environmental management." },
-      { name: "twitter:description", content: "UrbanTwinReadiness assesses minimum data and EO needs for Urban Digital Twins in environmental management." },
-      { property: "og:image", content: "https://urban-twin-readiness.sona-guliyeva.workers.dev/og-image.png" },
-      { name: "twitter:image", content: "https://urban-twin-readiness.sona-guliyeva.workers.dev/og-image.png" },
+      {
+        name: "twitter:title",
+        content: "UrbanTwinReadiness — Data Requirements for Urban Digital Twins",
+      },
+      {
+        name: "description",
+        content:
+          "UrbanTwinReadiness assesses minimum data and EO needs for Urban Digital Twins in environmental management.",
+      },
+      {
+        property: "og:description",
+        content:
+          "UrbanTwinReadiness assesses minimum data and EO needs for Urban Digital Twins in environmental management.",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "UrbanTwinReadiness assesses minimum data and EO needs for Urban Digital Twins in environmental management.",
+      },
+      {
+        property: "og:image",
+        content: "https://urban-twin-readiness.sona-guliyeva.workers.dev/og-image.png",
+      },
+      {
+        name: "twitter:image",
+        content: "https://urban-twin-readiness.sona-guliyeva.workers.dev/og-image.png",
+      },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
@@ -83,18 +109,32 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const links = [
-    { to: "/", label: "Overview", exact: true },
-    { to: "/configure", label: "Configurator", exact: false },
+    { to: "/", label: "Home", exact: true },
+    { to: "/configure", label: "Start", exact: false },
     { to: "/about", label: "About", exact: false },
   ] as const;
 
   return (
     <header className="border-b border-border/70 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
-        <Link to="/" className="flex min-w-0 items-center gap-2.5" onClick={() => setMenuOpen(false)}>
+        <Link
+          to="/"
+          className="flex min-w-0 items-center gap-2.5"
+          onClick={() => setMenuOpen(false)}
+        >
           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-accent-gradient text-primary-foreground">
-            <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" stroke="currentColor" strokeWidth="2">
-              <path d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-6h6v6" strokeLinecap="round" strokeLinejoin="round" />
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              className="h-4 w-4"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-6h6v6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </span>
           <div className="flex min-w-0 flex-col leading-none">
@@ -128,7 +168,13 @@ function SiteHeader() {
           aria-expanded={menuOpen}
           onClick={() => setMenuOpen((v) => !v)}
         >
-          <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" stroke="currentColor" strokeWidth="2">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            className="h-4 w-4"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
             {menuOpen ? (
               <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" strokeLinejoin="round" />
             ) : (
@@ -163,19 +209,27 @@ function SiteHeader() {
 
 function AboutThisTool() {
   return (
-    <section className="mt-24 border-t border-border/70 bg-surface">
-      <div className="mx-auto max-w-6xl px-6 py-12">
-        <div className="mb-6 flex items-center gap-3">
-          <span className="flex h-7 w-7 items-center justify-center rounded-md border border-border/70 bg-background text-muted-foreground">
-            <svg viewBox="0 0 24 24" fill="none" className="h-3.5 w-3.5" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="12" r="9" />
-              <path d="M12 8v.01M11 12h1v4h1" strokeLinecap="round" strokeLinejoin="round" />
+    <footer className="mt-16 border-t border-border/70 bg-surface">
+      <details className="group mx-auto max-w-6xl px-6 py-5 [&_summary::-webkit-details-marker]:hidden">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-xs text-muted-foreground">
+          <span>
+            UrbanTwinReadiness · Sona Guliyeva, Politecnico di Torino · v1.0 research prototype
+          </span>
+          <span className="flex shrink-0 items-center gap-1 hover:text-foreground">
+            Credits
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              className="h-3.5 w-3.5 transition-transform group-open:rotate-180"
+              stroke="currentColor"
+              strokeWidth="2"
+              aria-hidden
+            >
+              <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </span>
-          <h2 className="font-serif text-lg text-foreground">Credits</h2>
-        </div>
-
-        <div className="grid gap-8 md:grid-cols-3">
+        </summary>
+        <div className="mt-6 grid gap-8 pb-4 md:grid-cols-3">
           <div className="space-y-1">
             <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
               Author
@@ -184,9 +238,7 @@ function AboutThisTool() {
             <p className="text-xs text-muted-foreground">
               PhD Candidate, Urban and Regional Development
             </p>
-            <p className="text-xs text-muted-foreground">
-              Politecnico di Torino, Italy
-            </p>
+            <p className="text-xs text-muted-foreground">Politecnico di Torino, Italy</p>
           </div>
 
           <div className="space-y-1 md:col-span-2">
@@ -194,9 +246,9 @@ function AboutThisTool() {
               Short description
             </p>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              UrbanTwinReadiness is a research-driven prototype that supports cities in
-              identifying the minimum data requirements for Urban Digital Twin development
-              in urban environmental management.
+              UrbanTwinReadiness is a research-driven prototype that supports cities in identifying
+              the minimum data requirements for Urban Digital Twin development in urban
+              environmental management.
             </p>
           </div>
 
@@ -207,9 +259,8 @@ function AboutThisTool() {
             <p className="text-sm leading-relaxed text-foreground">
               Guliyeva, S., &amp; Boccardo, P. (2026).{" "}
               <span className="italic">
-                Geospatial Technologies for Flood and Drought Management: A Narrative
-                Review of Earth Observation Data, Procedures, and Their Operational
-                Effectiveness.
+                Geospatial Technologies for Flood and Drought Management: A Narrative Review of
+                Earth Observation Data, Procedures, and Their Operational Effectiveness.
               </span>{" "}
               Aerotecnica Missili &amp; Spazio.
             </p>
@@ -272,15 +323,8 @@ function AboutThisTool() {
             <p className="text-xs text-muted-foreground">Research Prototype</p>
           </div>
         </div>
-      </div>
-
-      <div className="border-t border-border/70">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>UrbanTwinReadiness · Research prototype for urban environmental management.</p>
-          <p className="font-mono uppercase tracking-[0.18em]">v1.0 · Research Prototype</p>
-        </div>
-      </div>
-    </section>
+      </details>
+    </footer>
   );
 }
 
