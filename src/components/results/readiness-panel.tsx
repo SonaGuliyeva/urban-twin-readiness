@@ -39,8 +39,8 @@ export function ReadinessPanel({
             Which of these data do you already have?
           </h3>
           <p className="mt-1 text-sm text-muted-foreground">
-            Answer Yes, Have it but not in the twin, or No for each item below. The result updates
-            as you answer.
+            These are your answers from the previous page. Change any of them in the data list below
+            and this updates.
           </p>
         </div>
         {started && (
