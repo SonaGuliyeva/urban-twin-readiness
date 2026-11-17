@@ -22,7 +22,6 @@ import { CollapsibleSection } from "@/components/common/collapsible-section";
 import { StatCard } from "@/components/common/stat-card";
 import { DatasetCard } from "@/components/results/dataset-card";
 import { PLAIN_DATASETS } from "@/data/plain-language";
-import { StartNow } from "@/components/common/start-now";
 import { ReadinessPanel } from "@/components/results/readiness-panel";
 import { decodeStatus, type StatusMap } from "@/components/results/readiness";
 import { OSLayerCard } from "@/components/results/os-layer-card";
@@ -333,8 +332,6 @@ function ResultsPage() {
           </div>
         )}
       </section>
-
-      <StartNow className="mt-12" />
 
       {/* Summary */}
       <section id="summary" className="mt-12 grid gap-6 lg:grid-cols-[2fr_1fr]">

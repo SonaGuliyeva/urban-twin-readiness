@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { StartNow } from "@/components/common/start-now";
 import { TwoExtremes } from "@/components/home/two-extremes";
 
 export const Route = createFileRoute("/")({
@@ -79,10 +78,6 @@ function HomePage() {
           ))}
         </ol>
       </section>
-
-      <div className="mx-auto max-w-6xl px-6 pb-20">
-        <StartNow />
-      </div>
 
       {/* Scope */}
       <section className="bg-surface">
