@@ -21,6 +21,7 @@ import { SectionHeading } from "@/components/common/section-heading";
 import { CollapsibleSection } from "@/components/common/collapsible-section";
 import { StatCard } from "@/components/common/stat-card";
 import { DatasetCard } from "@/components/results/dataset-card";
+import { PLAIN_DATASETS } from "@/data/plain-language";
 import { ReadinessPanel } from "@/components/results/readiness-panel";
 import { decodeStatus, type StatusMap } from "@/components/results/readiness";
 import { OSLayerCard } from "@/components/results/os-layer-card";
@@ -103,6 +104,31 @@ function ResultsPage() {
 
   const datasets = getDatasetsForObjectives(ids, level);
   const levelInfo = LEVEL_DESCRIPTIONS[level];
+
+  // Minimum step: open satellite datasets for the chosen objectives (one entry per plain title)
+  const minimumEO = (() => {
+    const byTitle = new Map<
+      string,
+      { title: string; name: string; names: string[]; examples: string[]; rank: number }
+    >();
+    const rank = { essential: 0, recommended: 1, optional: 2 } as const;
+    getDatasetsForObjectives(ids, "predictive")
+      .filter((d) => d.source === "satellite")
+      .forEach((d) => {
+        const title = PLAIN_DATASETS[d.name]?.title ?? d.name;
+        const cur = byTitle.get(title);
+        if (cur) cur.names.push(d.name);
+        else
+          byTitle.set(title, {
+            title,
+            name: d.name,
+            names: [d.name],
+            examples: d.examples,
+            rank: rank[d.priority],
+          });
+      });
+    return Array.from(byTitle.values()).sort((a, b) => a.rank - b.rank);
+  })();
   const LEVEL_ORDER: ImplementationLevel[] = [
     "status",
     "informative",
@@ -169,9 +195,7 @@ function ResultsPage() {
     <div className="mx-auto max-w-6xl px-6 py-14">
       {/* Header */}
       <header className="border-b border-border pb-8">
-        <p className="text-xs font-semibold text-muted-foreground">
-          Data requirement profile
-        </p>
+        <p className="text-xs font-semibold text-muted-foreground">Data requirement profile</p>
         <h1 className="mt-2 text-4xl text-foreground sm:text-5xl">
           {city ? `${city} — ` : ""}Urban Digital Twin readiness
         </h1>
@@ -236,14 +260,77 @@ function ResultsPage() {
         ))}
       </nav>
 
-      {/* Readiness: first thing the city sees */}
+      {/* The minimum: free satellite data to add to the twin */}
       <section id="readiness" className="mt-10 scroll-mt-16">
-        <ReadinessPanel
-          datasets={datasets}
-          status={status}
-          onReset={() => setStatus({})}
-          platforms={EO_PLATFORMS.slice(0, 5)}
-        />
+        <div className="rounded-xl border border-primary/30 bg-primary/5 p-6 shadow-card sm:p-8">
+          <h2 className="font-serif text-3xl text-foreground">
+            The minimum: add free satellite data to your twin
+          </h2>
+          <p className="mt-3 max-w-3xl text-base leading-relaxed text-foreground/85">
+            You do not need to buy data to start. These open satellite datasets can go into your
+            digital twin today and cover a first step for{" "}
+            {selected.map((o) => o.label.toLowerCase()).join(", ")}. At city scale the images are
+            coarse, but they improve every year and give you a regular overview of the whole city.
+          </p>
+          <ul className="mt-6 grid gap-3 md:grid-cols-2">
+            {minimumEO.map((d) => {
+              const plain = PLAIN_DATASETS[d.name];
+              const have = d.names.some((n) => status[n] === "have");
+              return (
+                <li key={d.title} className="rounded-lg border border-border bg-card p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <p className="font-medium text-foreground">{d.title}</p>
+                    {have && (
+                      <span className="shrink-0 rounded border border-accent/40 bg-accent/10 px-1.5 py-0.5 text-[11px] font-semibold text-accent">
+                        Already in your twin
+                      </span>
+                    )}
+                  </div>
+                  {plain && (
+                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                      {plain.what}
+                    </p>
+                  )}
+                  {d.examples.length > 0 && (
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      <span className="font-semibold text-foreground/80">Example sources: </span>
+                      {d.examples.slice(0, 3).join(", ")}
+                    </p>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+          <p className="mt-6 text-sm font-semibold text-foreground">Where to download them</p>
+          <ul className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {EO_PLATFORMS.slice(0, 5).map((p) => (
+              <li key={p.name}>
+                <a
+                  href={p.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="block h-full rounded-md border border-border bg-card px-3 py-2 text-sm hover:border-eo/50 hover:bg-muted"
+                >
+                  <span className="font-medium text-eo">{p.name}</span>
+                  <span className="mt-0.5 block text-xs text-muted-foreground">
+                    {p.description}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {Object.keys(status).length > 0 && (
+          <div className="mt-6">
+            <ReadinessPanel
+              datasets={datasets}
+              status={status}
+              onReset={() => setStatus({})}
+              platforms={[]}
+            />
+          </div>
+        )}
       </section>
 
       {/* Summary */}
@@ -271,7 +358,9 @@ function ResultsPage() {
 
           <div className="mt-6 border-t border-border pt-6">
             <p className="text-xs font-semibold text-muted-foreground">
-              {start === "none" ? "Once level 1 is reached, a city can" : "At this level, a city can"}
+              {start === "none"
+                ? "Once level 1 is reached, a city can"
+                : "At this level, a city can"}
             </p>
             <ul className="mt-3 space-y-2">
               {levelInfo.capable.map((item) => (
@@ -336,9 +425,7 @@ function ResultsPage() {
                     <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground">
                       Street
                     </th>
-                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground">
-                      LST
-                    </th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground">LST</th>
                     <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground">
                       Impervious
                     </th>
@@ -567,9 +654,7 @@ function ResultsPage() {
                 key={cs.name}
                 className="rounded-xl border border-border bg-card p-5 shadow-card"
               >
-                <p className="text-xs font-semibold text-muted-foreground">
-                  {cs.city}
-                </p>
+                <p className="text-xs font-semibold text-muted-foreground">{cs.city}</p>
                 <h3 className="mt-1 font-serif text-lg text-foreground">{cs.name}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-foreground/85">{cs.summary}</p>
                 <p className="mt-3 text-xs text-muted-foreground">Source: {cs.source}</p>
@@ -695,9 +780,7 @@ function ResultsPage() {
                 >
                   <div className="flex items-baseline justify-between gap-3">
                     <h4 className="font-serif text-base text-foreground">{a.approach}</h4>
-                    <span className="text-xs font-semibold text-muted-foreground">
-                      {a.scale}
-                    </span>
+                    <span className="text-xs font-semibold text-muted-foreground">{a.scale}</span>
                   </div>
                   <p className="mt-2 text-sm text-foreground/85">{a.data}</p>
                   <p className="mt-2 text-xs italic text-muted-foreground">Example — {a.example}</p>
@@ -730,9 +813,7 @@ function ResultsPage() {
                     </span>
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground">{s.description}</p>
-                  <p className="mt-3 text-xs font-semibold text-accent">
-                    {s.hazards.join(" · ")}
-                  </p>
+                  <p className="mt-3 text-xs font-semibold text-accent">{s.hazards.join(" · ")}</p>
                 </a>
               ))}
             </div>
@@ -761,9 +842,7 @@ function ResultsPage() {
         hint="EO platforms and open spatial layers"
       >
         <div>
-          <h3 className="text-xs font-semibold text-accent">
-            Role of satellite and EO data
-          </h3>
+          <h3 className="text-xs font-semibold text-accent">Role of satellite and EO data</h3>
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-foreground/80">
             Earth Observation provides repeated, spatially consistent measurements across the entire
             urban area. It supports the monitoring of variables that are difficult to capture with
@@ -778,9 +857,7 @@ function ResultsPage() {
         </div>
 
         <div className="mt-10">
-          <h3 className="text-xs font-semibold text-accent">
-            Key Earth Observation sources
-          </h3>
+          <h3 className="text-xs font-semibold text-accent">Key Earth Observation sources</h3>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {platforms.map((p) => (
               <a
@@ -809,9 +886,7 @@ function ResultsPage() {
         </div>
 
         <div className="mt-10">
-          <h3 className="text-xs font-semibold text-accent">
-            Open spatial layers for integration
-          </h3>
+          <h3 className="text-xs font-semibold text-accent">Open spatial layers for integration</h3>
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-foreground/80">
             The following open spatial datasets provide a foundational geospatial baseline for an
             Urban Digital Twin. They complement Earth Observation products by adding street
