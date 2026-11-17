@@ -4,25 +4,24 @@
  */
 const COLUMNS = [
   {
-    title: "What Turin already had",
+    title: "What the road digital twin already had",
     tone: "border-foreground/40",
     items: [
+      "The city's official topographic map at 1:1000, with the road network split into segments.",
       "A 3D city model from an airborne survey in January 2022: 5 cm photos plus LiDAR terrain and surface models.",
-      "The city's official topographic map at 1:1000.",
-      "Official flood hazard maps of the Po River District (PGRA).",
-      "A scan of the road pavement from a survey vehicle, February 2025.",
+      "The condition of the road pavement, scanned from a survey vehicle in February 2025.",
     ],
-    note: "One airborne survey shows the city at a single moment, in winter. It cannot show how conditions change through the year.",
+    note: "This twin was built for roads. One airborne survey shows the city at a single moment, in winter, so it cannot show how conditions change through the year.",
   },
   {
-    title: "What open satellite data added",
+    title: "What was added for the environment",
     tone: "border-eo",
     items: [
       "Free Sentinel-2 images (10 m, every five days): four dates in 2022 for plants and water, plus April and August of every year from 2018 to 2025.",
       "A thermal satellite image (SDGSAT-1, 30 m, 22 July 2022) for surface temperature, checked against Landsat 8/9.",
-      "Together they bring what the airborne survey lacks: change over time.",
+      "The official flood hazard maps of the Po River District (PGRA), which the twin did not have.",
     ],
-    note: "The city's own detailed data stayed the base. Satellites added the time dimension.",
+    note: "The existing detailed data stayed the base. Satellites added change over time, and the hazard maps added flood exposure.",
   },
   {
     title: "What it made possible",
@@ -33,7 +32,7 @@ const COLUMNS = [
       "The same steps applied to 5,918 city objects of six classes.",
       "An eight-year record that picked out 2022 and 2025 as the unusually dry summers, without being told which years to look for.",
     ],
-    note: "Flood exposure came from the official hazard maps. Satellite data supplied heat, plant stress and the history.",
+    note: "Flood exposure came from the hazard maps. Satellite data supplied heat, plant stress and the history.",
   },
 ];
 
@@ -61,9 +60,19 @@ export function TurinStory() {
         ))}
       </div>
       <p className="mt-6 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-        Your city can follow the same path: keep the detailed data you have, and add free satellite
-        data to see how things change. The 3D view below shows the result on individual city
-        objects.
+        The road digital twin is the work of Scolamiero and Boccardo (
+        <a
+          href="https://doi.org/10.3390/s26030947"
+          target="_blank"
+          rel="noreferrer"
+          className="text-eo underline-offset-2 hover:underline"
+        >
+          2026
+        </a>
+        ); the environmental enrichment with satellite data and flood hazard maps is the work
+        presented in this thesis. Your city can follow the same path: keep the detailed data you
+        have, and add free satellite data to see how things change. The 3D view below shows the
+        result on individual city objects.
       </p>
     </section>
   );
