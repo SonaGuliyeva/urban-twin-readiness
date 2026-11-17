@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { CORE_OBJECTIVE_IDS, POLICY_THEMES, type ImplementationLevel } from "@/data";
+import { CORE_OBJECTIVE_IDS, POLICY_THEMES, WATER_CATEGORIES, type ImplementationLevel } from "@/data";
 
 export const Route = createFileRoute("/configure")({
   head: () => ({
@@ -69,11 +69,8 @@ function ConfigurePage() {
   const canSubmit = selected.size > 0;
   const totalSelected = selected.size;
 
-  const coreObjectives = useMemo(
-    () =>
-      CORE_OBJECTIVE_IDS.map((id) =>
-        POLICY_THEMES.flatMap((g) => g.objectives).find((o) => o.id === id),
-      ).filter((o): o is NonNullable<typeof o> => Boolean(o)),
+  const objectiveById = useMemo(
+    () => new Map(POLICY_THEMES.flatMap((g) => g.objectives).map((o) => [o.id, o])),
     [],
   );
   const plannedThemes = useMemo(
@@ -81,7 +78,7 @@ function ConfigurePage() {
       POLICY_THEMES.map((g) => ({
         theme: g.theme,
         objectives: g.objectives.filter(
-          (o) => !(CORE_OBJECTIVE_IDS as readonly string[]).includes(o.id),
+          (o) => !CORE_OBJECTIVE_IDS.includes(o.id),
         ),
       })).filter((g) => g.objectives.length > 0),
     [],
@@ -119,53 +116,92 @@ function ConfigurePage() {
           <span className="font-mono text-xs text-muted-foreground">{totalSelected} selected</span>
         </div>
         <p className="mt-2 text-sm text-muted-foreground">
-          This version focuses on floods, droughts and their interaction. The first four objectives
-          address water abundance and scarcity; the last two address heat and vegetation stress
-          related to drought. Select one or more objectives.
+          Choose a water-related challenge, then select the objectives that matter to your city.
         </p>
 
-        <div className="mt-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-          {coreObjectives.map((obj) => {
-            const active = selected.has(obj.id);
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          {WATER_CATEGORIES.map((cat) => {
+            const ids = cat.objectiveIds;
+            const nSel = ids.filter((id) => selected.has(id)).length;
+            const allOn = nSel === ids.length;
             return (
-              <button
-                key={obj.id}
-                type="button"
-                onClick={() => toggle(obj.id)}
-                className={[
-                  "group flex items-start gap-3 rounded-md border px-4 py-3 text-left text-sm transition-all",
-                  active
-                    ? "border-primary bg-primary/5 text-foreground shadow-card"
-                    : "border-border bg-surface-elevated text-foreground hover:border-primary/40 hover:bg-muted",
-                ].join(" ")}
-                aria-pressed={active}
-              >
-                <span
-                  className={[
-                    "mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border transition-colors",
-                    active
-                      ? "border-primary bg-primary text-primary-foreground"
-                      : "border-border bg-background",
-                  ].join(" ")}
-                  aria-hidden
-                >
-                  {active && (
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      className="h-3 w-3"
-                      stroke="currentColor"
-                      strokeWidth="3"
-                    >
-                      <path d="M5 12l5 5 9-11" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  )}
-                </span>
-                <span className="leading-snug">{obj.label}</span>
-              </button>
+              <div key={cat.id} className="rounded-lg border border-border bg-surface-elevated p-5">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">
+                      {cat.subtitle}
+                    </p>
+                    <h3 className="mt-1 font-serif text-2xl text-foreground">{cat.title}</h3>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setSelected((prev) => {
+                        const next = new Set(prev);
+                        ids.forEach((id) => (allOn ? next.delete(id) : next.add(id)));
+                        return next;
+                      })
+                    }
+                    className="shrink-0 rounded-md border border-border px-3 py-1 text-xs text-muted-foreground hover:bg-muted hover:text-foreground"
+                  >
+                    {allOn ? "Clear" : "Select all"}
+                  </button>
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground">{cat.description}</p>
+
+                <div className="mt-4 space-y-2">
+                  {ids.map((id) => {
+                    const obj = objectiveById.get(id);
+                    if (!obj) return null;
+                    const active = selected.has(id);
+                    return (
+                      <button
+                        key={id}
+                        type="button"
+                        onClick={() => toggle(id)}
+                        className={[
+                          "group flex w-full items-start gap-3 rounded-md border px-4 py-3 text-left text-sm transition-all",
+                          active
+                            ? "border-primary bg-primary/5 text-foreground shadow-card"
+                            : "border-border bg-background text-foreground hover:border-primary/40 hover:bg-muted",
+                        ].join(" ")}
+                        aria-pressed={active}
+                      >
+                        <span
+                          className={[
+                            "mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border transition-colors",
+                            active
+                              ? "border-primary bg-primary text-primary-foreground"
+                              : "border-border bg-background",
+                          ].join(" ")}
+                          aria-hidden
+                        >
+                          {active && (
+                            <svg
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              className="h-3 w-3"
+                              stroke="currentColor"
+                              strokeWidth="3"
+                            >
+                              <path d="M5 12l5 5 9-11" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          )}
+                        </span>
+                        <span className="leading-snug">{obj.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             );
           })}
         </div>
+
+        <p className="mt-4 text-xs text-muted-foreground">
+          Floods and droughts often interact, for example heavy rainfall after a drought. Selecting
+          objectives from both categories produces a combined data profile.
+        </p>
 
         <details className="mt-8 rounded-md border border-dashed border-border p-4">
           <summary className="cursor-pointer font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
