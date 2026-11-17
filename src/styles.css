@@ -31,6 +31,10 @@
   --color-ring: var(--ring);
   --color-surface: var(--surface);
   --color-surface-elevated: var(--surface-elevated);
+  --color-flood: var(--flood);
+  --color-flood-tint: var(--flood-tint);
+  --color-drought: var(--drought);
+  --color-drought-tint: var(--drought-tint);
   --color-essential: var(--essential);
   --color-recommended: var(--recommended);
   --color-optional: var(--optional);
@@ -43,11 +47,11 @@
 :root {
   --radius: 0.5rem;
 
-  /* Academic deep teal + parchment palette */
-  --background: oklch(0.985 0.005 95);
+  /* Palette of thesis Figure 1-1: navy (climate), blue (floods), orange (droughts), crimson (heat), grey (cities) */
+  --background: #F8FAFC;
   --foreground: oklch(0.22 0.02 230);
 
-  --surface: oklch(0.97 0.008 95);
+  --surface: #EEF0F2;
   --surface-elevated: oklch(1 0 0);
 
   --card: oklch(1 0 0);
@@ -55,16 +59,16 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.22 0.02 230);
 
-  --primary: oklch(0.34 0.055 200);
+  --primary: #2B5784;
   --primary-foreground: oklch(0.985 0.005 95);
 
-  --secondary: oklch(0.93 0.015 200);
-  --secondary-foreground: oklch(0.28 0.04 210);
+  --secondary: #EBF6FA;
+  --secondary-foreground: #2B5784;
 
-  --muted: oklch(0.95 0.008 200);
+  --muted: #EEF0F2;
   --muted-foreground: oklch(0.48 0.02 220);
 
-  --accent: oklch(0.62 0.12 165);
+  --accent: #028FBE;
   --accent-foreground: oklch(0.99 0.005 95);
 
   --destructive: oklch(0.55 0.18 28);
@@ -72,18 +76,23 @@
 
   --border: oklch(0.89 0.012 220);
   --input: oklch(0.92 0.01 220);
-  --ring: oklch(0.5 0.08 195);
+  --ring: #028FBE;
 
   /* Priority semantic colors */
-  --essential: oklch(0.45 0.13 25);
-  --recommended: oklch(0.55 0.11 70);
+  --essential: #C0384B;
+  --recommended: #D96F00;
   --optional: oklch(0.5 0.05 220);
 
   /* Earth observation accent */
-  --eo: oklch(0.5 0.13 240);
+  --eo: #0B6F99;
 
-  --gradient-hero: linear-gradient(180deg, oklch(0.985 0.005 95) 0%, oklch(0.94 0.02 195) 100%);
-  --gradient-accent: linear-gradient(135deg, oklch(0.34 0.055 200), oklch(0.5 0.1 180));
+  --flood: #028FBE;
+  --flood-tint: #EBF6FA;
+  --drought: #EF7B00;
+  --drought-tint: #FDF4E8;
+
+  --gradient-hero: linear-gradient(180deg, #F8FAFC 0%, #EBF6FA 100%);
+  --gradient-accent: linear-gradient(135deg, #2B5784, #028FBE);
   --shadow-card: 0 1px 2px oklch(0.22 0.02 230 / 0.04), 0 4px 16px oklch(0.22 0.02 230 / 0.05);
   --shadow-elevated: 0 8px 32px oklch(0.22 0.02 230 / 0.08);
 }
@@ -97,19 +106,19 @@
   --card-foreground: oklch(0.96 0.005 95);
   --popover: oklch(0.22 0.018 230);
   --popover-foreground: oklch(0.96 0.005 95);
-  --primary: oklch(0.78 0.08 190);
+  --primary: #7FB0DC;
   --primary-foreground: oklch(0.18 0.015 230);
   --secondary: oklch(0.28 0.025 215);
   --secondary-foreground: oklch(0.96 0.005 95);
   --muted: oklch(0.26 0.02 220);
   --muted-foreground: oklch(0.7 0.02 220);
-  --accent: oklch(0.7 0.12 165);
+  --accent: #3CB4E0;
   --accent-foreground: oklch(0.18 0.015 230);
   --destructive: oklch(0.65 0.18 28);
   --destructive-foreground: oklch(0.99 0 0);
   --border: oklch(0.32 0.02 225);
   --input: oklch(0.3 0.02 225);
-  --ring: oklch(0.65 0.08 195);
+  --ring: #3CB4E0;
 }
 
 @layer base {
