@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TurinRouteImport } from './routes/turin'
 import { Route as ResultsRouteImport } from './routes/results'
 import { Route as ConfigureRouteImport } from './routes/configure'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TurinRoute = TurinRouteImport.update({
+  id: '/turin',
+  path: '/turin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResultsRoute = ResultsRouteImport.update({
   id: '/results',
   path: '/results',
@@ -40,12 +46,14 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/configure': typeof ConfigureRoute
   '/results': typeof ResultsRoute
+  '/turin': typeof TurinRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/configure': typeof ConfigureRoute
   '/results': typeof ResultsRoute
+  '/turin': typeof TurinRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +61,14 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/configure': typeof ConfigureRoute
   '/results': typeof ResultsRoute
+  '/turin': typeof TurinRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/configure' | '/results'
+  fullPaths: '/' | '/about' | '/configure' | '/results' | '/turin'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/configure' | '/results'
-  id: '__root__' | '/' | '/about' | '/configure' | '/results'
+  to: '/' | '/about' | '/configure' | '/results' | '/turin'
+  id: '__root__' | '/' | '/about' | '/configure' | '/results' | '/turin'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,10 +76,18 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ConfigureRoute: typeof ConfigureRoute
   ResultsRoute: typeof ResultsRoute
+  TurinRoute: typeof TurinRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/turin': {
+      id: '/turin'
+      path: '/turin'
+      fullPath: '/turin'
+      preLoaderRoute: typeof TurinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/results': {
       id: '/results'
       path: '/results'
@@ -107,6 +124,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   ConfigureRoute: ConfigureRoute,
   ResultsRoute: ResultsRoute,
+  TurinRoute: TurinRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
