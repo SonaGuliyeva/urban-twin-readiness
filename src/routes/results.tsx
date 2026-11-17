@@ -431,7 +431,7 @@ function ResultsPage() {
       <p className="mt-10 text-sm text-muted-foreground print:hidden">
         Want to see how a real city did it?{" "}
         <Link to="/turin" className="font-medium text-primary underline-offset-4 hover:underline">
-          See how Turin added satellite data to its road digital twin
+          See how Turin added satellite data to its digital twin
         </Link>
         .
       </p>

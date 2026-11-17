@@ -4,7 +4,7 @@
  */
 const COLUMNS = [
   {
-    title: "What the road digital twin already had",
+    title: "What the digital twin already had",
     tone: "border-foreground/40",
     items: [
       "The city's official topographic map at 1:1000, with the road network split into segments.",
@@ -60,7 +60,7 @@ export function TurinStory() {
         ))}
       </div>
       <p className="mt-6 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-        The road digital twin is the work of Scolamiero and Boccardo (
+        The digital twin, built for roads, is the work of Scolamiero and Boccardo (
         <a
           href="https://doi.org/10.3390/s26030947"
           target="_blank"
