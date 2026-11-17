@@ -1,7 +1,7 @@
 import type { PolicyObjective } from "@/data/types";
 
 /**
- * Objectives available in the current version: floods, droughts and the urban water cycle.
+ * Objectives available in the current version: floods, droughts and their interaction (surface heat as a drought-related stress).
  * All other objectives are planned extensions (shown in the configurator, not yet selectable).
  */
 export const CORE_OBJECTIVE_IDS = [
@@ -9,6 +9,8 @@ export const CORE_OBJECTIVE_IDS = [
   "stormwater",
   "drought",
   "water-resources",
+  "uhi",
+  "green-infra",
 ] as const;
 
 export const POLICY_THEMES: { theme: string; objectives: PolicyObjective[] }[] = [
