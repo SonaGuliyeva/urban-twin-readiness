@@ -3,9 +3,9 @@ import type { Dataset } from "@/data/types";
 export type HaveStatus = "have" | "partial" | "missing";
 
 export const STATUS_OPTIONS: { id: HaveStatus; short: string; long: string }[] = [
-  { id: "have", short: "In twin", long: "Already in our digital twin" },
-  { id: "partial", short: "Not integrated", long: "We have it, but not in the twin" },
-  { id: "missing", short: "Missing", long: "We do not have it" },
+  { id: "have", short: "Yes", long: "Yes, it is already in our digital twin" },
+  { id: "partial", short: "Have it, not in twin", long: "We have it, but it is not in the digital twin" },
+  { id: "missing", short: "No", long: "No, we do not have it" },
 ];
 
 export type StatusMap = Record<string, HaveStatus>;

@@ -1,18 +1,19 @@
 import { useState } from "react";
 import type { Dataset, Priority, SourceType } from "@/data/types";
+import { PLAIN_DATASETS } from "@/data/plain-language";
 import { STATUS_OPTIONS, type HaveStatus } from "./readiness";
 
 const PRIORITY_LABEL: Record<Priority, string> = {
-  essential: "Essential",
-  recommended: "Recommended",
+  essential: "Must have",
+  recommended: "Good to have",
   optional: "Optional",
 };
 
 const SOURCE_LABEL: Record<SourceType, string> = {
-  satellite: "Satellite / EO",
-  ground: "Ground sensor",
-  "open-data": "Open data",
-  administrative: "Administrative",
+  satellite: "Free satellite data",
+  ground: "Local sensors",
+  "open-data": "Open data portal",
+  administrative: "City records",
 };
 
 function priorityClasses(p: Priority): string {
@@ -47,6 +48,7 @@ export function DatasetCard({
   onStatus?: (s: HaveStatus | undefined) => void;
 }) {
   const [open, setOpen] = useState(false);
+  const plain = PLAIN_DATASETS[dataset.name];
   const hasDetails = Boolean(dataset.provider || dataset.resolution || dataset.access);
   return (
     <article
@@ -55,7 +57,14 @@ export function DatasetCard({
       }`}
     >
       <div className="flex items-start justify-between gap-3">
-        <h3 className="font-serif text-lg leading-snug text-foreground">{dataset.name}</h3>
+        <div>
+          <h3 className="font-serif text-lg leading-snug text-foreground">
+            {plain ? plain.title : dataset.name}
+          </h3>
+          {plain && (
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{plain.what}</p>
+          )}
+        </div>
         <span
           className={`shrink-0 rounded-full border px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] ${priorityClasses(
             dataset.priority,
@@ -77,6 +86,7 @@ export function DatasetCard({
 
       {onStatus && (
         <div className="mt-4 print:hidden">
+          <p className="mb-1.5 text-xs font-medium text-foreground">Does your city have this?</p>
           <div
             role="group"
             aria-label={`Status of ${dataset.name}`}
@@ -116,10 +126,13 @@ export function DatasetCard({
         aria-expanded={open}
         className="mt-3 self-start text-xs text-accent underline-offset-2 hover:underline print:hidden"
       >
-        {open ? "Hide details" : "Show details"}
+        {open ? "Hide technical details" : "Technical details"}
       </button>
 
       <div className={open ? "" : "hidden print:block"}>
+        {plain && (
+          <p className="mt-2 font-mono text-[11px] text-muted-foreground">{dataset.name}</p>
+        )}
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{dataset.description}</p>
         {hasDetails && (
           <dl className="mt-4 grid grid-cols-1 gap-2 border-t border-border pt-3 text-xs">
