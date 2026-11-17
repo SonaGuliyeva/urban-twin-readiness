@@ -23,7 +23,7 @@ import { StatCard } from "@/components/common/stat-card";
 import { DatasetCard } from "@/components/results/dataset-card";
 import { PLAIN_DATASETS } from "@/data/plain-language";
 import { DataLinks } from "@/components/results/data-links";
-import { EVIDENCE_BASE, linksFor, type DataLink } from "@/data/dataset-links";
+import { EVIDENCE_BASE, LOCAL_ALTERNATIVE, linksFor, type DataLink } from "@/data/dataset-links";
 import { ReadinessPanel } from "@/components/results/readiness-panel";
 import { decodeStatus, type StatusMap } from "@/components/results/readiness";
 import { OSLayerCard } from "@/components/results/os-layer-card";
@@ -290,15 +290,21 @@ function ResultsPage() {
           <p className="mt-3 max-w-3xl text-base leading-relaxed text-foreground/85">
             You do not need to buy data to start. These open satellite datasets can go into your
             digital twin today and cover a first step for{" "}
-            {selected.map((o) => o.label.toLowerCase()).join(", ")}. At city scale the images are
+            {selected.map((o) => o.label.toLowerCase()).join(", ")}. If your city already has
+            something more detailed (for example a LiDAR terrain model), use your own. The satellite
+            data are the starting point where nothing better exists. At city scale the images are
             coarse, but they improve every year and give you a regular overview of the whole city.
           </p>
           <ul className="mt-6 grid gap-3 md:grid-cols-2">
             {minimumEO.map((d) => {
               const plain = PLAIN_DATASETS[d.name];
               const have = d.names.some((n) => status[n] === "have");
+              const local = d.names.map((n) => LOCAL_ALTERNATIVE[n]).find(Boolean);
               return (
-                <li key={d.title} className="rounded-lg border border-border bg-card p-4">
+                <li
+                  key={d.title}
+                  className={`rounded-lg border border-border bg-card p-4 ${have ? "opacity-70" : ""}`}
+                >
                   <div className="flex items-start justify-between gap-3">
                     <p className="font-medium text-foreground">{d.title}</p>
                     {have && (
@@ -318,7 +324,17 @@ function ResultsPage() {
                       {d.examples.slice(0, 3).join(", ")}
                     </p>
                   )}
-                  <DataLinks links={d.links} />
+                  {local && (
+                    <p className="mt-2 rounded-md border border-recommended/30 bg-recommended/10 px-2.5 py-1.5 text-xs leading-relaxed text-foreground/85">
+                      {have
+                        ? "You already have this in your twin. Keep yours unless the satellite version covers more of the city."
+                        : local}
+                    </p>
+                  )}
+                  <DataLinks
+                    links={d.links}
+                    label={local ? "Free fallback" : have ? "Optional source" : "Open the data"}
+                  />
                 </li>
               );
             })}
@@ -346,7 +362,13 @@ function ResultsPage() {
             {EVIDENCE_BASE.map((e, i) => (
               <span key={e.url}>
                 {i > 0 && "; "}
-                <a href={e.url} target="_blank" rel="noreferrer" className="text-eo underline-offset-2 hover:underline" title={e.citation}>
+                <a
+                  href={e.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-eo underline-offset-2 hover:underline"
+                  title={e.citation}
+                >
                   {e.short}
                 </a>
               </span>
