@@ -92,3 +92,26 @@ export const EVIDENCE_BASE = [
     url: "https://doi.org/10.1007/s42496-026-00309-4",
   },
 ];
+
+/**
+ * Datasets for which many cities already hold something more detailed than the free satellite
+ * product (for example a LiDAR terrain model). The tool then says: keep yours, use the satellite
+ * source only as a fallback.
+ */
+const LOCAL_BETTER: Record<string, string> = {
+  dem: "If your city already has a more detailed terrain model, for example from LiDAR or a municipal survey, keep using it. The free 30 m model is only a fallback.",
+  landcover:
+    "If your city already has a detailed land cover or sealed-surface map, use it. The satellite layer is a fallback with coarser detail.",
+  green:
+    "If your city already keeps a green space or tree inventory, use it. The satellite map adds city-wide coverage.",
+};
+
+export const LOCAL_ALTERNATIVE: Record<string, string> = {
+  "High-Resolution Digital Elevation Model (DEM/DTM)": LOCAL_BETTER.dem,
+  "High-Resolution DEM & Drainage Network": LOCAL_BETTER.dem,
+  "Imperviousness & Land Cover": LOCAL_BETTER.landcover,
+  "Land Cover & Imperviousness": LOCAL_BETTER.landcover,
+  "Land Cover & Permeability": LOCAL_BETTER.landcover,
+  "Surface Albedo & Imperviousness": LOCAL_BETTER.landcover,
+  "Urban Tree Canopy & Green Space Maps": LOCAL_BETTER.green,
+};
