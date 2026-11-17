@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { POLICY_THEMES, type ImplementationLevel } from "@/data";
+import { CORE_OBJECTIVE_IDS, POLICY_THEMES, type ImplementationLevel } from "@/data";
 
 export const Route = createFileRoute("/configure")({
   head: () => ({
@@ -69,7 +69,23 @@ function ConfigurePage() {
   const canSubmit = selected.size > 0;
   const totalSelected = selected.size;
 
-  const themes = useMemo(() => POLICY_THEMES, []);
+  const coreObjectives = useMemo(
+    () =>
+      CORE_OBJECTIVE_IDS.map((id) =>
+        POLICY_THEMES.flatMap((g) => g.objectives).find((o) => o.id === id),
+      ).filter((o): o is NonNullable<typeof o> => Boolean(o)),
+    [],
+  );
+  const plannedThemes = useMemo(
+    () =>
+      POLICY_THEMES.map((g) => ({
+        theme: g.theme,
+        objectives: g.objectives.filter(
+          (o) => !(CORE_OBJECTIVE_IDS as readonly string[]).includes(o.id),
+        ),
+      })).filter((g) => g.objectives.length > 0),
+    [],
+  );
 
   const handleGenerate = () => {
     if (!canSubmit) return;
@@ -91,8 +107,8 @@ function ConfigurePage() {
         </p>
         <h1 className="mt-2 text-4xl text-foreground sm:text-5xl">Define your assessment</h1>
         <p className="mt-3 max-w-2xl text-base text-muted-foreground">
-          Select the policy objectives relevant to your city and indicate the current implementation
-          level. The tool will generate a structured data requirement profile.
+          Select the water-related objectives relevant to your city and indicate the current
+          implementation level. The tool will generate a structured data requirement profile.
         </p>
       </header>
 
@@ -103,63 +119,82 @@ function ConfigurePage() {
           <span className="font-mono text-xs text-muted-foreground">{totalSelected} selected</span>
         </div>
         <p className="mt-2 text-sm text-muted-foreground">
-          Select one or more objectives, grouped by thematic domain.
+          This version focuses on floods, droughts and the urban water cycle. Select one or more
+          objectives.
         </p>
 
-        <div className="mt-8 space-y-8">
-          {themes.map((group) => (
-            <div key={group.theme}>
-              <div className="mb-3 flex items-center gap-3">
-                <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
-                  {group.theme}
-                </h3>
-                <div className="h-px flex-1 bg-border" />
-              </div>
-              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                {group.objectives.map((obj) => {
-                  const active = selected.has(obj.id);
-                  return (
-                    <button
-                      key={obj.id}
-                      type="button"
-                      onClick={() => toggle(obj.id)}
-                      className={[
-                        "group flex items-start gap-3 rounded-md border px-4 py-3 text-left text-sm transition-all",
-                        active
-                          ? "border-primary bg-primary/5 text-foreground shadow-card"
-                          : "border-border bg-surface-elevated text-foreground hover:border-primary/40 hover:bg-muted",
-                      ].join(" ")}
-                      aria-pressed={active}
+        <div className="mt-6 grid gap-2 sm:grid-cols-2">
+          {coreObjectives.map((obj) => {
+            const active = selected.has(obj.id);
+            return (
+              <button
+                key={obj.id}
+                type="button"
+                onClick={() => toggle(obj.id)}
+                className={[
+                  "group flex items-start gap-3 rounded-md border px-4 py-3 text-left text-sm transition-all",
+                  active
+                    ? "border-primary bg-primary/5 text-foreground shadow-card"
+                    : "border-border bg-surface-elevated text-foreground hover:border-primary/40 hover:bg-muted",
+                ].join(" ")}
+                aria-pressed={active}
+              >
+                <span
+                  className={[
+                    "mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border transition-colors",
+                    active
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-background",
+                  ].join(" ")}
+                  aria-hidden
+                >
+                  {active && (
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      className="h-3 w-3"
+                      stroke="currentColor"
+                      strokeWidth="3"
                     >
-                      <span
-                        className={[
-                          "mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border transition-colors",
-                          active
-                            ? "border-primary bg-primary text-primary-foreground"
-                            : "border-border bg-background",
-                        ].join(" ")}
-                        aria-hidden
-                      >
-                        {active && (
-                          <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            className="h-3 w-3"
-                            stroke="currentColor"
-                            strokeWidth="3"
-                          >
-                            <path d="M5 12l5 5 9-11" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        )}
-                      </span>
-                      <span className="leading-snug">{obj.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
+                      <path d="M5 12l5 5 9-11" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
+                </span>
+                <span className="leading-snug">{obj.label}</span>
+              </button>
+            );
+          })}
         </div>
+
+        <details className="mt-8 rounded-md border border-dashed border-border p-4">
+          <summary className="cursor-pointer font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+            Planned extensions ({plannedThemes.reduce((n, g) => n + g.objectives.length, 0)} further
+            objectives, not yet available)
+          </summary>
+          <p className="mt-3 text-sm text-muted-foreground">
+            Further thematic domains will be added in later versions of the tool, following the same
+            methodology.
+          </p>
+          <div className="mt-4 space-y-4">
+            {plannedThemes.map((group) => (
+              <div key={group.theme}>
+                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                  {group.theme}
+                </p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {group.objectives.map((obj) => (
+                    <span
+                      key={obj.id}
+                      className="rounded-full border border-border bg-muted/40 px-3 py-1 text-xs text-muted-foreground"
+                    >
+                      {obj.label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </details>
       </section>
 
       {/* Technical maturity level */}

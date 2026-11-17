@@ -122,12 +122,12 @@ function HomePage() {
         <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-2">
           <div>
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Scope</p>
-            <h2 className="mt-2 font-serif text-3xl text-foreground">Ten domains within urban environmental management</h2>
+            <h2 className="mt-2 font-serif text-3xl text-foreground">Floods, droughts and the urban water cycle</h2>
             <p className="mt-4 text-base leading-relaxed text-foreground/80">
-              From urban planning and mobility to energy, disaster management, public safety, and
-              health, the tool spans ten thematic domains that together shape a city&rsquo;s
-              environmental management capacity — keeping every recommendation grounded in the same
-              operational, evidence-based methodology.
+              The current version covers four water-related objectives: flood risk reduction,
+              stormwater and drainage, drought preparedness and water resource monitoring. Further
+              thematic domains, such as heat, air quality, energy and mobility, are planned
+              extensions of the same methodology.
             </p>
           </div>
           <div>

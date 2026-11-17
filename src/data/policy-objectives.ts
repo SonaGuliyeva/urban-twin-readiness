@@ -1,10 +1,25 @@
 import type { PolicyObjective } from "@/data/types";
 
+/**
+ * Objectives available in the current version: floods, droughts and the urban water cycle.
+ * All other objectives are planned extensions (shown in the configurator, not yet selectable).
+ */
+export const CORE_OBJECTIVE_IDS = [
+  "flood-risk",
+  "stormwater",
+  "drought",
+  "water-resources",
+] as const;
+
 export const POLICY_THEMES: { theme: string; objectives: PolicyObjective[] }[] = [
   {
     theme: "Urban Planning & Development",
     objectives: [
-      { id: "land-use", label: "Land Use & Change Monitoring", theme: "Urban Planning & Development" },
+      {
+        id: "land-use",
+        label: "Land Use & Change Monitoring",
+        theme: "Urban Planning & Development",
+      },
       {
         id: "regeneration",
         label: "Urban Regeneration & Densification",
