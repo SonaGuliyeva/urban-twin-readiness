@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { StartNow } from "@/components/common/start-now";
 import { TwoExtremes } from "@/components/home/two-extremes";
 
 export const Route = createFileRoute("/")({
@@ -62,12 +63,12 @@ function HomePage() {
             {
               n: "2",
               t: "Say where your city starts",
-              d: "From nothing at all to a real-time twin. Your answer fills in the data list for you.",
+              d: "From nothing at all to a real-time twin.",
             },
             {
               n: "3",
-              t: "Mark what you already have",
-              d: "Correct the list. You get a readiness score, a list of what to add first and where to get it free.",
+              t: "Get your minimum",
+              d: "You get the open satellite data to add to your twin and where to download it. You can also mark what you already have.",
             },
           ].map((s) => (
             <li key={s.n} className="border-t-2 border-primary pt-5">
@@ -78,6 +79,10 @@ function HomePage() {
           ))}
         </ol>
       </section>
+
+      <div className="mx-auto max-w-6xl px-6 pb-20">
+        <StartNow />
+      </div>
 
       {/* Scope */}
       <section className="bg-surface">
