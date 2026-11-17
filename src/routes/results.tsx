@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   EO_PLATFORMS,
@@ -20,6 +21,8 @@ import { SectionHeading } from "@/components/common/section-heading";
 import { CollapsibleSection } from "@/components/common/collapsible-section";
 import { StatCard } from "@/components/common/stat-card";
 import { DatasetCard } from "@/components/results/dataset-card";
+import { ReadinessPanel } from "@/components/results/readiness-panel";
+import type { StatusMap } from "@/components/results/readiness";
 import { OSLayerCard } from "@/components/results/os-layer-card";
 import { PathwayCard } from "@/components/results/pathway-card";
 
@@ -62,6 +65,26 @@ export const Route = createFileRoute("/results")({
 function ResultsPage() {
   const { objectives, level, city } = Route.useSearch();
   const ids = objectives ? objectives.split(",").filter(Boolean) : [];
+
+  // City's own answers: which datasets are already in its digital twin.
+  // Kept per configuration in sessionStorage (optional convenience, never required).
+  const storeKey = `utr-status:${objectives ?? ""}:${level}`;
+  const [status, setStatus] = useState<StatusMap>({});
+  useEffect(() => {
+    try {
+      const raw = window.sessionStorage.getItem(storeKey);
+      setStatus(raw ? (JSON.parse(raw) as StatusMap) : {});
+    } catch {
+      setStatus({});
+    }
+  }, [storeKey]);
+  useEffect(() => {
+    try {
+      window.sessionStorage.setItem(storeKey, JSON.stringify(status));
+    } catch {
+      /* storage unavailable: state stays in memory */
+    }
+  }, [storeKey, status]);
 
   const allObjectives = POLICY_THEMES.flatMap((g) => g.objectives);
   const selected = ids
@@ -351,9 +374,22 @@ function ResultsPage() {
       {/* Datasets */}
       <section id="datasets" className="mt-12">
         <SectionHeading eyebrow="Data inventory" title="Minimum required datasets" />
+        <ReadinessPanel datasets={datasets} status={status} onReset={() => setStatus({})} />
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           {datasets.map((d) => (
-            <DatasetCard key={d.name} dataset={d} />
+            <DatasetCard
+              key={d.name}
+              dataset={d}
+              status={status[d.name]}
+              onStatus={(v) =>
+                setStatus((prev) => {
+                  const next = { ...prev };
+                  if (v) next[d.name] = v;
+                  else delete next[d.name];
+                  return next;
+                })
+              }
+            />
           ))}
         </div>
       </section>

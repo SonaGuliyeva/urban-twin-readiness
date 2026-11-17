@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Dataset, Priority, SourceType } from "@/data/types";
+import { STATUS_OPTIONS, type HaveStatus } from "./readiness";
 
 const PRIORITY_LABEL: Record<Priority, string> = {
   essential: "Essential",
@@ -25,11 +26,34 @@ function sourceClasses(s: SourceType): string {
   return "border-border bg-muted text-muted-foreground";
 }
 
-export function DatasetCard({ dataset }: { dataset: Dataset }) {
+const STATUS_CARD: Record<HaveStatus, string> = {
+  have: "border-accent/60 bg-accent/5",
+  partial: "border-recommended/50 bg-recommended/5",
+  missing: "border-foreground/25",
+};
+const STATUS_ACTIVE: Record<HaveStatus, string> = {
+  have: "bg-accent text-accent-foreground",
+  partial: "bg-recommended text-white",
+  missing: "bg-foreground/70 text-background",
+};
+
+export function DatasetCard({
+  dataset,
+  status,
+  onStatus,
+}: {
+  dataset: Dataset;
+  status?: HaveStatus;
+  onStatus?: (s: HaveStatus | undefined) => void;
+}) {
   const [open, setOpen] = useState(false);
   const hasDetails = Boolean(dataset.provider || dataset.resolution || dataset.access);
   return (
-    <article className="flex h-full flex-col rounded-lg border border-border bg-card p-5 shadow-card transition-shadow hover:shadow-elevated">
+    <article
+      className={`flex h-full flex-col rounded-lg border p-5 shadow-card transition-shadow hover:shadow-elevated ${
+        status ? STATUS_CARD[status] + " bg-card" : "border-border bg-card"
+      }`}
+    >
       <div className="flex items-start justify-between gap-3">
         <h3 className="font-serif text-lg leading-snug text-foreground">{dataset.name}</h3>
         <span
@@ -50,6 +74,41 @@ export function DatasetCard({ dataset }: { dataset: Dataset }) {
           {SOURCE_LABEL[dataset.source]}
         </span>
       </div>
+
+      {onStatus && (
+        <div className="mt-4 print:hidden">
+          <div
+            role="group"
+            aria-label={`Status of ${dataset.name}`}
+            className="grid grid-cols-3 overflow-hidden rounded-md border border-border text-xs"
+          >
+            {STATUS_OPTIONS.map((o) => {
+              const active = status === o.id;
+              return (
+                <button
+                  key={o.id}
+                  type="button"
+                  title={o.long}
+                  aria-pressed={active}
+                  onClick={() => onStatus(active ? undefined : o.id)}
+                  className={`px-2 py-1.5 transition-colors ${
+                    active
+                      ? STATUS_ACTIVE[o.id]
+                      : "bg-card text-muted-foreground hover:bg-muted hover:text-foreground"
+                  } ${o.id !== "have" ? "border-l border-border" : ""}`}
+                >
+                  {o.short}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+      {status && (
+        <p className="mt-3 hidden text-xs font-medium text-foreground print:block">
+          {STATUS_OPTIONS.find((o) => o.id === status)?.long}
+        </p>
+      )}
 
       <button
         type="button"
