@@ -29,7 +29,7 @@ function AboutPage() {
         </p>
         <p>
           An Urban Digital Twin is a dynamic, data-driven representation of the urban environment
-          that supports monitoring, analysis, and scenario testing. The current version focuses on floods, droughts and the urban water cycle, where Earth
+          that supports monitoring, analysis, and scenario testing. The current version focuses on floods, droughts and their interaction, where Earth
           Observation data can support municipal decisions on drainage, sealed surfaces, green areas
           and water resources. Further thematic domains, such as heat, air quality, energy and
           mobility, are planned extensions.

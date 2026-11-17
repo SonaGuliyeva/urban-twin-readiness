@@ -27,7 +27,7 @@ Cities increasingly need data-driven tools to plan Urban Digital Twins across a 
 
 ### 1. Select Policy Objectives
 
-The current version focuses on **floods, droughts and the urban water cycle** (4 objectives: flood risk reduction, stormwater and drainage, drought preparedness, water resource monitoring). The remaining 26 objectives across the other thematic domains are planned extensions and are listed in the configurator but not yet selectable:
+The current version focuses on **floods, droughts and the urban water cycle** (6 objectives: flood risk reduction, stormwater and drainage, drought preparedness, water resource monitoring, urban heat island mitigation, green infrastructure planning). The remaining 24 objectives across the other thematic domains are planned extensions and are listed in the configurator but not yet selectable:
 
 - Urban Planning & Development
 - Mobility & Transport

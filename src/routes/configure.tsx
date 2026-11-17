@@ -119,11 +119,12 @@ function ConfigurePage() {
           <span className="font-mono text-xs text-muted-foreground">{totalSelected} selected</span>
         </div>
         <p className="mt-2 text-sm text-muted-foreground">
-          This version focuses on floods, droughts and the urban water cycle. Select one or more
-          objectives.
+          This version focuses on floods, droughts and their interaction. The first four objectives
+          address water abundance and scarcity; the last two address heat and vegetation stress
+          related to drought. Select one or more objectives.
         </p>
 
-        <div className="mt-6 grid gap-2 sm:grid-cols-2">
+        <div className="mt-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {coreObjectives.map((obj) => {
             const active = selected.has(obj.id);
             return (
