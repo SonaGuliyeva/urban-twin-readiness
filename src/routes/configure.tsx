@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { CORE_OBJECTIVE_IDS, HAZARD_TYPES, POLICY_THEMES, WATER_CATEGORIES, type ImplementationLevel } from "@/data";
+import { CORE_OBJECTIVE_IDS, POLICY_THEMES, WATER_CATEGORIES, type ImplementationLevel } from "@/data";
 
 export const Route = createFileRoute("/configure")({
   head: () => ({
@@ -58,15 +58,6 @@ function ConfigurePage() {
   const [level, setLevel] = useState<ImplementationLevel>("predictive");
   const [city, setCity] = useState("");
 
-  const [types, setTypes] = useState<Set<string>>(new Set());
-  const toggleType = (id: string) =>
-    setTypes((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-
   const toggle = (id: string) =>
     setSelected((prev) => {
       const next = new Set(prev);
@@ -99,7 +90,6 @@ function ConfigurePage() {
       to: "/results",
       search: {
         objectives: Array.from(selected).join(","),
-        types: types.size ? Array.from(types).join(",") : undefined,
         level,
         city: city.trim() || undefined,
       },
@@ -126,7 +116,7 @@ function ConfigurePage() {
           <span className="font-mono text-xs text-muted-foreground">{totalSelected} selected</span>
         </div>
         <p className="mt-2 text-sm text-muted-foreground">
-          Choose the water-related challenge, optionally the hazard type, then the objectives that matter to your city.
+          Choose a water-related challenge, then select the objectives that matter to your city.
         </p>
 
         <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -158,36 +148,6 @@ function ConfigurePage() {
                   </button>
                 </div>
                 <p className="mt-2 text-sm text-muted-foreground">{cat.description}</p>
-
-                <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-                  Type (optional)
-                </p>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {HAZARD_TYPES.filter((t) => t.category === cat.id).map((t) => {
-                    const on = types.has(t.id);
-                    return (
-                      <button
-                        key={t.id}
-                        type="button"
-                        onClick={() => toggleType(t.id)}
-                        aria-pressed={on}
-                        title={t.note}
-                        className={[
-                          "rounded-full border px-3 py-1 text-xs transition-colors",
-                          on
-                            ? "border-primary bg-primary text-primary-foreground"
-                            : "border-border bg-background text-foreground hover:border-primary/40 hover:bg-muted",
-                        ].join(" ")}
-                      >
-                        {t.label}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-                  Objectives
-                </p>
 
                 <div className="mt-4 space-y-2">
                   {ids.map((id) => {

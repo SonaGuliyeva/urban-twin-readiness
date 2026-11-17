@@ -5,7 +5,6 @@ import {
   EO_INDICATORS,
   EO_HYDRO_SERVICES,
   HYDRO_INTEGRATION_APPROACHES,
-  HAZARD_TYPES,
   HYDRO_REFERENCE,
   LEVEL_DESCRIPTIONS,
   OPEN_SPATIAL_LAYERS,
@@ -26,7 +25,6 @@ import { PathwayCard } from "@/components/results/pathway-card";
 
 type Search = {
   objectives: string;
-  types?: string;
   level: ImplementationLevel;
   city?: string;
 };
@@ -44,7 +42,6 @@ export const Route = createFileRoute("/results")({
     const validLevel: ImplementationLevel = validLevels.includes(level) ? level : "predictive";
     return {
       objectives: typeof search.objectives === "string" ? search.objectives : "",
-      types: typeof search.types === "string" && search.types ? search.types : undefined,
       level: validLevel,
       city: typeof search.city === "string" ? search.city : undefined,
     };
@@ -63,7 +60,7 @@ export const Route = createFileRoute("/results")({
 });
 
 function ResultsPage() {
-  const { objectives, level, city, types } = Route.useSearch();
+  const { objectives, level, city } = Route.useSearch();
   const ids = objectives ? objectives.split(",").filter(Boolean) : [];
 
   const allObjectives = POLICY_THEMES.flatMap((g) => g.objectives);
@@ -120,17 +117,9 @@ function ResultsPage() {
   const platforms = level === "status" ? EO_PLATFORMS.slice(0, 5) : EO_PLATFORMS;
 
   // Hydrological hazards focus — surfaced when flood-risk and/or drought are selected
-  const typeIds = types ? types.split(",").filter(Boolean) : [];
-  const selectedTypes = typeIds
-    .map((id) => HAZARD_TYPES.find((t) => t.id === id))
-    .filter((t): t is NonNullable<typeof t> => Boolean(t));
   const hydroHazards: Hazard[] = [
-    ...(ids.includes("flood-risk") || selectedTypes.some((t) => t.category === "flood")
-      ? (["flood"] as Hazard[])
-      : []),
-    ...(ids.includes("drought") || selectedTypes.some((t) => t.category === "drought")
-      ? (["drought"] as Hazard[])
-      : []),
+    ...(ids.includes("flood-risk") ? (["flood"] as Hazard[]) : []),
+    ...(ids.includes("drought") ? (["drought"] as Hazard[]) : []),
   ];
   const showHydro = hydroHazards.length > 0;
   const hydroSensors = EO_SENSOR_FAMILIES.filter((f) =>
@@ -168,14 +157,6 @@ function ResultsPage() {
               className="rounded-full border border-border bg-surface-elevated px-3 py-1 text-xs text-foreground"
             >
               {o.label}
-            </span>
-          ))}
-          {selectedTypes.map((t) => (
-            <span
-              key={t.id}
-              className="rounded-full border border-accent/40 bg-accent/5 px-3 py-1 text-xs text-foreground"
-            >
-              {t.label}
             </span>
           ))}
         </div>
@@ -542,21 +523,6 @@ function ResultsPage() {
             Adapted from a peer-reviewed review of Earth Observation for flood and drought
             management (Guliyeva &amp; Boccardo, 2026).
           </p>
-
-          {selectedTypes.length > 0 && (
-            <div className="mt-6 rounded-lg border border-accent/30 bg-accent/5 p-4">
-              <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
-                Focus for your selected hazard types
-              </h3>
-              <ul className="mt-3 space-y-2 text-sm leading-relaxed text-foreground/80">
-                {selectedTypes.map((t) => (
-                  <li key={t.id}>
-                    <span className="font-medium text-foreground">{t.label}.</span> {t.focus}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
 
           <div className="mt-8">
             <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
