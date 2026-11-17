@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { Dataset, Priority, SourceType } from "@/data/types";
 
 const PRIORITY_LABEL: Record<Priority, string> = {
@@ -25,6 +26,8 @@ function sourceClasses(s: SourceType): string {
 }
 
 export function DatasetCard({ dataset }: { dataset: Dataset }) {
+  const [open, setOpen] = useState(false);
+  const hasDetails = Boolean(dataset.provider || dataset.resolution || dataset.access);
   return (
     <article className="flex h-full flex-col rounded-lg border border-border bg-card p-5 shadow-card transition-shadow hover:shadow-elevated">
       <div className="flex items-start justify-between gap-3">
@@ -37,7 +40,6 @@ export function DatasetCard({ dataset }: { dataset: Dataset }) {
           {PRIORITY_LABEL[dataset.priority]}
         </span>
       </div>
-      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{dataset.description}</p>
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
         <span
@@ -49,43 +51,55 @@ export function DatasetCard({ dataset }: { dataset: Dataset }) {
         </span>
       </div>
 
-      {(dataset.provider || dataset.resolution || dataset.access) && (
-        <dl className="mt-4 grid grid-cols-1 gap-2 border-t border-border pt-3 text-xs">
-          {dataset.provider && (
-            <div className="flex gap-2">
-              <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">
-                Provider
-              </dt>
-              <dd className="text-foreground/85">{dataset.provider}</dd>
-            </div>
-          )}
-          {dataset.resolution && (
-            <div className="flex gap-2">
-              <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">
-                Resolution
-              </dt>
-              <dd className="text-foreground/85">{dataset.resolution}</dd>
-            </div>
-          )}
-          {dataset.access && (
-            <div className="flex gap-2">
-              <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">
-                Access
-              </dt>
-              <dd className="text-foreground/85">{dataset.access}</dd>
-            </div>
-          )}
-        </dl>
-      )}
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="mt-3 self-start text-xs text-accent underline-offset-2 hover:underline print:hidden"
+      >
+        {open ? "Hide details" : "Show details"}
+      </button>
 
-      {dataset.examples.length > 0 && (
-        <div className="mt-3 border-t border-border pt-3">
-          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-            Example sources
-          </p>
-          <p className="mt-1 text-sm text-foreground/80">{dataset.examples.join(" · ")}</p>
-        </div>
-      )}
+      <div className={open ? "" : "hidden print:block"}>
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{dataset.description}</p>
+        {hasDetails && (
+          <dl className="mt-4 grid grid-cols-1 gap-2 border-t border-border pt-3 text-xs">
+            {dataset.provider && (
+              <div className="flex gap-2">
+                <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">
+                  Provider
+                </dt>
+                <dd className="text-foreground/85">{dataset.provider}</dd>
+              </div>
+            )}
+            {dataset.resolution && (
+              <div className="flex gap-2">
+                <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">
+                  Resolution
+                </dt>
+                <dd className="text-foreground/85">{dataset.resolution}</dd>
+              </div>
+            )}
+            {dataset.access && (
+              <div className="flex gap-2">
+                <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">
+                  Access
+                </dt>
+                <dd className="text-foreground/85">{dataset.access}</dd>
+              </div>
+            )}
+          </dl>
+        )}
+
+        {dataset.examples.length > 0 && (
+          <div className="mt-3 border-t border-border pt-3">
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+              Example sources
+            </p>
+            <p className="mt-1 text-sm text-foreground/80">{dataset.examples.join(" · ")}</p>
+          </div>
+        )}
+      </div>
     </article>
   );
 }
