@@ -6,28 +6,35 @@ export function ReadinessPanel({
   datasets,
   status,
   onReset,
+  platforms = [],
 }: {
   datasets: Dataset[];
   status: StatusMap;
   onReset: () => void;
+  platforms?: { name: string; description: string; url: string }[];
 }) {
   const s = summarise(datasets, status);
   const pct = (n: number) => (s.total ? (n / s.total) * 100 : 0);
   const readiness = Math.round(pct(s.have));
   const started = s.answered > 0;
-  const gaps = [...s.gaps].sort((a, b) => {
-    const rank = { essential: 0, recommended: 1, optional: 2 } as const;
-    return rank[a.priority] - rank[b.priority];
-  });
+  const rank = { essential: 0, recommended: 1, optional: 2 } as const;
+  const seenTitles = new Set<string>();
+  const gaps = [...s.gaps]
+    .sort((a, b) => rank[a.priority] - rank[b.priority])
+    // two datasets can share one plain-language title: list it once
+    .filter((d) => {
+      const t = PLAIN_DATASETS[d.name]?.title ?? d.name;
+      if (seenTitles.has(t)) return false;
+      seenTitles.add(t);
+      return true;
+    });
   const eoGaps = gaps.filter((d) => d.source === "satellite").length;
 
   return (
-    <article className="mt-6 rounded-xl border border-accent/40 bg-accent/5 p-5 shadow-card sm:p-6">
+    <article className="rounded-xl border border-accent/40 bg-accent/5 p-5 shadow-card sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-semibold text-accent">
-            How ready is your city?
-          </p>
+          <p className="text-xs font-semibold text-accent">How ready is your city?</p>
           <h3 className="mt-1 font-serif text-xl text-foreground">
             Which of these data do you already have?
           </h3>
@@ -150,6 +157,30 @@ export function ReadinessPanel({
                 ))}
               </ul>
             </>
+          )}
+          {eoGaps > 0 && platforms.length > 0 && (
+            <div className="mt-6">
+              <p className="text-sm font-semibold text-foreground">
+                Where to get the free satellite data
+              </p>
+              <ul className="mt-2 grid gap-2 sm:grid-cols-2">
+                {platforms.map((p) => (
+                  <li key={p.name}>
+                    <a
+                      href={p.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block rounded-md border border-border bg-card px-3 py-2 text-sm hover:border-eo/50 hover:bg-muted"
+                    >
+                      <span className="font-medium text-eo">{p.name}</span>
+                      <span className="mt-0.5 block text-xs text-muted-foreground">
+                        {p.description}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
         </div>
       )}
