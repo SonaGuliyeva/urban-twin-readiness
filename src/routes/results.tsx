@@ -339,6 +339,12 @@ function ResultsPage() {
             In Proceedings of the 77th International Astronautical Congress (IAC 2026),
             International Astronautical Federation.
           </p>
+          <Link
+            to="/turin"
+            className="mt-4 inline-flex items-center rounded-md border border-border bg-surface-elevated px-4 py-2 text-xs font-medium text-foreground transition-colors hover:bg-muted"
+          >
+            Explore the Turin city model in 3D &rarr;
+          </Link>
         </CollapsibleSection>
       )}
 

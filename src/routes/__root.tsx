@@ -85,6 +85,7 @@ function SiteHeader() {
   const links = [
     { to: "/", label: "Overview", exact: true },
     { to: "/configure", label: "Configurator", exact: false },
+    { to: "/turin", label: "Turin example", exact: false },
     { to: "/about", label: "About", exact: false },
   ] as const;
 
