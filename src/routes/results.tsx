@@ -11,8 +11,6 @@ import {
   OPEN_SPATIAL_LAYERS,
   POLICY_THEMES,
   CASE_STUDIES,
-  TURIN_SEGMENTS,
-  TURIN_SUMMARY,
   getDatasetsForObjectives,
   type Hazard,
   type ImplementationLevel,
@@ -178,13 +176,6 @@ function ResultsPage() {
     cs.relatedObjectives.some((id) => ids.includes(id)),
   );
 
-  // Turin worked example: shown only when the user names Turin/Torino as their city
-  const isTurin = city ? /^(turin|torino)$/i.test(city.trim()) : false;
-  const turinRelevant = ["uhi", "drought", "climate-resilience", "green-infra"].some((id) =>
-    ids.includes(id),
-  );
-  const showTurinCase = isTurin && turinRelevant;
-  const turinHottest = [...TURIN_SEGMENTS].sort((a, b) => b.lst - a.lst).slice(0, 8);
 
   // Curate EO platforms shown — at the Status level, keep it to core Copernicus platforms
   const platforms = level === "status" ? EO_PLATFORMS.slice(0, 5) : EO_PLATFORMS;
@@ -266,7 +257,6 @@ function ResultsPage() {
           { id: "summary", label: "Summary" },
           { id: "datasets", label: "Datasets" },
           { id: "roadmap", label: "Roadmap" },
-          ...(showTurinCase ? [{ id: "turin-case", label: "Turin example" }] : []),
           ...(relevantCaseStudies.length > 0 ? [{ id: "in-practice", label: "In practice" }] : []),
           ...(showHydro ? [{ id: "hydro", label: "Hydro focus" }] : []),
           { id: "eo-sources", label: "EO & open data" },
@@ -437,109 +427,14 @@ function ResultsPage() {
         </aside>
       </section>
 
-      {/* Turin worked example — real object-level data from the author's PhD research */}
-      {showTurinCase && (
-        <CollapsibleSection
-          id="turin-case"
-          eyebrow="Worked example — real data"
-          title="Turin: what this looks like with real object-level data"
-          hint="Road-segment analysis from the author's doctoral research"
-        >
-          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-            The recommendations above are generic. This is what the same approach produces when
-            applied to real infrastructure: {TURIN_SUMMARY.segmentCount} road segments in Turin's
-            Barriera di Milano / Po&ndash;Stura confluence area, enriched with airborne and
-            Sentinel-2 vegetation indices and SDGSAT-1 summer land surface temperature (
-            {TURIN_SUMMARY.acquisitionDate}), from the author&rsquo;s doctoral research.
-          </p>
-
-          <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
-            <StatCard label="Segments analysed" value={TURIN_SUMMARY.segmentCount} />
-            <StatCard
-              label="Environmentally stressed"
-              value={`${TURIN_SUMMARY.envStressedCount} (${Math.round(
-                (TURIN_SUMMARY.envStressedCount / TURIN_SUMMARY.segmentCount) * 100,
-              )}%)`}
-              accent="essential"
-            />
-            <StatCard
-              label={`Thermal stress (>${TURIN_SUMMARY.thermalThresholdC}\u00b0C)`}
-              value={TURIN_SUMMARY.thermalStressedCount}
-              accent="eo"
-            />
-            <StatCard label="Mean summer LST" value={`${TURIN_SUMMARY.lstMean}\u00b0C`} />
-          </div>
-
-          <p className="mt-6 text-xs font-semibold text-muted-foreground">
-            Hottest segments in the analysed network
-          </p>
-          <div className="mt-3 overflow-hidden rounded-xl border border-border bg-card">
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[520px] border-collapse text-left text-sm">
-                <thead>
-                  <tr className="border-b border-border">
-                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground">
-                      Street
-                    </th>
-                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground">LST</th>
-                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground">
-                      Impervious
-                    </th>
-                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground">
-                      Stress flags
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {turinHottest.map((s) => (
-                    <tr key={s.id} className="border-b border-border last:border-0">
-                      <td className="px-4 py-2.5 text-foreground/85">{s.street}</td>
-                      <td className="px-4 py-2.5 text-foreground/85">{s.lst}&deg;C</td>
-                      <td className="px-4 py-2.5 text-foreground/85">{s.imperviousPct}%</td>
-                      <td className="px-4 py-2.5">
-                        <div className="flex flex-wrap gap-1.5">
-                          {s.thermalStressed && (
-                            <span className="rounded-full bg-destructive/10 px-2 py-0.5 text-[10px] font-medium text-destructive">
-                              thermal
-                            </span>
-                          )}
-                          {s.droughtStressed && (
-                            <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium text-amber-700">
-                              drought
-                            </span>
-                          )}
-                          {!s.thermalStressed && !s.droughtStressed && s.envStressed && (
-                            <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
-                              other
-                            </span>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <p className="mt-3 text-xs text-muted-foreground">
-            Source: SDGSAT-1 TIS land surface temperature, airborne and Sentinel-2 NDVI/NDWI. Full
-            methodology in Guliyeva, S., Scolamiero, V., Boccardo, P., Di Rita, M., Vizireanu, A.,
-            &amp; Alaskarov, E. (2026).{" "}
-            <span className="italic">
-              Integrating Multi-source Earth Observation Data into Urban Digital Twin Architectures:
-              Environmental Data Enrichment for the City of Turin.
-            </span>{" "}
-            In Proceedings of the 77th International Astronautical Congress (IAC 2026),
-            International Astronautical Federation.
-          </p>
-          <Link
-            to="/turin"
-            className="mt-4 inline-flex items-center rounded-md border border-border bg-surface-elevated px-4 py-2 text-xs font-medium text-foreground transition-colors hover:bg-muted"
-          >
-            Explore the Turin city model in 3D &rarr;
-          </Link>
-        </CollapsibleSection>
-      )}
+      {/* Turin worked example lives on its own page */}
+      <p className="mt-10 text-sm text-muted-foreground print:hidden">
+        Want to see how a real city did it?{" "}
+        <Link to="/turin" className="font-medium text-primary underline-offset-4 hover:underline">
+          See how Turin added satellite data to its road digital twin
+        </Link>
+        .
+      </p>
 
       {/* Why: situational awareness before the event */}
       <section className="mt-10 rounded-xl border border-primary/25 bg-primary/5 p-6 sm:p-8">
