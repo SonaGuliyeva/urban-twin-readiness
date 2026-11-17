@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { TurinStory } from "@/components/turin/turin-story";
 import { TurinViewer } from "@/components/turin/turin-viewer";
 
 export const Route = createFileRoute("/turin")({
@@ -30,7 +31,9 @@ function TurinPage() {
         an Urban Digital Twin, and how finer sources can be added later without changing the model.
       </p>
 
-      <div className="mt-8">
+      <TurinStory />
+
+      <div className="mt-10">
         <TurinViewer />
       </div>
 
