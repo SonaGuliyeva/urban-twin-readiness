@@ -1,6 +1,22 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { CORE_OBJECTIVE_IDS, POLICY_THEMES, WATER_CATEGORIES, type ImplementationLevel } from "@/data";
+import {
+  CORE_OBJECTIVE_IDS,
+  POLICY_THEMES,
+  WATER_CATEGORIES,
+  getDatasetsForObjectives,
+  type ImplementationLevel,
+} from "@/data";
+import { PLAIN_DATASETS } from "@/data/plain-language";
+import {
+  START_OPTIONS,
+  STATUS_OPTIONS,
+  encodeStatus,
+  prefillFor,
+  type HaveStatus,
+  type StartKey,
+  type StatusMap,
+} from "@/components/results/readiness";
 
 export const Route = createFileRoute("/configure")({
   head: () => ({
@@ -16,46 +32,14 @@ export const Route = createFileRoute("/configure")({
   component: ConfigurePage,
 });
 
-const LEVELS: { id: ImplementationLevel; title: string; tag: string; desc: string }[] = [
-  {
-    id: "status",
-    title: "1 · Static Digital Model",
-    tag: "3D/2D visualization",
-    desc: "Provides 3D or 2D visualization with limited analytics; relies on mostly static data and is used primarily for basic visualization and communication.",
-  },
-  {
-    id: "informative",
-    title: "2 · Analytical Digital Twin",
-    tag: "Dashboards & analytics",
-    desc: "Integrates multiple datasets and leverages dashboards and analytics to perform limited scenario analysis.",
-  },
-  {
-    id: "predictive",
-    title: "3 · Predictive Digital Twin",
-    tag: "Forecasting & simulation",
-    desc: "Incorporates predictive modeling, forecasting, or simulation of urban systems and trends.",
-  },
-  {
-    id: "optimisation",
-    title: "4 · Prescriptive Digital Twin",
-    tag: "Scenario planning",
-    desc: "Employs advanced simulations and scenario planning specifically designed to support policy or operational decisions.",
-  },
-  {
-    id: "autonomous",
-    title: "5 · Autonomous Digital Twin",
-    tag: "Real-time & automated",
-    desc: "Features real-time data integration, artificial intelligence (AI), and automated decision support to trigger interventions.",
-  },
-];
-
 // Technical Maturity Levels, as used in the author's related Urban Digital Twin survey
 // instrument (national and subnational government questionnaires).
 
 function ConfigurePage() {
   const navigate = useNavigate();
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [level, setLevel] = useState<ImplementationLevel>("predictive");
+  const [start, setStart] = useState<StartKey>("status");
+  const [status, setStatus] = useState<StatusMap>({});
   const [city, setCity] = useState("");
 
   const toggle = (id: string) =>
@@ -77,12 +61,50 @@ function ConfigurePage() {
     () =>
       POLICY_THEMES.map((g) => ({
         theme: g.theme,
-        objectives: g.objectives.filter(
-          (o) => !CORE_OBJECTIVE_IDS.includes(o.id),
-        ),
+        objectives: g.objectives.filter((o) => !CORE_OBJECTIVE_IDS.includes(o.id)),
       })).filter((g) => g.objectives.length > 0),
     [],
   );
+
+  // All datasets for the chosen objectives (full pool, independent of level)
+  const pool = useMemo(
+    () => getDatasetsForObjectives(Array.from(selected), "predictive"),
+    [selected],
+  );
+  const poolNames = useMemo(() => pool.map((d) => d.name), [pool]);
+
+  const chooseStart = (k: StartKey) => {
+    setStart(k);
+    setStatus(prefillFor(k, pool));
+  };
+  // Apply the suggested answers once the first objectives are chosen
+  const [prefilled, setPrefilled] = useState(false);
+  if (!prefilled && pool.length > 0) {
+    setPrefilled(true);
+    setStatus(prefillFor(start, pool));
+  }
+  const titleOf = (n: string) => PLAIN_DATASETS[n]?.title ?? n;
+  // Rows: one per plain-language title (two datasets can describe the same thing)
+  const rows = useMemo(() => {
+    const seen = new Set<string>();
+    return pool.filter((d) => {
+      const t = titleOf(d.name);
+      if (seen.has(t)) return false;
+      seen.add(t);
+      return true;
+    });
+  }, [pool]);
+  const setOne = (name: string, v: HaveStatus | undefined) =>
+    setStatus((prev) => {
+      const next = { ...prev };
+      for (const d of pool) {
+        if (titleOf(d.name) !== titleOf(name)) continue;
+        if (v) next[d.name] = v;
+        else delete next[d.name];
+      }
+      return next;
+    });
+  const level: ImplementationLevel = start === "none" ? "status" : start;
 
   const handleGenerate = () => {
     if (!canSubmit) return;
@@ -91,6 +113,8 @@ function ConfigurePage() {
       search: {
         objectives: Array.from(selected).join(","),
         level,
+        start,
+        have: encodeStatus(poolNames, status),
         city: city.trim() || undefined,
       },
     });
@@ -99,13 +123,11 @@ function ConfigurePage() {
   return (
     <div className="mx-auto max-w-6xl px-6 py-14">
       <header className="mb-10">
-        <p className="text-xs font-semibold text-muted-foreground">
-          Configurator
-        </p>
+        <p className="text-xs font-semibold text-muted-foreground">Configurator</p>
         <h1 className="mt-2 text-4xl text-foreground sm:text-5xl">Define your assessment</h1>
         <p className="mt-3 max-w-2xl text-base text-muted-foreground">
-          Select the water-related objectives relevant to your city and indicate the current
-          implementation level. The tool will generate a structured data requirement profile.
+          Choose the challenge, say where your city starts, and tell us which data you already have.
+          You get a readiness score and a list of what to add first.
         </p>
       </header>
 
@@ -145,9 +167,7 @@ function ConfigurePage() {
               <div key={cat.id} className={`rounded-lg border p-5 ${tone.card}`}>
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className={`text-xs font-semibold ${tone.text}`}>
-                      {cat.subtitle}
-                    </p>
+                    <p className={`text-xs font-semibold ${tone.text}`}>{cat.subtitle}</p>
                     <h3 className="mt-1 font-serif text-2xl text-foreground">{cat.title}</h3>
                   </div>
                   <button
@@ -199,7 +219,11 @@ function ConfigurePage() {
                               stroke="currentColor"
                               strokeWidth="3"
                             >
-                              <path d="M5 12l5 5 9-11" strokeLinecap="round" strokeLinejoin="round" />
+                              <path
+                                d="M5 12l5 5 9-11"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
                             </svg>
                           )}
                         </span>
@@ -230,9 +254,7 @@ function ConfigurePage() {
           <div className="mt-4 space-y-4">
             {plannedThemes.map((group) => (
               <div key={group.theme}>
-                <p className="text-xs font-semibold text-muted-foreground">
-                  {group.theme}
-                </p>
+                <p className="text-xs font-semibold text-muted-foreground">{group.theme}</p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {group.objectives.map((obj) => (
                     <span
@@ -249,38 +271,110 @@ function ConfigurePage() {
         </details>
       </section>
 
-      {/* Technical maturity level */}
+      {/* Starting point */}
       <section className="mt-8 rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
-        <h2 className="font-serif text-2xl text-foreground">Technical maturity level</h2>
+        <h2 className="font-serif text-2xl text-foreground">Where does your city start?</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Select the option that best reflects your city's current digital and analytical capacity.
+          Pick the closest description of what you have today. It fills in the data list below, and
+          you can change any answer.
         </p>
-
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          {LEVELS.map((l) => {
-            const active = level === l.id;
+        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {START_OPTIONS.map((o) => {
+            const active = start === o.id;
             return (
               <button
-                key={l.id}
+                key={o.id}
                 type="button"
-                onClick={() => setLevel(l.id)}
+                onClick={() => chooseStart(o.id)}
+                aria-pressed={active}
                 className={[
-                  "rounded-lg border p-5 text-left transition-all",
+                  "rounded-lg border p-4 text-left transition-all",
                   active
                     ? "border-primary bg-primary/5 shadow-card"
                     : "border-border bg-surface-elevated hover:border-primary/40 hover:bg-muted",
                 ].join(" ")}
-                aria-pressed={active}
               >
-                <span className="font-serif text-xl text-foreground">{l.title}</span>
-                <span className="mt-1 block text-xs font-semibold text-muted-foreground">
-                  {l.tag}
-                </span>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{l.desc}</p>
+                <span className="font-serif text-lg text-foreground">{o.title}</span>
+                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{o.desc}</p>
               </button>
             );
           })}
         </div>
+      </section>
+
+      {/* Data checklist */}
+      <section className="mt-8 rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
+        <h2 className="font-serif text-2xl text-foreground">What data do you already have?</h2>
+        {pool.length === 0 ? (
+          <p className="mt-2 text-sm text-muted-foreground">
+            Choose at least one objective above and the data list appears here.
+          </p>
+        ) : (
+          <>
+            <p className="mt-2 text-sm text-muted-foreground">
+              For each item: is it already in your digital twin, do you have it but not in the twin,
+              or do you not have it? Leave an item blank if you are not sure.
+            </p>
+            <ul className="mt-6 divide-y divide-border">
+              {rows.map((d) => {
+                const plain = PLAIN_DATASETS[d.name];
+                const cur = status[d.name];
+                return (
+                  <li
+                    key={d.name}
+                    className="grid gap-3 py-4 md:grid-cols-[1fr_auto] md:items-center"
+                  >
+                    <div>
+                      <p className="font-medium text-foreground">{plain ? plain.title : d.name}</p>
+                      <p className="mt-0.5 text-sm text-muted-foreground">
+                        {plain?.what}
+                        {d.priority === "essential" && (
+                          <span className="ml-2 text-xs font-semibold text-essential">
+                            Must have
+                          </span>
+                        )}
+                        {d.source === "satellite" && (
+                          <span className="ml-2 text-xs font-semibold text-eo">
+                            Free satellite data
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                    <div
+                      role="group"
+                      aria-label={`Status of ${d.name}`}
+                      className="grid min-w-[17rem] grid-cols-3 overflow-hidden rounded-md border border-border text-xs"
+                    >
+                      {STATUS_OPTIONS.map((o) => {
+                        const active = cur === o.id;
+                        const on =
+                          o.id === "have"
+                            ? "bg-accent text-accent-foreground"
+                            : o.id === "partial"
+                              ? "bg-recommended text-white"
+                              : "bg-foreground/70 text-background";
+                        return (
+                          <button
+                            key={o.id}
+                            type="button"
+                            title={o.long}
+                            aria-pressed={active}
+                            onClick={() => setOne(d.name, active ? undefined : o.id)}
+                            className={`px-2 py-2 ${o.id !== "have" ? "border-l border-border" : ""} ${
+                              active ? on : "bg-card text-muted-foreground hover:bg-muted"
+                            }`}
+                          >
+                            {o.short}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </>
+        )}
       </section>
 
       {/* City + Generate */}
@@ -308,7 +402,7 @@ function ConfigurePage() {
             disabled={!canSubmit}
             className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow-card transition-all hover:bg-primary/90 hover:shadow-elevated disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
           >
-            Generate profile
+            See your readiness
             <svg
               viewBox="0 0 24 24"
               fill="none"

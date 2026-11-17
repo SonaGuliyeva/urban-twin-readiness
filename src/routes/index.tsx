@@ -27,8 +27,7 @@ function HomePage() {
               Is your city&rsquo;s digital twin ready for floods and droughts?
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-foreground/80">
-              Find out which data a digital twin needs, which of it your city already has, and which
-              you can get free from satellites.
+              Be ready before the event. Find out which data a digital twin needs, which of it your city already has, and which you can get free from satellites.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-3">
               <Link
@@ -57,18 +56,18 @@ function HomePage() {
           {[
             {
               n: "1",
-              t: "Choose your challenge",
+              t: "Choose the challenge",
               d: "Floods, droughts or both, and the objectives that matter to your city, such as flood risk reduction or drought preparedness.",
             },
             {
               n: "2",
-              t: "Say how advanced your twin is",
-              d: "From a static 3D model to an autonomous twin. This sets how much data you need.",
+              t: "Say where your city starts",
+              d: "From nothing at all to a real-time twin. Your answer fills in the data list for you.",
             },
             {
               n: "3",
               t: "Mark what you already have",
-              d: "Answer yes or no for each data item. You get a readiness score and a list of what to get next.",
+              d: "Correct the list. You get a readiness score, a list of what to add first and where to get it free.",
             },
           ].map((s) => (
             <li key={s.n} className="border-t-2 border-primary pt-5">
@@ -99,8 +98,7 @@ function HomePage() {
           </div>
           <p className="max-w-2xl leading-relaxed text-muted-foreground md:col-span-2">
             Most of the data comes from open Earth Observation programmes such as Copernicus, so a
-            city can start without buying anything. More topics, such as air quality, energy and
-            mobility, will follow in later versions.
+            city can start without buying anything. Floods and droughts come first. The same method will be extended to other city objectives, such as air quality, energy and mobility, in later versions.
           </p>
         </div>
       </section>

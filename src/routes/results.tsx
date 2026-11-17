@@ -22,13 +22,15 @@ import { CollapsibleSection } from "@/components/common/collapsible-section";
 import { StatCard } from "@/components/common/stat-card";
 import { DatasetCard } from "@/components/results/dataset-card";
 import { ReadinessPanel } from "@/components/results/readiness-panel";
-import type { StatusMap } from "@/components/results/readiness";
+import { decodeStatus, type StatusMap } from "@/components/results/readiness";
 import { OSLayerCard } from "@/components/results/os-layer-card";
 import { PathwayCard } from "@/components/results/pathway-card";
 
 type Search = {
   objectives: string;
   level: ImplementationLevel;
+  start?: string;
+  have?: string;
   city?: string;
 };
 
@@ -46,6 +48,8 @@ export const Route = createFileRoute("/results")({
     return {
       objectives: typeof search.objectives === "string" ? search.objectives : "",
       level: validLevel,
+      start: typeof search.start === "string" ? search.start : undefined,
+      have: typeof search.have === "string" ? search.have : undefined,
       city: typeof search.city === "string" ? search.city : undefined,
     };
   },
@@ -63,7 +67,7 @@ export const Route = createFileRoute("/results")({
 });
 
 function ResultsPage() {
-  const { objectives, level, city } = Route.useSearch();
+  const { objectives, level, city, start, have } = Route.useSearch();
   const ids = objectives ? objectives.split(",").filter(Boolean) : [];
 
   // City's own answers: which datasets are already in its digital twin.
@@ -71,13 +75,19 @@ function ResultsPage() {
   const storeKey = `utr-status:${objectives ?? ""}:${level}`;
   const [status, setStatus] = useState<StatusMap>({});
   useEffect(() => {
+    // Answers given in the configurator arrive in the link and take priority
+    if (have) {
+      const names = getDatasetsForObjectives(ids, "predictive").map((d) => d.name);
+      setStatus(decodeStatus(names, have));
+      return;
+    }
     try {
       const raw = window.sessionStorage.getItem(storeKey);
       setStatus(raw ? (JSON.parse(raw) as StatusMap) : {});
     } catch {
       setStatus({});
     }
-  }, [storeKey]);
+  }, [storeKey, have]);
   useEffect(() => {
     try {
       window.sessionStorage.setItem(storeKey, JSON.stringify(status));
@@ -207,6 +217,7 @@ function ResultsPage() {
         className="sticky top-0 z-10 -mx-6 mt-0 flex gap-1 overflow-x-auto border-b border-border bg-background/95 px-6 py-2.5 backdrop-blur supports-[backdrop-filter]:bg-background/80 print:hidden"
       >
         {[
+          { id: "readiness", label: "Readiness" },
           { id: "summary", label: "Summary" },
           { id: "datasets", label: "Datasets" },
           { id: "roadmap", label: "Roadmap" },
@@ -225,12 +236,28 @@ function ResultsPage() {
         ))}
       </nav>
 
+      {/* Readiness: first thing the city sees */}
+      <section id="readiness" className="mt-10 scroll-mt-16">
+        <ReadinessPanel
+          datasets={datasets}
+          status={status}
+          onReset={() => setStatus({})}
+          platforms={EO_PLATFORMS.slice(0, 5)}
+        />
+      </section>
+
       {/* Summary */}
-      <section id="summary" className="mt-10 grid gap-6 lg:grid-cols-[2fr_1fr]">
+      <section id="summary" className="mt-12 grid gap-6 lg:grid-cols-[2fr_1fr]">
         <article className="rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
           <p className="text-xs font-semibold text-accent">Summary</p>
-          <h2 className="mt-2 font-serif text-2xl text-foreground">{levelInfo.title}</h2>
-          <p className="mt-4 text-base leading-relaxed text-foreground/80">{levelInfo.short}</p>
+          <h2 className="mt-2 font-serif text-2xl text-foreground">
+            {start === "none" ? "Starting from scratch" : levelInfo.title}
+          </h2>
+          <p className="mt-4 text-base leading-relaxed text-foreground/80">
+            {start === "none"
+              ? "Your city has no digital twin yet. The first step is a static model (level 1) that holds the core layers below. Free satellite data can fill many of them."
+              : levelInfo.short}
+          </p>
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
             The selected configuration requires{" "}
             <span className="font-medium text-foreground">{datasets.length} datasets</span>, of
@@ -244,7 +271,7 @@ function ResultsPage() {
 
           <div className="mt-6 border-t border-border pt-6">
             <p className="text-xs font-semibold text-muted-foreground">
-              At this level, a city can
+              {start === "none" ? "Once level 1 is reached, a city can" : "At this level, a city can"}
             </p>
             <ul className="mt-3 space-y-2">
               {levelInfo.capable.map((item) => (
@@ -371,10 +398,21 @@ function ResultsPage() {
         </CollapsibleSection>
       )}
 
+      {/* Why: situational awareness before the event */}
+      <section className="mt-10 rounded-xl border border-primary/25 bg-primary/5 p-6 sm:p-8">
+        <h2 className="font-serif text-2xl text-foreground">Be ready before the event</h2>
+        <p className="mt-3 max-w-3xl leading-relaxed text-foreground/85">
+          Satellite data are most useful at the start of a response, during early situation
+          assessment, when a fast overview of where conditions are changing matters more than fine
+          detail. If these layers are already in your digital twin, that overview is available the
+          moment a flood or drought develops, and it can be refreshed regularly across the whole
+          city, not only after an alert.
+        </p>
+      </section>
+
       {/* Datasets */}
       <section id="datasets" className="mt-12">
         <SectionHeading eyebrow="Data inventory" title="Minimum required datasets" />
-        <ReadinessPanel datasets={datasets} status={status} onReset={() => setStatus({})} />
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           {datasets.map((d) => (
             <DatasetCard

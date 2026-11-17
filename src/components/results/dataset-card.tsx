@@ -138,25 +138,19 @@ export function DatasetCard({
           <dl className="mt-4 grid grid-cols-1 gap-2 border-t border-border pt-3 text-xs">
             {dataset.provider && (
               <div className="flex gap-2">
-                <dt className="w-20 shrink-0 font-medium text-muted-foreground">
-                  Provider
-                </dt>
+                <dt className="w-20 shrink-0 font-medium text-muted-foreground">Provider</dt>
                 <dd className="text-foreground/85">{dataset.provider}</dd>
               </div>
             )}
             {dataset.resolution && (
               <div className="flex gap-2">
-                <dt className="w-20 shrink-0 font-medium text-muted-foreground">
-                  Resolution
-                </dt>
+                <dt className="w-20 shrink-0 font-medium text-muted-foreground">Resolution</dt>
                 <dd className="text-foreground/85">{dataset.resolution}</dd>
               </div>
             )}
             {dataset.access && (
               <div className="flex gap-2">
-                <dt className="w-20 shrink-0 font-medium text-muted-foreground">
-                  Access
-                </dt>
+                <dt className="w-20 shrink-0 font-medium text-muted-foreground">Access</dt>
                 <dd className="text-foreground/85">{dataset.access}</dd>
               </div>
             )}
@@ -165,9 +159,7 @@ export function DatasetCard({
 
         {dataset.examples.length > 0 && (
           <div className="mt-3 border-t border-border pt-3">
-            <p className="text-xs font-semibold text-muted-foreground">
-              Example sources
-            </p>
+            <p className="text-xs font-semibold text-muted-foreground">Example sources</p>
             <p className="mt-1 text-sm text-foreground/80">{dataset.examples.join(" · ")}</p>
           </div>
         )}
