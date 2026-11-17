@@ -303,79 +303,91 @@ function ConfigurePage() {
       </section>
 
       {/* Data checklist */}
-      <section className="mt-8 rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
-        <h2 className="font-serif text-2xl text-foreground">What data do you already have?</h2>
-        {pool.length === 0 ? (
-          <p className="mt-2 text-sm text-muted-foreground">
-            Choose at least one objective above and the data list appears here.
-          </p>
-        ) : (
-          <>
+      <details className="group mt-8 rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
+        <summary className="cursor-pointer list-none">
+          <span className="font-serif text-2xl text-foreground">
+            Optional: mark the data you already have
+          </span>
+          <span className="mt-1 block text-sm text-muted-foreground">
+            Skip this if you are not sure. You still get the minimum free satellite data to start
+            with.
+          </span>
+        </summary>
+        <div className="mt-6">
+          {pool.length === 0 ? (
             <p className="mt-2 text-sm text-muted-foreground">
-              For each item: is it already in your digital twin, do you have it but not in the twin,
-              or do you not have it? Leave an item blank if you are not sure.
+              Choose at least one objective above and the data list appears here.
             </p>
-            <ul className="mt-6 divide-y divide-border">
-              {rows.map((d) => {
-                const plain = PLAIN_DATASETS[d.name];
-                const cur = status[d.name];
-                return (
-                  <li
-                    key={d.name}
-                    className="grid gap-3 py-4 md:grid-cols-[1fr_auto] md:items-center"
-                  >
-                    <div>
-                      <p className="font-medium text-foreground">{plain ? plain.title : d.name}</p>
-                      <p className="mt-0.5 text-sm text-muted-foreground">
-                        {plain?.what}
-                        {d.priority === "essential" && (
-                          <span className="ml-2 text-xs font-semibold text-essential">
-                            Must have
-                          </span>
-                        )}
-                        {d.source === "satellite" && (
-                          <span className="ml-2 text-xs font-semibold text-eo">
-                            Free satellite data
-                          </span>
-                        )}
-                      </p>
-                    </div>
-                    <div
-                      role="group"
-                      aria-label={`Status of ${d.name}`}
-                      className="grid min-w-[17rem] grid-cols-3 overflow-hidden rounded-md border border-border text-xs"
+          ) : (
+            <>
+              <p className="mt-2 text-sm text-muted-foreground">
+                For each item: is it already in your digital twin, do you have it but not in the
+                twin, or do you not have it? Leave an item blank if you are not sure.
+              </p>
+              <ul className="mt-6 divide-y divide-border">
+                {rows.map((d) => {
+                  const plain = PLAIN_DATASETS[d.name];
+                  const cur = status[d.name];
+                  return (
+                    <li
+                      key={d.name}
+                      className="grid gap-3 py-4 md:grid-cols-[1fr_auto] md:items-center"
                     >
-                      {STATUS_OPTIONS.map((o) => {
-                        const active = cur === o.id;
-                        const on =
-                          o.id === "have"
-                            ? "bg-accent text-accent-foreground"
-                            : o.id === "partial"
-                              ? "bg-recommended text-white"
-                              : "bg-foreground/70 text-background";
-                        return (
-                          <button
-                            key={o.id}
-                            type="button"
-                            title={o.long}
-                            aria-pressed={active}
-                            onClick={() => setOne(d.name, active ? undefined : o.id)}
-                            className={`px-2 py-2 ${o.id !== "have" ? "border-l border-border" : ""} ${
-                              active ? on : "bg-card text-muted-foreground hover:bg-muted"
-                            }`}
-                          >
-                            {o.short}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </>
-        )}
-      </section>
+                      <div>
+                        <p className="font-medium text-foreground">
+                          {plain ? plain.title : d.name}
+                        </p>
+                        <p className="mt-0.5 text-sm text-muted-foreground">
+                          {plain?.what}
+                          {d.priority === "essential" && (
+                            <span className="ml-2 text-xs font-semibold text-essential">
+                              Must have
+                            </span>
+                          )}
+                          {d.source === "satellite" && (
+                            <span className="ml-2 text-xs font-semibold text-eo">
+                              Free satellite data
+                            </span>
+                          )}
+                        </p>
+                      </div>
+                      <div
+                        role="group"
+                        aria-label={`Status of ${d.name}`}
+                        className="grid min-w-[17rem] grid-cols-3 overflow-hidden rounded-md border border-border text-xs"
+                      >
+                        {STATUS_OPTIONS.map((o) => {
+                          const active = cur === o.id;
+                          const on =
+                            o.id === "have"
+                              ? "bg-accent text-accent-foreground"
+                              : o.id === "partial"
+                                ? "bg-recommended text-white"
+                                : "bg-foreground/70 text-background";
+                          return (
+                            <button
+                              key={o.id}
+                              type="button"
+                              title={o.long}
+                              aria-pressed={active}
+                              onClick={() => setOne(d.name, active ? undefined : o.id)}
+                              className={`px-2 py-2 ${o.id !== "have" ? "border-l border-border" : ""} ${
+                                active ? on : "bg-card text-muted-foreground hover:bg-muted"
+                              }`}
+                            >
+                              {o.short}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </>
+          )}
+        </div>
+      </details>
 
       {/* City + Generate */}
       <section className="mt-8 rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
