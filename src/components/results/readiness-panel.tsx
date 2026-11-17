@@ -25,7 +25,7 @@ export function ReadinessPanel({
     <article className="mt-6 rounded-xl border border-accent/40 bg-accent/5 p-5 shadow-card sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">
+          <p className="text-xs font-semibold text-accent">
             How ready is your city?
           </p>
           <h3 className="mt-1 font-serif text-xl text-foreground">
@@ -101,7 +101,7 @@ export function ReadinessPanel({
 
       {started && (
         <div className="mt-6 border-t border-accent/30 pt-5">
-          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+          <p className="text-xs font-semibold text-muted-foreground">
             What to get next, most important first
           </p>
           {gaps.length === 0 ? (
@@ -132,12 +132,12 @@ export function ReadinessPanel({
                     </span>
                     <span className="flex shrink-0 gap-1">
                       {d.source === "satellite" && (
-                        <span className="rounded border border-eo/30 bg-eo/10 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-eo">
+                        <span className="rounded border border-eo/30 bg-eo/10 px-1.5 py-0.5 text-[11px] font-semibold text-eo">
                           Free
                         </span>
                       )}
                       <span
-                        className={`rounded border px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider ${
+                        className={`rounded border px-1.5 py-0.5 text-[11px] font-semibold ${
                           d.priority === "essential"
                             ? "border-essential/30 bg-essential/10 text-essential"
                             : "border-recommended/30 bg-recommended/10 text-recommended"

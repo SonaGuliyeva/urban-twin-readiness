@@ -18,7 +18,7 @@ export const Route = createFileRoute("/turin")({
 function TurinPage() {
   return (
     <div className="mx-auto max-w-6xl px-6 py-12">
-      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">
+      <p className="text-xs font-semibold text-accent">
         Worked example &middot; Turin
       </p>
       <h1 className="mt-2 text-3xl text-foreground sm:text-4xl">

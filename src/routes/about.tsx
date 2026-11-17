@@ -18,7 +18,7 @@ export const Route = createFileRoute("/about")({
 function AboutPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
-      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">About</p>
+      <p className="text-xs font-semibold text-muted-foreground">About</p>
       <h1 className="mt-2 text-4xl text-foreground sm:text-5xl">About the tool</h1>
 
       <div className="mt-8 space-y-6 text-base leading-relaxed text-foreground/85">
@@ -65,7 +65,7 @@ function AboutPage() {
           <table className="w-full min-w-[560px] border-collapse text-left text-sm">
             <thead>
               <tr className="bg-card">
-                <th className="border-b border-border px-4 py-3 font-mono text-[10px] uppercase tracking-wider text-muted-foreground"></th>
+                <th className="border-b border-border px-4 py-3 text-xs font-semibold text-muted-foreground"></th>
                 <th className="border-b border-border px-4 py-3 font-serif text-base text-foreground">
                   3D City Model
                 </th>
@@ -294,11 +294,11 @@ function AboutPage() {
               className="grid gap-3 rounded-lg border border-border bg-card p-5 shadow-card sm:grid-cols-[120px_1fr] sm:gap-6"
             >
               <div>
-                <p className="font-mono text-xs uppercase tracking-[0.18em] text-accent">
+                <p className="text-xs font-semibold text-accent">
                   {step.version}
                 </p>
                 <span
-                  className={`mt-2 inline-block rounded-full border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] ${
+                  className={`mt-2 inline-block rounded-full border px-2 py-0.5 text-xs font-semibold ${
                     step.status === "current"
                       ? "border-primary/30 bg-primary/10 text-primary"
                       : "border-border bg-muted text-muted-foreground"
@@ -318,7 +318,7 @@ function AboutPage() {
         </ol>
 
         <div className="!mt-6 rounded-xl border border-dashed border-border bg-surface-elevated p-6">
-          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">
+          <p className="text-xs font-semibold text-accent">
             Future data visualization
           </p>
           <h3 className="mt-2 font-serif text-lg text-foreground">

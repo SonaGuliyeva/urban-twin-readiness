@@ -66,7 +66,7 @@ export function DatasetCard({
           )}
         </div>
         <span
-          className={`shrink-0 rounded-full border px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] ${priorityClasses(
+          className={`shrink-0 rounded-full border px-2.5 py-0.5 text-xs font-semibold ${priorityClasses(
             dataset.priority,
           )}`}
         >
@@ -76,7 +76,7 @@ export function DatasetCard({
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
         <span
-          className={`rounded-md border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] ${sourceClasses(
+          className={`rounded-md border px-2 py-0.5 text-xs font-semibold ${sourceClasses(
             dataset.source,
           )}`}
         >
@@ -138,7 +138,7 @@ export function DatasetCard({
           <dl className="mt-4 grid grid-cols-1 gap-2 border-t border-border pt-3 text-xs">
             {dataset.provider && (
               <div className="flex gap-2">
-                <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">
+                <dt className="w-20 shrink-0 font-medium text-muted-foreground">
                   Provider
                 </dt>
                 <dd className="text-foreground/85">{dataset.provider}</dd>
@@ -146,7 +146,7 @@ export function DatasetCard({
             )}
             {dataset.resolution && (
               <div className="flex gap-2">
-                <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">
+                <dt className="w-20 shrink-0 font-medium text-muted-foreground">
                   Resolution
                 </dt>
                 <dd className="text-foreground/85">{dataset.resolution}</dd>
@@ -154,7 +154,7 @@ export function DatasetCard({
             )}
             {dataset.access && (
               <div className="flex gap-2">
-                <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">
+                <dt className="w-20 shrink-0 font-medium text-muted-foreground">
                   Access
                 </dt>
                 <dd className="text-foreground/85">{dataset.access}</dd>
@@ -165,7 +165,7 @@ export function DatasetCard({
 
         {dataset.examples.length > 0 && (
           <div className="mt-3 border-t border-border pt-3">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="text-xs font-semibold text-muted-foreground">
               Example sources
             </p>
             <p className="mt-1 text-sm text-foreground/80">{dataset.examples.join(" · ")}</p>

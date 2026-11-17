@@ -7,7 +7,7 @@ function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">Error 404</p>
+        <p className="text-xs font-semibold text-muted-foreground">Error 404</p>
         <h1 className="mt-3 text-5xl text-foreground">Page not found</h1>
         <p className="mt-3 text-sm text-muted-foreground">
           The page you are looking for does not exist or has been moved.
@@ -53,12 +53,6 @@ export const Route = createRootRoute({
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
-      },
     ],
   }),
   shellComponent: RootShell,
@@ -100,7 +94,7 @@ function SiteHeader() {
           </span>
           <div className="flex min-w-0 flex-col leading-none">
             <span className="font-serif text-base text-foreground">UrbanTwinReadiness</span>
-            <span className="hidden font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground sm:block">
+            <span className="hidden text-xs font-semibold text-muted-foreground sm:block">
               Decision-support prototype
             </span>
           </div>
@@ -178,7 +172,7 @@ function AboutThisTool() {
 
         <div className="grid gap-8 md:grid-cols-3">
           <div className="space-y-1">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="text-xs font-semibold text-muted-foreground">
               Author
             </p>
             <p className="text-sm text-foreground">Sona Guliyeva</p>
@@ -191,7 +185,7 @@ function AboutThisTool() {
           </div>
 
           <div className="space-y-1 md:col-span-2">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="text-xs font-semibold text-muted-foreground">
               Short description
             </p>
             <p className="text-sm leading-relaxed text-muted-foreground">
@@ -202,7 +196,7 @@ function AboutThisTool() {
           </div>
 
           <div className="space-y-1 md:col-span-3">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="text-xs font-semibold text-muted-foreground">
               Research reference
             </p>
             <p className="text-sm leading-relaxed text-foreground">
@@ -235,7 +229,7 @@ function AboutThisTool() {
           </div>
 
           <div className="space-y-1">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="text-xs font-semibold text-muted-foreground">
               Prototype
             </p>
             <a
@@ -249,7 +243,7 @@ function AboutThisTool() {
           </div>
 
           <div className="space-y-1">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="text-xs font-semibold text-muted-foreground">
               Repository
             </p>
             <a
@@ -266,7 +260,7 @@ function AboutThisTool() {
           </div>
 
           <div className="space-y-1">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="text-xs font-semibold text-muted-foreground">
               Version
             </p>
             <p className="text-sm text-foreground">1.0</p>
@@ -278,7 +272,7 @@ function AboutThisTool() {
       <div className="border-t border-border/70">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <p>UrbanTwinReadiness · Research prototype for urban environmental management.</p>
-          <p className="font-mono uppercase tracking-[0.18em]">v1.0 · Research Prototype</p>
+          <p className="font-medium">Version 1.0, research prototype</p>
         </div>
       </div>
     </section>

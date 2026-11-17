@@ -159,7 +159,7 @@ function ResultsPage() {
     <div className="mx-auto max-w-6xl px-6 py-14">
       {/* Header */}
       <header className="border-b border-border pb-8">
-        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+        <p className="text-xs font-semibold text-muted-foreground">
           Data requirement profile
         </p>
         <h1 className="mt-2 text-4xl text-foreground sm:text-5xl">
@@ -228,7 +228,7 @@ function ResultsPage() {
       {/* Summary */}
       <section id="summary" className="mt-10 grid gap-6 lg:grid-cols-[2fr_1fr]">
         <article className="rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
-          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">Summary</p>
+          <p className="text-xs font-semibold text-accent">Summary</p>
           <h2 className="mt-2 font-serif text-2xl text-foreground">{levelInfo.title}</h2>
           <p className="mt-4 text-base leading-relaxed text-foreground/80">{levelInfo.short}</p>
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
@@ -243,7 +243,7 @@ function ResultsPage() {
           </p>
 
           <div className="mt-6 border-t border-border pt-6">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="text-xs font-semibold text-muted-foreground">
               At this level, a city can
             </p>
             <ul className="mt-3 space-y-2">
@@ -298,7 +298,7 @@ function ResultsPage() {
             <StatCard label="Mean summer LST" value={`${TURIN_SUMMARY.lstMean}\u00b0C`} />
           </div>
 
-          <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+          <p className="mt-6 text-xs font-semibold text-muted-foreground">
             Hottest segments in the analysed network
           </p>
           <div className="mt-3 overflow-hidden rounded-xl border border-border bg-card">
@@ -306,16 +306,16 @@ function ResultsPage() {
               <table className="w-full min-w-[520px] border-collapse text-left text-sm">
                 <thead>
                   <tr className="border-b border-border">
-                    <th className="px-4 py-2.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground">
                       Street
                     </th>
-                    <th className="px-4 py-2.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground">
                       LST
                     </th>
-                    <th className="px-4 py-2.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground">
                       Impervious
                     </th>
-                    <th className="px-4 py-2.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground">
                       Stress flags
                     </th>
                   </tr>
@@ -421,8 +421,8 @@ function ResultsPage() {
         <ol className="mt-6 space-y-4">
           <li className="grid gap-3 rounded-lg border border-border bg-card p-5 shadow-card sm:grid-cols-[120px_1fr] sm:gap-6">
             <div>
-              <p className="font-mono text-xs uppercase tracking-[0.18em] text-accent">Phase 1</p>
-              <span className="mt-2 inline-block rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] text-primary">
+              <p className="text-xs font-semibold text-accent">Phase 1</p>
+              <span className="mt-2 inline-block rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
                 Start here
               </span>
             </div>
@@ -450,8 +450,8 @@ function ResultsPage() {
           {datasets.some((d) => d.priority === "recommended") && (
             <li className="grid gap-3 rounded-lg border border-border bg-card p-5 shadow-card sm:grid-cols-[120px_1fr] sm:gap-6">
               <div>
-                <p className="font-mono text-xs uppercase tracking-[0.18em] text-accent">Phase 2</p>
-                <span className="mt-2 inline-block rounded-full border border-border bg-muted px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+                <p className="text-xs font-semibold text-accent">Phase 2</p>
+                <span className="mt-2 inline-block rounded-full border border-border bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground">
                   Build capacity
                 </span>
               </div>
@@ -480,8 +480,8 @@ function ResultsPage() {
 
           <li className="grid gap-3 rounded-lg border border-border bg-card p-5 shadow-card sm:grid-cols-[120px_1fr] sm:gap-6">
             <div>
-              <p className="font-mono text-xs uppercase tracking-[0.18em] text-accent">Phase 3</p>
-              <span className="mt-2 inline-block rounded-full border border-border bg-muted px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+              <p className="text-xs font-semibold text-accent">Phase 3</p>
+              <span className="mt-2 inline-block rounded-full border border-border bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground">
                 Advance
               </span>
             </div>
@@ -529,7 +529,7 @@ function ResultsPage() {
                 key={cs.name}
                 className="rounded-xl border border-border bg-card p-5 shadow-card"
               >
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                <p className="text-xs font-semibold text-muted-foreground">
                   {cs.city}
                 </p>
                 <h3 className="mt-1 font-serif text-lg text-foreground">{cs.name}</h3>
@@ -561,13 +561,13 @@ function ResultsPage() {
           </p>
 
           <div className="mt-8">
-            <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
+            <h3 className="text-xs font-semibold text-accent">
               EO sensor families and operational roles
             </h3>
             <div className="mt-4 overflow-x-auto rounded-lg border border-border bg-card shadow-card">
               <table className="w-full min-w-[720px] text-left text-sm">
                 <thead className="border-b border-border bg-surface-elevated">
-                  <tr className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                  <tr className="text-xs font-semibold text-muted-foreground">
                     <th className="px-4 py-3">Sensor family</th>
                     <th className="px-4 py-3">Key missions</th>
                     <th className="px-4 py-3">Resolution / revisit</th>
@@ -590,7 +590,7 @@ function ResultsPage() {
                             .filter((r) => hydroHazards.includes(r.hazard))
                             .map((r) => (
                               <li key={r.hazard}>
-                                <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-accent">
+                                <span className="text-xs font-semibold text-accent">
                                   {r.hazard}
                                 </span>{" "}
                                 — {r.description}
@@ -607,13 +607,13 @@ function ResultsPage() {
           </div>
 
           <div className="mt-10">
-            <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
+            <h3 className="text-xs font-semibold text-accent">
               EO-derived indicators for hydrological monitoring
             </h3>
             <div className="mt-4 overflow-x-auto rounded-lg border border-border bg-card shadow-card">
               <table className="w-full min-w-[720px] text-left text-sm">
                 <thead className="border-b border-border bg-surface-elevated">
-                  <tr className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                  <tr className="text-xs font-semibold text-muted-foreground">
                     <th className="px-4 py-3">Group</th>
                     <th className="px-4 py-3">Indicator</th>
                     {hydroHazards.includes("flood") && <th className="px-4 py-3">Flood</th>}
@@ -627,7 +627,7 @@ function ResultsPage() {
                       key={i.indicator}
                       className="border-b border-border/60 align-top last:border-0"
                     >
-                      <td className="px-4 py-3 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+                      <td className="px-4 py-3 text-xs font-semibold text-muted-foreground">
                         {i.group}
                       </td>
                       <td className="px-4 py-3 font-medium text-foreground">{i.indicator}</td>
@@ -646,7 +646,7 @@ function ResultsPage() {
           </div>
 
           <div className="mt-10">
-            <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
+            <h3 className="text-xs font-semibold text-accent">
               Multi-source EO integration approaches
             </h3>
             <div className="mt-4 grid gap-4 md:grid-cols-2">
@@ -657,7 +657,7 @@ function ResultsPage() {
                 >
                   <div className="flex items-baseline justify-between gap-3">
                     <h4 className="font-serif text-base text-foreground">{a.approach}</h4>
-                    <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+                    <span className="text-xs font-semibold text-muted-foreground">
                       {a.scale}
                     </span>
                   </div>
@@ -672,7 +672,7 @@ function ResultsPage() {
           </div>
 
           <div className="mt-10">
-            <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
+            <h3 className="text-xs font-semibold text-accent">
               Operational EO services for{" "}
               {hydroHazards.length === 2 ? "flood and drought" : hydroHazards[0]}
             </h3>
@@ -687,12 +687,12 @@ function ResultsPage() {
                 >
                   <div className="flex items-start justify-between gap-3">
                     <h4 className="font-serif text-base leading-tight text-foreground">{s.name}</h4>
-                    <span className="shrink-0 rounded-full border border-border bg-surface-elevated px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+                    <span className="shrink-0 rounded-full border border-border bg-surface-elevated px-2 py-0.5 text-xs font-semibold text-muted-foreground">
                       {s.scope}
                     </span>
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground">{s.description}</p>
-                  <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.12em] text-accent">
+                  <p className="mt-3 text-xs font-semibold text-accent">
                     {s.hazards.join(" · ")}
                   </p>
                 </a>
@@ -723,7 +723,7 @@ function ResultsPage() {
         hint="EO platforms and open spatial layers"
       >
         <div>
-          <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
+          <h3 className="text-xs font-semibold text-accent">
             Role of satellite and EO data
           </h3>
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-foreground/80">
@@ -740,7 +740,7 @@ function ResultsPage() {
         </div>
 
         <div className="mt-10">
-          <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
+          <h3 className="text-xs font-semibold text-accent">
             Key Earth Observation sources
           </h3>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -771,7 +771,7 @@ function ResultsPage() {
         </div>
 
         <div className="mt-10">
-          <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
+          <h3 className="text-xs font-semibold text-accent">
             Open spatial layers for integration
           </h3>
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-foreground/80">

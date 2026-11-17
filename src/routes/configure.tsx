@@ -99,7 +99,7 @@ function ConfigurePage() {
   return (
     <div className="mx-auto max-w-6xl px-6 py-14">
       <header className="mb-10">
-        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+        <p className="text-xs font-semibold text-muted-foreground">
           Configurator
         </p>
         <h1 className="mt-2 text-4xl text-foreground sm:text-5xl">Define your assessment</h1>
@@ -145,7 +145,7 @@ function ConfigurePage() {
               <div key={cat.id} className={`rounded-lg border p-5 ${tone.card}`}>
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className={`font-mono text-[10px] uppercase tracking-[0.2em] ${tone.text}`}>
+                    <p className={`text-xs font-semibold ${tone.text}`}>
                       {cat.subtitle}
                     </p>
                     <h3 className="mt-1 font-serif text-2xl text-foreground">{cat.title}</h3>
@@ -219,7 +219,7 @@ function ConfigurePage() {
         </p>
 
         <details className="mt-8 rounded-md border border-dashed border-border p-4">
-          <summary className="cursor-pointer font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+          <summary className="cursor-pointer text-xs font-semibold text-muted-foreground">
             Planned extensions ({plannedThemes.reduce((n, g) => n + g.objectives.length, 0)} further
             objectives, not yet available)
           </summary>
@@ -230,7 +230,7 @@ function ConfigurePage() {
           <div className="mt-4 space-y-4">
             {plannedThemes.map((group) => (
               <div key={group.theme}>
-                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                <p className="text-xs font-semibold text-muted-foreground">
                   {group.theme}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
@@ -273,7 +273,7 @@ function ConfigurePage() {
                 aria-pressed={active}
               >
                 <span className="font-serif text-xl text-foreground">{l.title}</span>
-                <span className="mt-1 block font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                <span className="mt-1 block text-xs font-semibold text-muted-foreground">
                   {l.tag}
                 </span>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{l.desc}</p>

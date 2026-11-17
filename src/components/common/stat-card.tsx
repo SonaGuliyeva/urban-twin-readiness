@@ -12,7 +12,7 @@ export function StatCard({
   return (
     <div className="rounded-lg border border-border bg-card p-5 shadow-card">
       <div className={`font-serif text-3xl ${accentClass}`}>{value}</div>
-      <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+      <div className="mt-1 text-xs font-semibold text-muted-foreground">
         {label}
       </div>
     </div>

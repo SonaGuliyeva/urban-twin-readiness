@@ -23,19 +23,19 @@ export function OSLayerCard({ layer }: { layer: OpenSpatialLayer }) {
       <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{layer.description}</p>
       <dl className="mt-4 grid grid-cols-1 gap-2 border-t border-border pt-3 text-xs">
         <div className="flex gap-2">
-          <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">
+          <dt className="w-20 shrink-0 font-medium text-muted-foreground">
             Provider
           </dt>
           <dd className="text-foreground/85">{layer.provider}</dd>
         </div>
         <div className="flex gap-2">
-          <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">
+          <dt className="w-20 shrink-0 font-medium text-muted-foreground">
             Coverage
           </dt>
           <dd className="text-foreground/85">{layer.coverage}</dd>
         </div>
         <div className="flex gap-2">
-          <dt className="w-20 shrink-0 font-mono uppercase tracking-[0.12em] text-muted-foreground">
+          <dt className="w-20 shrink-0 font-medium text-muted-foreground">
             Access
           </dt>
           <dd className="text-foreground/85">{layer.access}</dd>

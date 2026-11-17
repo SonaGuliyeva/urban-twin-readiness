@@ -51,7 +51,7 @@ export function CollapsibleSection({
         className="flex w-full items-center justify-between gap-4 p-5 text-left sm:p-6 print:cursor-default"
       >
         <span>
-          <span className="block font-mono text-[10px] uppercase tracking-[0.2em] text-accent">
+          <span className="block text-xs font-semibold text-accent">
             {eyebrow}
           </span>
           <span className="mt-1 block font-serif text-xl text-foreground sm:text-2xl">{title}</span>
