@@ -124,11 +124,28 @@ function ConfigurePage() {
             const ids = cat.objectiveIds;
             const nSel = ids.filter((id) => selected.has(id)).length;
             const allOn = nSel === ids.length;
+            // Colours follow Figure 1-1 of the thesis: blue = water abundance, orange = water scarcity
+            const isFlood = cat.id === "flood";
+            const tone = isFlood
+              ? {
+                  card: "border-flood/40 bg-flood-tint",
+                  text: "text-flood",
+                  on: "border-flood bg-flood/10",
+                  box: "border-flood bg-flood text-white",
+                  hover: "hover:border-flood/50",
+                }
+              : {
+                  card: "border-drought/40 bg-drought-tint",
+                  text: "text-drought",
+                  on: "border-drought bg-drought/10",
+                  box: "border-drought bg-drought text-white",
+                  hover: "hover:border-drought/50",
+                };
             return (
-              <div key={cat.id} className="rounded-lg border border-border bg-surface-elevated p-5">
+              <div key={cat.id} className={`rounded-lg border p-5 ${tone.card}`}>
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">
+                    <p className={`font-mono text-[10px] uppercase tracking-[0.2em] ${tone.text}`}>
                       {cat.subtitle}
                     </p>
                     <h3 className="mt-1 font-serif text-2xl text-foreground">{cat.title}</h3>
@@ -162,17 +179,15 @@ function ConfigurePage() {
                         className={[
                           "group flex w-full items-start gap-3 rounded-md border px-4 py-3 text-left text-sm transition-all",
                           active
-                            ? "border-primary bg-primary/5 text-foreground shadow-card"
-                            : "border-border bg-background text-foreground hover:border-primary/40 hover:bg-muted",
+                            ? `${tone.on} text-foreground shadow-card`
+                            : `border-border bg-white text-foreground ${tone.hover}`,
                         ].join(" ")}
                         aria-pressed={active}
                       >
                         <span
                           className={[
                             "mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border transition-colors",
-                            active
-                              ? "border-primary bg-primary text-primary-foreground"
-                              : "border-border bg-background",
+                            active ? tone.box : "border-border bg-white",
                           ].join(" ")}
                           aria-hidden
                         >
