@@ -1,4 +1,5 @@
 import type { Dataset } from "@/data/types";
+import { PLAIN_DATASETS } from "@/data/plain-language";
 import { summarise, type StatusMap } from "./readiness";
 
 export function ReadinessPanel({
@@ -25,13 +26,14 @@ export function ReadinessPanel({
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">
-            Your readiness
+            How ready is your city?
           </p>
           <h3 className="mt-1 font-serif text-xl text-foreground">
-            Which of these data does your twin already have?
+            Which of these data do you already have?
           </h3>
           <p className="mt-1 text-sm text-muted-foreground">
-            Mark each dataset below. The bar and the gap list update as you go.
+            Answer Yes, Have it but not in the twin, or No for each item below. The result updates
+            as you answer.
           </p>
         </div>
         {started && (
@@ -52,11 +54,11 @@ export function ReadinessPanel({
             <span className="text-xl text-muted-foreground">%</span>
           </p>
           <p className="text-sm text-muted-foreground">
-            <span className="font-medium text-foreground">{s.have}</span> of {s.total} datasets in
-            your twin
+            <span className="font-medium text-foreground">{s.have}</span> of {s.total} data items
+            are ready in your twin
             {s.essentialTotal > 0 && (
               <>
-                {" · "}essential:{" "}
+                {" · "}must have:{" "}
                 <span className="font-medium text-foreground">
                   {s.essentialHave} of {s.essentialTotal}
                 </span>
@@ -79,14 +81,14 @@ export function ReadinessPanel({
         </div>
         <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-xs text-muted-foreground">
           <li className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-accent" /> In twin ({s.have})
+            <span className="h-2.5 w-2.5 rounded-full bg-accent" /> Ready in twin ({s.have})
           </li>
           <li className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-recommended" /> Have it, not integrated (
+            <span className="h-2.5 w-2.5 rounded-full bg-recommended" /> Have it, not in the twin (
             {s.partial})
           </li>
           <li className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-foreground/35" /> Missing ({s.missing})
+            <span className="h-2.5 w-2.5 rounded-full bg-foreground/35" /> Do not have ({s.missing})
           </li>
           {s.unanswered > 0 && (
             <li className="flex items-center gap-1.5">
@@ -100,21 +102,21 @@ export function ReadinessPanel({
       {started && (
         <div className="mt-6 border-t border-accent/30 pt-5">
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-            Gaps to close, most important first
+            What to get next, most important first
           </p>
           {gaps.length === 0 ? (
             <p className="mt-2 text-sm text-foreground/85">
-              All essential and recommended datasets are in your twin.
+              Everything important is already in your twin.
             </p>
           ) : (
             <>
               <p className="mt-2 text-sm text-foreground/85">
-                {gaps.length} essential or recommended {gaps.length === 1 ? "dataset is" : "datasets are"} not
-                yet in your twin
+                {gaps.length} important {gaps.length === 1 ? "item is" : "items are"} not yet in
+                your twin
                 {eoGaps > 0 && (
                   <>
-                    ; <span className="font-medium text-eo">{eoGaps}</span> could be sourced from
-                    open satellite data
+                    ; <span className="font-medium text-eo">{eoGaps}</span> can be obtained free
+                    from satellites
                   </>
                 )}
                 .
@@ -125,11 +127,13 @@ export function ReadinessPanel({
                     key={d.name}
                     className="flex items-start justify-between gap-2 rounded-md border border-border bg-card px-3 py-2 text-sm"
                   >
-                    <span className="text-foreground/90">{d.name}</span>
+                    <span className="text-foreground/90">
+                      {PLAIN_DATASETS[d.name]?.title ?? d.name}
+                    </span>
                     <span className="flex shrink-0 gap-1">
                       {d.source === "satellite" && (
                         <span className="rounded border border-eo/30 bg-eo/10 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-eo">
-                          EO
+                          Free
                         </span>
                       )}
                       <span
@@ -139,7 +143,7 @@ export function ReadinessPanel({
                             : "border-recommended/30 bg-recommended/10 text-recommended"
                         }`}
                       >
-                        {d.priority === "essential" ? "Essential" : "Recomm."}
+                        {d.priority === "essential" ? "Must have" : "Good to have"}
                       </span>
                     </span>
                   </li>
