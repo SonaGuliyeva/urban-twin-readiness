@@ -1,6 +1,8 @@
 import { useState } from "react";
 import type { Dataset, Priority, SourceType } from "@/data/types";
 import { PLAIN_DATASETS } from "@/data/plain-language";
+import { linksFor } from "@/data/dataset-links";
+import { DataLinks } from "./data-links";
 import { STATUS_OPTIONS, type HaveStatus } from "./readiness";
 
 const PRIORITY_LABEL: Record<Priority, string> = {
@@ -119,6 +121,8 @@ export function DatasetCard({
           {STATUS_OPTIONS.find((o) => o.id === status)?.long}
         </p>
       )}
+
+      <DataLinks links={linksFor(dataset.name, dataset.source)} label="Where to find it" />
 
       <button
         type="button"

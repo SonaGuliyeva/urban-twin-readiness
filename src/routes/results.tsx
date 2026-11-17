@@ -22,6 +22,8 @@ import { CollapsibleSection } from "@/components/common/collapsible-section";
 import { StatCard } from "@/components/common/stat-card";
 import { DatasetCard } from "@/components/results/dataset-card";
 import { PLAIN_DATASETS } from "@/data/plain-language";
+import { DataLinks } from "@/components/results/data-links";
+import { EVIDENCE_BASE, linksFor, type DataLink } from "@/data/dataset-links";
 import { ReadinessPanel } from "@/components/results/readiness-panel";
 import { decodeStatus, type StatusMap } from "@/components/results/readiness";
 import { OSLayerCard } from "@/components/results/os-layer-card";
@@ -109,7 +111,14 @@ function ResultsPage() {
   const minimumEO = (() => {
     const byTitle = new Map<
       string,
-      { title: string; name: string; names: string[]; examples: string[]; rank: number }
+      {
+        title: string;
+        name: string;
+        names: string[];
+        examples: string[];
+        links: DataLink[];
+        rank: number;
+      }
     >();
     const rank = { essential: 0, recommended: 1, optional: 2 } as const;
     getDatasetsForObjectives(ids, "predictive")
@@ -117,13 +126,18 @@ function ResultsPage() {
       .forEach((d) => {
         const title = PLAIN_DATASETS[d.name]?.title ?? d.name;
         const cur = byTitle.get(title);
-        if (cur) cur.names.push(d.name);
-        else
+        if (cur) {
+          cur.names.push(d.name);
+          linksFor(d.name, d.source).forEach((l) => {
+            if (!cur.links.some((x) => x.url === l.url)) cur.links.push(l);
+          });
+        } else
           byTitle.set(title, {
             title,
             name: d.name,
             names: [d.name],
             examples: d.examples,
+            links: [...linksFor(d.name, d.source)],
             rank: rank[d.priority],
           });
       });
@@ -232,6 +246,13 @@ function ResultsPage() {
           >
             Export / print
           </button>
+          <a
+            href="/UrbanTwinReadiness-brief.pdf"
+            download
+            className="inline-flex items-center gap-2 rounded-md border border-border bg-surface-elevated px-4 py-2 text-xs font-medium text-foreground transition-colors hover:bg-muted"
+          >
+            Download the brief (PDF)
+          </a>
         </div>
       </header>
 
@@ -297,6 +318,7 @@ function ResultsPage() {
                       {d.examples.slice(0, 3).join(", ")}
                     </p>
                   )}
+                  <DataLinks links={d.links} />
                 </li>
               );
             })}
@@ -319,6 +341,18 @@ function ResultsPage() {
               </li>
             ))}
           </ul>
+          <p className="mt-6 text-xs leading-relaxed text-muted-foreground">
+            Based on the author&rsquo;s reviews:{" "}
+            {EVIDENCE_BASE.map((e, i) => (
+              <span key={e.url}>
+                {i > 0 && "; "}
+                <a href={e.url} target="_blank" rel="noreferrer" className="text-eo underline-offset-2 hover:underline" title={e.citation}>
+                  {e.short}
+                </a>
+              </span>
+            ))}
+            . Priorities are an expert judgement and are meant for screening.
+          </p>
         </div>
 
         {Object.keys(status).length > 0 && (

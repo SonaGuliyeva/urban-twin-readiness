@@ -43,7 +43,16 @@ function HomePage() {
                 See the Turin example
               </Link>
             </div>
-            <p className="mt-6 text-sm text-muted-foreground">No account needed.</p>
+            <p className="mt-6 text-sm text-muted-foreground">
+              No account needed.{" "}
+              <a
+                href="/UrbanTwinReadiness-brief.pdf"
+                download
+                className="font-medium text-primary underline-offset-4 hover:underline"
+              >
+                Download the two-page brief (PDF)
+              </a>
+            </p>
           </div>
           <TwoExtremes />
         </div>
