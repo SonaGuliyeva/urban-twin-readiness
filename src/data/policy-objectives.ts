@@ -1,17 +1,39 @@
 import type { PolicyObjective } from "@/data/types";
 
+export interface WaterCategory {
+  id: "flood" | "drought";
+  title: string;
+  subtitle: string;
+  description: string;
+  objectiveIds: string[];
+}
+
 /**
- * Objectives available in the current version: floods, droughts and their interaction (surface heat as a drought-related stress).
- * All other objectives are planned extensions (shown in the configurator, not yet selectable).
+ * Objectives available in the current version, grouped by the two water-related challenges
+ * described in Chapter 1. All other objectives are planned extensions.
  */
-export const CORE_OBJECTIVE_IDS = [
-  "flood-risk",
-  "stormwater",
-  "drought",
-  "water-resources",
-  "uhi",
-  "green-infra",
-] as const;
+export const WATER_CATEGORIES: WaterCategory[] = [
+  {
+    id: "flood",
+    title: "Floods",
+    subtitle: "Water abundance",
+    description:
+      "Heavy rainfall, river flooding and surface runoff, including the role of sealed surfaces and drainage.",
+    objectiveIds: ["flood-risk", "stormwater"],
+  },
+  {
+    id: "drought",
+    title: "Droughts",
+    subtitle: "Water scarcity",
+    description:
+      "Water shortage and its effects on water resources, vegetation and surface heat, which is treated as a drought-related stress.",
+    objectiveIds: ["drought", "water-resources", "uhi", "green-infra"],
+  },
+];
+
+export const CORE_OBJECTIVE_IDS: readonly string[] = WATER_CATEGORIES.flatMap(
+  (c) => c.objectiveIds,
+);
 
 export const POLICY_THEMES: { theme: string; objectives: PolicyObjective[] }[] = [
   {
