@@ -31,6 +31,75 @@ export const WATER_CATEGORIES: WaterCategory[] = [
   },
 ];
 
+export interface HazardType {
+  id: string;
+  category: "flood" | "drought";
+  label: string;
+  note: string;
+  /** What the data profile should emphasise for this type (see thesis Chapter 1, Fig. 1-1; Chapter 2, Tables 2-1 and 2-3). */
+  focus: string;
+}
+
+/** Hazard types as shown in Figure 1-1 of the thesis. */
+export const HAZARD_TYPES: HazardType[] = [
+  {
+    id: "river-flood",
+    category: "flood",
+    label: "River flood",
+    note: "Rivers overflow their banks",
+    focus:
+      "Inundation mapping from SAR and optical water indices, official flood hazard maps, and elevation data to relate flood extent to individual city objects.",
+  },
+  {
+    id: "pluvial-flood",
+    category: "flood",
+    label: "Pluvial (urban) flood",
+    note: "Heavy rain exceeds drainage and infiltration",
+    focus:
+      "Sealed surfaces, high-resolution elevation and the drainage network, since sealing reduces infiltration and increases runoff during heavy rainfall.",
+  },
+  {
+    id: "flash-flood",
+    category: "flood",
+    label: "Flash flood",
+    note: "Rapid onset, short warning time",
+    focus:
+      "Frequent or on-demand revisit, all-weather SAR and rainfall data, because the time between rainfall and impact is short.",
+  },
+  {
+    id: "agricultural-drought",
+    category: "drought",
+    label: "Agricultural drought",
+    note: "Soil moisture deficit affects vegetation",
+    focus:
+      "Vegetation stress indices (NDVI anomaly, VCI, VHI), land surface temperature anomalies and soil moisture anomalies.",
+  },
+  {
+    id: "ecological-drought",
+    category: "drought",
+    label: "Ecological drought",
+    note: "Water shortage stresses ecosystems",
+    focus:
+      "Vegetation condition and early physiological stress of urban greenery and tree canopy (NDVI anomaly, solar-induced fluorescence).",
+  },
+  {
+    id: "hydrological-drought",
+    category: "drought",
+    label: "Hydrological drought",
+    note: "Low river flow, reservoirs and groundwater",
+    focus:
+      "Surface water extent, water level and total water storage anomalies, together with precipitation anomalies (SPI, SPEI).",
+  },
+  {
+    id: "flash-drought",
+    category: "drought",
+    label: "Flash drought",
+    note: "Develops within weeks, often heat-driven",
+    focus:
+      "Frequent temperature, land surface temperature and soil moisture observations, because heat accelerates evaporation and dries the soil within weeks.",
+  },
+];
+
 export const CORE_OBJECTIVE_IDS: readonly string[] = WATER_CATEGORIES.flatMap(
   (c) => c.objectiveIds,
 );
