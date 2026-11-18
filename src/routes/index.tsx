@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { TwoExtremes } from "@/components/home/two-extremes";
+import { DataLayers } from "@/components/home/data-layers";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -56,7 +56,7 @@ function HomePage() {
               </a>
             </p>
           </div>
-          <TwoExtremes />
+          <DataLayers />
         </div>
       </section>
 
