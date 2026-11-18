@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { DataLayers } from "@/components/home/data-layers";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -20,13 +19,13 @@ function HomePage() {
     <>
       {/* Hero */}
       <section className="relative overflow-hidden bg-hero-gradient">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 pb-20 pt-16 sm:pt-24 lg:grid-cols-[1.05fr_1fr]">
+        <div className="mx-auto max-w-6xl px-6 pb-20 pt-16 sm:pt-24">
           <div>
             <p className="text-sm font-semibold text-primary">UrbanTwinReadiness</p>
-            <h1 className="mt-4 text-5xl leading-[1.04] text-foreground sm:text-6xl">
+            <h1 className="mt-4 max-w-3xl text-5xl leading-[1.04] text-foreground sm:text-6xl lg:text-7xl">
               Open satellite data for your city&rsquo;s digital twin
             </h1>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-foreground/80">
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-foreground/80">
               Whether your city already has a digital twin or is only planning one, find out which
               data it needs, which of it you already have, and which you can get free from
               satellites.
@@ -56,7 +55,6 @@ function HomePage() {
               </a>
             </p>
           </div>
-          <DataLayers />
         </div>
       </section>
 
