@@ -220,40 +220,38 @@ function AboutThisTool() {
 
           <div className="space-y-2 md:col-span-2">
             <p className="text-xs font-semibold text-muted-foreground">Based on</p>
-            <p className="text-sm leading-relaxed text-foreground">
-              <a
-                href="https://doi.org/10.1007/s42496-026-00309-4"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={link}
-              >
-                Guliyeva &amp; Boccardo (2026)
-              </a>
-              , Aerotecnica Missili &amp; Spazio.
-            </p>
-            <p className="text-sm leading-relaxed text-foreground">
-              <a
-                href="https://dl.iafastro.directory/event/IAC-2026/paper/110750/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={link}
-              >
-                Guliyeva et al. (2026)
-              </a>
-              , IAC 2026: environmental data enrichment for the city of Turin.
-            </p>
-            <p className="text-sm leading-relaxed text-foreground">
-              <a
-                href="https://www.mdpi.com/2072-4292/17/17/2943"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={link}
-              >
-                Destefanis et al. (2025)
-              </a>
-              , Remote Sensing: a review of Earth observation services, 3D data integration and
-              AI-based techniques for flood mapping.
-            </p>
+            <ul className="space-y-1 text-sm">
+              <li>
+                <a
+                  href="https://doi.org/10.1007/s42496-026-00309-4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={link}
+                >
+                  Guliyeva &amp; Boccardo (2026)
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://dl.iafastro.directory/event/IAC-2026/paper/110750/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={link}
+                >
+                  Guliyeva et al. (2026)
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.mdpi.com/2072-4292/17/17/2943"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={link}
+                >
+                  Destefanis et al. (2025)
+                </a>
+              </li>
+            </ul>
           </div>
 
           <div className="space-y-1 md:col-span-3">
