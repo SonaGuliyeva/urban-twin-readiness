@@ -65,8 +65,8 @@ function HomePage() {
           {[
             {
               n: "1",
-              t: "Choose the challenge",
-              d: "Floods, droughts or both, and the objectives that matter to your city, such as flood risk reduction or drought preparedness.",
+              t: "Choose your objective",
+              d: "Pick the objectives that matter most to your city. Each one shows which data it needs.",
             },
             {
               n: "2",
