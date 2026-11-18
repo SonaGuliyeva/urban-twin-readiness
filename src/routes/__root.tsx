@@ -36,24 +36,46 @@ export const Route = createRootRoute({
         content:
           "A decision-support tool helping cities identify the minimum datasets and Earth Observation inputs needed to develop Urban Digital Twins for urban environmental management.",
       },
-      { property: "og:title", content: "UrbanTwinReadiness — Data Requirements for Urban Digital Twins" },
+      {
+        property: "og:title",
+        content: "UrbanTwinReadiness — Data Requirements for Urban Digital Twins",
+      },
       {
         property: "og:description",
         content:
           "Assessing the minimum data requirements for Urban Digital Twins in urban environmental management.",
       },
       { property: "og:type", content: "website" },
-      { name: "twitter:title", content: "UrbanTwinReadiness — Data Requirements for Urban Digital Twins" },
-      { name: "description", content: "UrbanTwinReadiness assesses minimum data and EO needs for Urban Digital Twins in environmental management." },
-      { property: "og:description", content: "UrbanTwinReadiness assesses minimum data and EO needs for Urban Digital Twins in environmental management." },
-      { name: "twitter:description", content: "UrbanTwinReadiness assesses minimum data and EO needs for Urban Digital Twins in environmental management." },
-      { property: "og:image", content: "https://urban-twin-readiness.sona-guliyeva.workers.dev/og-image.png" },
-      { name: "twitter:image", content: "https://urban-twin-readiness.sona-guliyeva.workers.dev/og-image.png" },
+      {
+        name: "twitter:title",
+        content: "UrbanTwinReadiness — Data Requirements for Urban Digital Twins",
+      },
+      {
+        name: "description",
+        content:
+          "UrbanTwinReadiness assesses minimum data and EO needs for Urban Digital Twins in environmental management.",
+      },
+      {
+        property: "og:description",
+        content:
+          "UrbanTwinReadiness assesses minimum data and EO needs for Urban Digital Twins in environmental management.",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "UrbanTwinReadiness assesses minimum data and EO needs for Urban Digital Twins in environmental management.",
+      },
+      {
+        property: "og:image",
+        content: "https://urban-twin-readiness.sona-guliyeva.workers.dev/og-image.png",
+      },
+      {
+        name: "twitter:image",
+        content: "https://urban-twin-readiness.sona-guliyeva.workers.dev/og-image.png",
+      },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [
-      { rel: "stylesheet", href: appCss },
-    ],
+    links: [{ rel: "stylesheet", href: appCss }],
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -86,10 +108,24 @@ function SiteHeader() {
   return (
     <header className="border-b border-border/70 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
-        <Link to="/" className="flex min-w-0 items-center gap-2.5" onClick={() => setMenuOpen(false)}>
+        <Link
+          to="/"
+          className="flex min-w-0 items-center gap-2.5"
+          onClick={() => setMenuOpen(false)}
+        >
           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-accent-gradient text-primary-foreground">
-            <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" stroke="currentColor" strokeWidth="2">
-              <path d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-6h6v6" strokeLinecap="round" strokeLinejoin="round" />
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              className="h-4 w-4"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-6h6v6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </span>
           <div className="flex min-w-0 flex-col leading-none">
@@ -123,7 +159,13 @@ function SiteHeader() {
           aria-expanded={menuOpen}
           onClick={() => setMenuOpen((v) => !v)}
         >
-          <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" stroke="currentColor" strokeWidth="2">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            className="h-4 w-4"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
             {menuOpen ? (
               <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" strokeLinejoin="round" />
             ) : (
@@ -157,122 +199,62 @@ function SiteHeader() {
 }
 
 function AboutThisTool() {
+  const link = "text-primary underline-offset-4 hover:underline";
   return (
     <section className="mt-24 border-t border-border/70 bg-surface">
       <div className="mx-auto max-w-6xl px-6 py-12">
-        <div className="mb-6 flex items-center gap-3">
-          <span className="flex h-7 w-7 items-center justify-center rounded-md border border-border/70 bg-background text-muted-foreground">
-            <svg viewBox="0 0 24 24" fill="none" className="h-3.5 w-3.5" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="12" r="9" />
-              <path d="M12 8v.01M11 12h1v4h1" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </span>
-          <h2 className="font-serif text-lg text-foreground">Credits</h2>
-        </div>
+        <h2 className="font-serif text-lg text-foreground">Credits</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          UrbanTwinReadiness, a web-based decision-support tool. Research prototype, version 1.0.
+        </p>
 
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="mt-8 grid gap-8 md:grid-cols-3">
           <div className="space-y-1">
-            <p className="text-xs font-semibold text-muted-foreground">
-              Author
-            </p>
+            <p className="text-xs font-semibold text-muted-foreground">Author</p>
             <p className="text-sm text-foreground">Sona Guliyeva</p>
             <p className="text-xs text-muted-foreground">
-              PhD Candidate, Urban and Regional Development
+              PhD candidate, Politecnico di Torino, Italy
             </p>
-            <p className="text-xs text-muted-foreground">
-              Politecnico di Torino, Italy
-            </p>
+            <p className="text-xs text-muted-foreground">Supervisor: Prof. Piero Boccardo</p>
           </div>
 
-          <div className="space-y-1 md:col-span-2">
-            <p className="text-xs font-semibold text-muted-foreground">
-              Short description
+          <div className="space-y-2 md:col-span-2">
+            <p className="text-xs font-semibold text-muted-foreground">Based on</p>
+            <p className="text-sm leading-relaxed text-foreground">
+              <a
+                href="https://doi.org/10.1007/s42496-026-00309-4"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={link}
+              >
+                Guliyeva &amp; Boccardo (2026)
+              </a>
+              , Aerotecnica Missili &amp; Spazio.
             </p>
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              UrbanTwinReadiness is a research-driven prototype that supports cities in
-              identifying the minimum data requirements for Urban Digital Twin development
-              in urban environmental management.
+            <p className="text-sm leading-relaxed text-foreground">
+              Guliyeva et al. (2026), IAC 2026: environmental data enrichment for the city of Turin.
             </p>
           </div>
 
           <div className="space-y-1 md:col-span-3">
-            <p className="text-xs font-semibold text-muted-foreground">
-              Research reference
-            </p>
-            <p className="text-sm leading-relaxed text-foreground">
-              Guliyeva, S., &amp; Boccardo, P. (2026).{" "}
-              <span className="italic">
-                Geospatial Technologies for Flood and Drought Management: A Narrative
-                Review of Earth Observation Data, Procedures, and Their Operational
-                Effectiveness.
-              </span>{" "}
-              Aerotecnica Missili &amp; Spazio.
-            </p>
-            <a
-              href="https://doi.org/10.1007/s42496-026-00309-4"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block font-mono text-xs text-primary underline-offset-4 hover:underline"
-            >
-              DOI: 10.1007/s42496-026-00309-4
-            </a>
-            <p className="pt-3 text-sm leading-relaxed text-foreground">
-              Guliyeva, S., Scolamiero, V., Boccardo, P., Di Rita, M., Vizireanu, A., &amp;
-              Alaskarov, E. (2026).{" "}
-              <span className="italic">
-                Integrating Multi-source Earth Observation Data into Urban Digital Twin
-                Architectures: Environmental Data Enrichment for the City of Turin.
-              </span>{" "}
-              In Proceedings of the 77th International Astronautical Congress (IAC 2026),
-              International Astronautical Federation.
+            <p className="text-xs font-semibold text-muted-foreground">Funding</p>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              This research is part of a PhD funded by the Italian National Recovery and Resilience
+              Plan (PNRR), Mission 4, Component 1, Investment 3.4, under Ministerial Decree No. 118
+              of 2 March 2023 (NextGenerationEU).
             </p>
           </div>
 
-          <div className="space-y-1">
-            <p className="text-xs font-semibold text-muted-foreground">
-              Prototype
-            </p>
-            <a
-              href="https://urban-twin-readiness.sona-guliyeva.workers.dev"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-primary underline-offset-4 hover:underline break-all"
-            >
-              urban-twin-readiness.sona-guliyeva.workers.dev
-            </a>
-          </div>
-
-          <div className="space-y-1">
-            <p className="text-xs font-semibold text-muted-foreground">
-              Repository
-            </p>
+          <div className="md:col-span-3">
             <a
               href="https://github.com/SonaGuliyeva/urban-twin-readiness"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm text-primary underline-offset-4 hover:underline break-all"
+              className={`inline-flex items-center gap-1.5 text-sm ${link}`}
             >
-              <svg viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5 shrink-0">
-                <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.25 3.34.95.1-.74.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.4-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z" />
-              </svg>
-              github.com/SonaGuliyeva/urban-twin-readiness
+              Source code on GitHub
             </a>
           </div>
-
-          <div className="space-y-1">
-            <p className="text-xs font-semibold text-muted-foreground">
-              Version
-            </p>
-            <p className="text-sm text-foreground">1.0</p>
-            <p className="text-xs text-muted-foreground">Research Prototype</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="border-t border-border/70">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>UrbanTwinReadiness · Research prototype for urban environmental management.</p>
-          <p className="font-medium">Version 1.0, research prototype</p>
         </div>
       </div>
     </section>
