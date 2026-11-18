@@ -30,7 +30,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "UrbanTwinReadiness — Data Requirements for Urban Digital Twins" },
+      { title: "UrbanTwinReadiness: a web-based decision-support tool" },
       {
         name: "description",
         content:

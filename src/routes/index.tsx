@@ -4,7 +4,7 @@ import { TwoExtremes } from "@/components/home/two-extremes";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "UrbanTwinReadiness — Minimum Data Requirements for Urban Digital Twins" },
+      { title: "UrbanTwinReadiness: a web-based decision-support tool" },
       {
         name: "description",
         content:
@@ -24,11 +24,12 @@ function HomePage() {
           <div>
             <p className="text-sm font-semibold text-primary">UrbanTwinReadiness</p>
             <h1 className="mt-4 text-5xl leading-[1.04] text-foreground sm:text-6xl">
-              Is your city&rsquo;s digital twin ready for floods and droughts?
+              Open satellite data for your city&rsquo;s digital twin
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-foreground/80">
-              Be ready before the event. Find out which data a digital twin needs, which of it your
-              city already has, and which you can get free from satellites.
+              Whether your city already has a digital twin or is only planning one, find out which
+              data it needs, which of it you already have, and which you can get free from
+              satellites.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-3">
               <Link
