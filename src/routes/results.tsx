@@ -141,6 +141,14 @@ function ResultsPage() {
       });
     return Array.from(byTitle.values()).sort((a, b) => a.rank - b.rank);
   })();
+  // Data the city marked as already in its twin leave the to-do list; the rest is ordered
+  // by priority, with data that is missing before data that exists but is not yet integrated.
+  const isInTwin = (d: { names: string[] }) => d.names.some((n) => status[n] === "have");
+  const isPartial = (d: { names: string[] }) => d.names.some((n) => status[n] === "partial");
+  const inTwin = minimumEO.filter(isInTwin);
+  const toAdd = minimumEO
+    .filter((d) => !isInTwin(d))
+    .sort((a, b) => a.rank - b.rank || Number(isPartial(a)) - Number(isPartial(b)));
   const LEVEL_ORDER: ImplementationLevel[] = [
     "status",
     "informative",
@@ -175,7 +183,6 @@ function ResultsPage() {
   const relevantCaseStudies = CASE_STUDIES.filter((cs) =>
     cs.relatedObjectives.some((id) => ids.includes(id)),
   );
-
 
   // Curate EO platforms shown — at the Status level, keep it to core Copernicus platforms
   const platforms = level === "status" ? EO_PLATFORMS.slice(0, 5) : EO_PLATFORMS;
@@ -285,8 +292,19 @@ function ResultsPage() {
             data are the starting point where nothing better exists. At city scale the images are
             coarse, but they improve every year and give you a regular overview of the whole city.
           </p>
-          <ul className="mt-6 grid gap-3 md:grid-cols-2">
-            {minimumEO.map((d) => {
+          {toAdd.length === 0 && (
+            <p className="mt-6 rounded-lg border border-accent/40 bg-accent/10 p-4 text-sm text-foreground/85">
+              Everything on this list is already in your twin. The next step is to keep it up to
+              date and to see below what else would make it more useful.
+            </p>
+          )}
+          {toAdd.length > 0 && Object.keys(status).length > 0 && (
+            <p className="mt-6 text-sm font-semibold text-foreground">
+              Add these first ({toAdd.length})
+            </p>
+          )}
+          <ul className="mt-3 grid gap-3 md:grid-cols-2">
+            {toAdd.map((d) => {
               const plain = PLAIN_DATASETS[d.name];
               const have = d.names.some((n) => status[n] === "have");
               const local = d.names.map((n) => LOCAL_ALTERNATIVE[n]).find(Boolean);
@@ -329,6 +347,21 @@ function ResultsPage() {
               );
             })}
           </ul>
+          {inTwin.length > 0 && (
+            <details className="mt-4 rounded-lg border border-border bg-card p-4">
+              <summary className="cursor-pointer text-sm font-semibold text-foreground">
+                Already in your twin ({inTwin.length})
+              </summary>
+              <ul className="mt-3 space-y-1.5 text-sm text-muted-foreground">
+                {inTwin.map((d) => (
+                  <li key={d.title}>{d.title}</li>
+                ))}
+              </ul>
+              <p className="mt-3 text-xs text-muted-foreground">
+                Keep yours unless the satellite version covers more of the city.
+              </p>
+            </details>
+          )}
           <p className="mt-6 text-sm font-semibold text-foreground">Where to download them</p>
           <ul className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {EO_PLATFORMS.slice(0, 5).map((p) => (
