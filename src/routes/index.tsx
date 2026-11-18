@@ -27,7 +27,8 @@ function HomePage() {
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-foreground/80">
               Whether your city already has a digital twin or is only planning one, find out which
-              data it needs, which of it you already have, and which you can get from satellites.
+              data it needs, which of it you already have, and which you can get from satellites for
+              urban environmental management.
             </p>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
               <Link
