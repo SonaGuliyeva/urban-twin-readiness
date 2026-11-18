@@ -88,32 +88,6 @@ function HomePage() {
         </ol>
       </section>
 
-      {/* Scope */}
-      <section className="bg-surface">
-        <div className="mx-auto grid max-w-6xl gap-12 px-6 py-16 md:grid-cols-2">
-          <div className="border-l-4 border-flood pl-6">
-            <h2 className="font-serif text-3xl text-foreground">Floods</h2>
-            <p className="mt-3 leading-relaxed text-foreground/80">
-              Heavy rain, rivers and sealed streets. The tool covers flood risk reduction and
-              stormwater and drainage management.
-            </p>
-          </div>
-          <div className="border-l-4 border-drought pl-6">
-            <h2 className="font-serif text-3xl text-foreground">Droughts</h2>
-            <p className="mt-3 leading-relaxed text-foreground/80">
-              Water shortage, dry soil and heat. The tool covers drought preparedness, water
-              resource monitoring, urban heat island mitigation and green infrastructure.
-            </p>
-          </div>
-          <p className="max-w-2xl leading-relaxed text-muted-foreground md:col-span-2">
-            The tool brings environmental information from open satellite data, such as Copernicus,
-            into the city’s digital twin. Floods and droughts come first. The same method will be
-            extended to other city objectives, such as air quality, energy and mobility, in later
-            versions.
-          </p>
-        </div>
-      </section>
-
       {/* CTA */}
       <section className="mx-auto max-w-6xl px-6 py-20 text-center">
         <h2 className="font-serif text-3xl text-foreground sm:text-4xl">
