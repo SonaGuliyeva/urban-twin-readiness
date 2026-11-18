@@ -19,18 +19,18 @@ function HomePage() {
     <>
       {/* Hero */}
       <section className="relative overflow-hidden bg-hero-gradient">
-        <div className="mx-auto max-w-6xl px-6 pb-20 pt-16 sm:pt-24">
+        <div className="mx-auto max-w-4xl px-6 pb-20 pt-16 text-center sm:pt-24">
           <div>
             <p className="text-sm font-semibold text-primary">UrbanTwinReadiness</p>
-            <h1 className="mt-4 max-w-3xl text-5xl leading-[1.04] text-foreground sm:text-6xl lg:text-7xl">
+            <h1 className="mt-4 mx-auto max-w-3xl text-5xl leading-[1.04] text-foreground sm:text-6xl lg:text-7xl">
               Open satellite data for your city&rsquo;s digital twin
             </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-foreground/80">
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-foreground/80">
               Whether your city already has a digital twin or is only planning one, find out which
               data it needs, which of it you already have, and which you can get free from
               satellites.
             </p>
-            <div className="mt-9 flex flex-wrap items-center gap-3">
+            <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
               <Link
                 to="/configure"
                 className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-base font-medium text-primary-foreground shadow-card transition-all hover:bg-primary/90 hover:shadow-elevated"
