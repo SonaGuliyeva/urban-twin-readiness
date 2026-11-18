@@ -232,7 +232,27 @@ function AboutThisTool() {
               , Aerotecnica Missili &amp; Spazio.
             </p>
             <p className="text-sm leading-relaxed text-foreground">
-              Guliyeva et al. (2026), IAC 2026: environmental data enrichment for the city of Turin.
+              <a
+                href="https://dl.iafastro.directory/event/IAC-2026/paper/110750/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={link}
+              >
+                Guliyeva et al. (2026)
+              </a>
+              , IAC 2026: environmental data enrichment for the city of Turin.
+            </p>
+            <p className="text-sm leading-relaxed text-foreground">
+              <a
+                href="https://www.mdpi.com/2072-4292/17/17/2943"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={link}
+              >
+                Destefanis et al. (2025)
+              </a>
+              , Remote Sensing: a review of Earth observation services, 3D data integration and
+              AI-based techniques for flood mapping.
             </p>
           </div>
 
