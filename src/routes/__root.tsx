@@ -218,43 +218,7 @@ function AboutThisTool() {
             <p className="text-xs text-muted-foreground">Supervisor: Prof. Piero Boccardo</p>
           </div>
 
-          <div className="space-y-2 md:col-span-2">
-            <p className="text-xs font-semibold text-muted-foreground">Based on</p>
-            <ul className="space-y-1 text-sm">
-              <li>
-                <a
-                  href="https://doi.org/10.1007/s42496-026-00309-4"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={link}
-                >
-                  Guliyeva &amp; Boccardo (2026)
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://dl.iafastro.directory/event/IAC-2026/paper/110750/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={link}
-                >
-                  Guliyeva et al. (2026)
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://www.mdpi.com/2072-4292/17/17/2943"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={link}
-                >
-                  Destefanis et al. (2025)
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-1 md:col-span-3">
+          <div className="space-y-1 md:col-span-2">
             <p className="text-xs font-semibold text-muted-foreground">Funding</p>
             <p className="text-sm leading-relaxed text-muted-foreground">
               This research is part of a PhD funded by the Italian National Recovery and Resilience
