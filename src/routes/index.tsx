@@ -27,7 +27,8 @@ function HomePage() {
               Is your city&rsquo;s digital twin ready for floods and droughts?
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-foreground/80">
-              Be ready before the event. Find out which data a digital twin needs, which of it your city already has, and which you can get free from satellites.
+              Be ready before the event. Find out which data a digital twin needs, which of it your
+              city already has, and which you can get free from satellites.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-3">
               <Link
@@ -106,8 +107,10 @@ function HomePage() {
             </p>
           </div>
           <p className="max-w-2xl leading-relaxed text-muted-foreground md:col-span-2">
-            Most of the data comes from open Earth Observation programmes such as Copernicus, so a
-            city can start without buying anything. Floods and droughts come first. The same method will be extended to other city objectives, such as air quality, energy and mobility, in later versions.
+            The tool brings environmental information from open satellite data, such as Copernicus,
+            into the city’s digital twin. Floods and droughts come first. The same method will be
+            extended to other city objectives, such as air quality, energy and mobility, in later
+            versions.
           </p>
         </div>
       </section>
@@ -118,14 +121,21 @@ function HomePage() {
           Find out how ready your city is
         </h2>
         <p className="mx-auto mt-3 max-w-xl text-base text-muted-foreground">
-          Answer a few questions and get a clear list of the data your city needs, has and is missing.
+          Answer a few questions and get a clear list of the data your city needs, has and is
+          missing.
         </p>
         <Link
           to="/configure"
           className="mt-8 inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-card transition-all hover:bg-primary/90 hover:shadow-elevated"
         >
           Start the assessment
-          <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" stroke="currentColor" strokeWidth="2">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            className="h-4 w-4"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
             <path d="M5 12h14M13 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </Link>

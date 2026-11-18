@@ -285,12 +285,12 @@ function ResultsPage() {
             The minimum: add free satellite data to your twin
           </h2>
           <p className="mt-3 max-w-3xl text-base leading-relaxed text-foreground/85">
-            You do not need to buy data to start. These open satellite datasets can go into your
-            digital twin today and cover a first step for{" "}
-            {selected.map((o) => o.label.toLowerCase()).join(", ")}. If your city already has
-            something more detailed (for example a LiDAR terrain model), use your own. The satellite
-            data are the starting point where nothing better exists. At city scale the images are
-            coarse, but they improve every year and give you a regular overview of the whole city.
+            Open satellite data can bring environmental information into your digital twin. These
+            datasets are a first step for {selected.map((o) => o.label.toLowerCase()).join(", ")}.
+            If your city already has something more detailed (for example a LiDAR terrain model),
+            use your own. The satellite data are the starting point where nothing better exists. At
+            city scale the images are coarse, but they improve every year and give you a regular
+            overview of the whole city.
           </p>
           {toAdd.length === 0 && (
             <p className="mt-6 rounded-lg border border-accent/40 bg-accent/10 p-4 text-sm text-foreground/85">
