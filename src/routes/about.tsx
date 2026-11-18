@@ -24,9 +24,9 @@ function AboutPage() {
 
       <div className="mt-8 space-y-6 text-base leading-relaxed text-foreground/85">
         <p className="text-lg text-foreground">
-          UrbanTwinReadiness is a web-based decision-support tool for city administrations. It tells
-          a city which data its digital twin needs to assess floods and droughts early, and which
-          free satellite data can fill the gaps.
+          UrbanTwinReadiness is a web-based decision-support tool for cities and the public bodies
+          that work with them. It shows which data a digital twin needs to assess floods and
+          droughts early, and which free satellite data can fill the gaps.
         </p>
 
         <h2 className="!mt-12 font-serif text-2xl text-foreground">How it works</h2>
@@ -56,10 +56,12 @@ function AboutPage() {
 
         <h2 className="!mt-12 font-serif text-2xl text-foreground">Who it is for</h2>
         <p>
-          City administrations, urban planners and environmental agencies, including staff without a
-          technical background. Researchers and students can use it to see how a digital twin is
-          built up step by step. The tool supports early scoping and discussion with stakeholders.
-          It is <em>not</em> a substitute for a formal technical feasibility study.
+          Anyone who plans or studies how a city prepares for floods and droughts: city
+          administrations, public authorities and environmental agencies, urban planners and
+          consultants, researchers and students. No technical background is needed. Researchers and
+          students can also use it to see how a digital twin is built up step by step. The tool
+          supports early scoping and discussion with stakeholders. It is <em>not</em> a substitute
+          for a formal technical feasibility study.
         </p>
 
         <h2 className="!mt-12 font-serif text-2xl text-foreground">What it covers now</h2>
@@ -416,8 +418,8 @@ function AboutPage() {
 
         <h2 className="!mt-12 font-serif text-2xl text-foreground">Status</h2>
         <p>
-          This application is a research prototype developed in the context of doctoral research at Politecnico di Torino
-          on Urban Digital Twins for environmental management.
+          This application is a research prototype developed in the context of doctoral research at
+          Politecnico di Torino on Urban Digital Twins for environmental management.
         </p>
 
         <h2 className="!mt-12 font-serif text-2xl text-foreground">References</h2>
