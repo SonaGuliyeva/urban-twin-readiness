@@ -229,7 +229,6 @@ function AboutThisTool() {
               >
                 Guliyeva &amp; Boccardo (2026)
               </a>
-              , Aerotecnica Missili &amp; Spazio.
             </p>
             <p className="text-sm leading-relaxed text-foreground">
               <a
@@ -240,7 +239,6 @@ function AboutThisTool() {
               >
                 Guliyeva et al. (2026)
               </a>
-              , IAC 2026: environmental data enrichment for the city of Turin.
             </p>
             <p className="text-sm leading-relaxed text-foreground">
               <a
@@ -251,8 +249,6 @@ function AboutThisTool() {
               >
                 Destefanis et al. (2025)
               </a>
-              , Remote Sensing: a review of Earth observation services, 3D data integration and
-              AI-based techniques for flood mapping.
             </p>
           </div>
 
