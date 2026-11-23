@@ -1,20 +1,23 @@
-export type ImplementationLevel = "status" | "informative" | "predictive" | "optimisation" | "autonomous";
+export type ImplementationLevel =
+  | "status"
+  | "informative"
+  | "predictive"
+  | "optimisation"
+  | "autonomous";
 
 export type Priority = "essential" | "recommended" | "optional";
 
 export type SourceType = "satellite" | "ground" | "open-data" | "administrative";
 
 export type EoFit = "strong" | "partial" | "limited";
-export type Agenda = "Blue" | "Green" | "Brown" | "Gray";
 
 export interface PolicyObjective {
   id: string;
   label: string;
   /** Challenge group (Srinivas): Urban risks, Water, Air, Land, Waste, Food security, Energy, Mobility */
   theme: string;
-  /** Table or box of the source where the problem area is listed */
+  /** Table and problem area in Srinivas the objective comes from */
   source?: string;
-  agenda?: Agenda;
   /** How well open satellite data can support the objective (draft judgement) */
   eoFit?: EoFit;
   /** Older objective ids whose data lists are merged into this one */
