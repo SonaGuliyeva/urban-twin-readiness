@@ -1,4 +1,5 @@
 import type { Dataset, ImplementationLevel, Priority, SourceType } from "@/data/types";
+import { OBJECTIVE_ALIASES } from "@/data/policy-objectives";
 
 const D = (
   name: string,
@@ -811,7 +812,8 @@ function priorityRank(p: Priority): number {
 
 export function getDatasetsForObjectives(ids: string[], level: ImplementationLevel): Dataset[] {
   const map = new Map<string, Dataset>();
-  ids.forEach((id) => {
+  const expanded = ids.flatMap((id) => [id, ...(OBJECTIVE_ALIASES[id] ?? [])]);
+  expanded.forEach((id) => {
     (DATASETS_BY_OBJECTIVE[id] ?? []).forEach((d) => {
       const existing = map.get(d.name);
       if (!existing || priorityRank(d.priority) < priorityRank(existing.priority)) {

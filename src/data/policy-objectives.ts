@@ -1,4 +1,4 @@
-import type { PolicyObjective } from "@/data/types";
+import type { PolicyObjective, EoFit, Agenda } from "@/data/types";
 
 export interface WaterCategory {
   id: "flood" | "drought";
@@ -9,8 +9,8 @@ export interface WaterCategory {
 }
 
 /**
- * Objectives available in the current version, grouped by the two water-related challenges
- * described in Chapter 1. All other objectives are planned extensions.
+ * Objectives available in the current version, grouped by the two water-related categories.
+ * All other objectives are planned extensions.
  */
 export const WATER_CATEGORIES: WaterCategory[] = [
   {
@@ -37,163 +37,95 @@ export const CORE_OBJECTIVE_IDS: readonly string[] = WATER_CATEGORIES.flatMap(
 
 export const POLICY_THEMES: { theme: string; objectives: PolicyObjective[] }[] = [
   {
-    theme: "Urban Planning & Development",
+    theme: "Urban risks",
     objectives: [
-      {
-        id: "land-use",
-        label: "Land Use & Change Monitoring",
-        theme: "Urban Planning & Development",
-      },
-      {
-        id: "regeneration",
-        label: "Urban Regeneration & Densification",
-        theme: "Urban Planning & Development",
-      },
-      {
-        id: "spatial-planning",
-        label: "Sustainable Spatial Planning",
-        theme: "Urban Planning & Development",
-      },
+      { id: "flood-risk", label: "Reduce flood risk", theme: "Urban risks", source: "Table 7", agenda: "Blue", eoFit: "strong" },
+      { id: "stormwater", label: "Manage stormwater and drainage", theme: "Urban risks", source: "Table 7", agenda: "Blue", eoFit: "strong" },
+      { id: "drought", label: "Prepare for drought and water scarcity", theme: "Urban risks", source: "Table 7", agenda: "Blue", eoFit: "strong" },
+      { id: "uhi", label: "Reduce urban heat", theme: "Urban risks", source: "Table 7", agenda: "Green", eoFit: "strong", alsoUses: ["thermal-comfort"] },
+      { id: "green-infra", label: "Expand green and blue infrastructure", theme: "Urban risks", source: "Table 7", agenda: "Green", eoFit: "strong" },
+      { id: "climate-resilience", label: "Plan climate adaptation", theme: "Urban risks", source: "Table 7", agenda: "Green", eoFit: "partial" },
+      { id: "early-warning", label: "Early warning and emergency response", theme: "Urban risks", source: "Table 7", agenda: "Brown", eoFit: "partial", alsoUses: ["disaster-response", "emergency-coordination"] },
+      { id: "social-vulnerability", label: "Reduce social vulnerability", theme: "Urban risks", source: "Table 7", agenda: "Brown", eoFit: "partial" },
+      { id: "informal-settlements", label: "Upgrade informal settlements", theme: "Urban risks", source: "Table 7", agenda: "Brown", eoFit: "partial" },
     ],
   },
   {
-    theme: "Mobility & Transport",
+    theme: "Water",
     objectives: [
-      { id: "traffic-flows", label: "Optimize Traffic Flows", theme: "Mobility & Transport" },
-      {
-        id: "sustainable-mobility",
-        label: "Support Sustainable Mobility",
-        theme: "Mobility & Transport",
-      },
-      {
-        id: "transport-emissions",
-        label: "Reduce Transport Emissions",
-        theme: "Mobility & Transport",
-      },
+      { id: "water-resources", label: "Monitor water resources and groundwater", theme: "Water", source: "Table 2", agenda: "Blue", eoFit: "strong" },
+      { id: "water-quality", label: "Protect surface, coastal and lake water quality", theme: "Water", source: "Table 2", agenda: "Blue", eoFit: "partial" },
+      { id: "wastewater-sanitation", label: "Treat wastewater and sewage", theme: "Water", source: "Table 2", agenda: "Brown", eoFit: "limited" },
     ],
   },
   {
-    theme: "Water & Sanitation",
+    theme: "Air",
     objectives: [
-      {
-        id: "stormwater",
-        label: "Stormwater and Drainage Management",
-        theme: "Water & Sanitation",
-      },
-      { id: "water-resources", label: "Water Resource Monitoring", theme: "Water & Sanitation" },
-      {
-        id: "wastewater-sanitation",
-        label: "Wastewater & Sanitation Management",
-        theme: "Water & Sanitation",
-      },
+      { id: "air-quality", label: "Improve outdoor air quality", theme: "Air", source: "Table 1", agenda: "Brown", eoFit: "partial", alsoUses: ["urban-emissions", "pollution"] },
+      { id: "indoor-air", label: "Reduce indoor air pollution", theme: "Air", source: "Table 1", agenda: "Brown", eoFit: "limited" },
     ],
   },
   {
-    theme: "Green Spaces & Environment",
+    theme: "Land",
     objectives: [
-      {
-        id: "green-infra",
-        label: "Green Infrastructure Planning",
-        theme: "Green Spaces & Environment",
-      },
-      {
-        id: "biodiversity",
-        label: "Urban Biodiversity Support",
-        theme: "Green Spaces & Environment",
-      },
-      {
-        id: "nbs",
-        label: "Nature-Based Solutions Implementation",
-        theme: "Green Spaces & Environment",
-      },
+      { id: "land-use", label: "Limit land degradation and urban sprawl", theme: "Land", source: "Table 3", agenda: "Green", eoFit: "strong", alsoUses: ["spatial-planning", "regeneration"] },
+      { id: "biodiversity", label: "Protect ecosystems and biodiversity", theme: "Land", source: "Table 3", agenda: "Green", eoFit: "strong", alsoUses: ["nbs"] },
+      { id: "heritage", label: "Protect cultural and historical property", theme: "Land", source: "Table 3", agenda: "Brown", eoFit: "limited" },
     ],
   },
   {
-    theme: "Air Quality",
+    theme: "Waste",
     objectives: [
-      { id: "air-quality", label: "Improve Air Quality", theme: "Air Quality" },
-      { id: "urban-emissions", label: "Reduce Urban Emissions", theme: "Air Quality" },
-      { id: "pollution", label: "Monitor Environmental Pollution", theme: "Air Quality" },
+      { id: "solid-waste", label: "Manage solid waste", theme: "Waste", source: "Table 4", agenda: "Brown", eoFit: "partial" },
+      { id: "hazardous-waste", label: "Manage hazardous and industrial waste", theme: "Waste", source: "Table 4", agenda: "Brown", eoFit: "partial" },
     ],
   },
   {
-    theme: "Disaster Management",
+    theme: "Food security",
     objectives: [
-      { id: "flood-risk", label: "Flood Risk Reduction", theme: "Disaster Management" },
-      {
-        id: "disaster-response",
-        label: "Disaster Response & Civil Protection",
-        theme: "Disaster Management",
-      },
-      { id: "early-warning", label: "Early Warning Systems", theme: "Disaster Management" },
+      { id: "food-supply", label: "Secure food supply", theme: "Food security", source: "Table 5", agenda: "Green", eoFit: "partial" },
+      { id: "food-access", label: "Improve access to food", theme: "Food security", source: "Table 5", agenda: "Brown", eoFit: "limited" },
+      { id: "food-waste", label: "Reduce food loss and waste", theme: "Food security", source: "Table 5", agenda: "Brown", eoFit: "limited" },
     ],
   },
   {
     theme: "Energy",
     objectives: [
-      {
-        id: "energy-efficiency",
-        label: "Building Energy Efficiency Monitoring",
-        theme: "Energy",
-      },
-      {
-        id: "renewable-energy",
-        label: "Renewable Energy Potential Mapping",
-        theme: "Energy",
-      },
-      { id: "carbon-footprint", label: "Carbon Footprint Monitoring", theme: "Energy" },
+      { id: "energy-access", label: "Improve energy supply and access", theme: "Energy", source: "Table 6", agenda: "Gray", eoFit: "limited" },
+      { id: "energy-efficiency", label: "Improve building energy efficiency", theme: "Energy", source: "Table 6", agenda: "Gray", eoFit: "partial" },
+      { id: "renewable-energy", label: "Reduce fossil-fuel dependence", theme: "Energy", source: "Table 6", agenda: "Gray", eoFit: "partial", alsoUses: ["carbon-footprint"] },
+      { id: "critical-infrastructure", label: "Make energy systems resilient", theme: "Energy", source: "Table 6", agenda: "Gray", eoFit: "partial" },
+      { id: "energy-poverty", label: "Reduce energy poverty", theme: "Energy", source: "Table 6", agenda: "Gray", eoFit: "limited" },
     ],
   },
   {
-    theme: "Public Safety & Security",
+    theme: "Mobility",
     objectives: [
-      {
-        id: "public-safety",
-        label: "Public Safety & Crime Monitoring",
-        theme: "Public Safety & Security",
-      },
-      {
-        id: "critical-infrastructure",
-        label: "Critical Infrastructure Protection",
-        theme: "Public Safety & Security",
-      },
-      {
-        id: "emergency-coordination",
-        label: "Emergency Response Coordination",
-        theme: "Public Safety & Security",
-      },
-    ],
-  },
-  {
-    theme: "Health & Social Services",
-    objectives: [
-      {
-        id: "thermal-comfort",
-        label: "Thermal Comfort Improvement",
-        theme: "Health & Social Services",
-      },
-      {
-        id: "healthcare-access",
-        label: "Healthcare Accessibility Planning",
-        theme: "Health & Social Services",
-      },
-      {
-        id: "social-vulnerability",
-        label: "Social Vulnerability Mapping",
-        theme: "Health & Social Services",
-      },
-    ],
-  },
-  {
-    theme: "Climate Risk & Resilience",
-    objectives: [
-      {
-        id: "climate-resilience",
-        label: "Climate Resilience Planning",
-        theme: "Climate Risk & Resilience",
-      },
-      { id: "uhi", label: "Urban Heat Island Mitigation", theme: "Climate Risk & Resilience" },
-      { id: "drought", label: "Drought Preparedness", theme: "Climate Risk & Resilience" },
+      { id: "traffic-flows", label: "Make mobility more sustainable", theme: "Mobility", source: "Box 3 (thematic areas)", agenda: "Gray", eoFit: "partial", alsoUses: ["sustainable-mobility", "transport-emissions"] },
     ],
   },
 ];
+
+/** Challenges that follow Srinivas; mobility is added from his list of thematic areas (Box 3). */
+export const SOURCE_NOTE =
+  "Srinivas, H. Urban Environmental Management: Concepts, Frameworks, and Practice. GDRC Concept Note E-259.";
+
+export const EO_FIT_LABEL: Record<EoFit, string> = {
+  strong: "Strong fit with satellite data",
+  partial: "Partial fit",
+  limited: "Limited fit",
+};
+
+export const AGENDA_LABEL: Record<Agenda, string> = {
+  Blue: "Blue agenda (water)",
+  Green: "Green agenda (nature)",
+  Brown: "Brown agenda (pollution, health)",
+  Gray: "Gray agenda (infrastructure, energy)",
+};
+
+/** Objective ids whose dataset lists are merged into a selected objective. */
+export const OBJECTIVE_ALIASES: Record<string, string[]> = Object.fromEntries(
+  POLICY_THEMES.flatMap((g) => g.objectives)
+    .filter((o) => o.alsoUses?.length)
+    .map((o) => [o.id, o.alsoUses as string[]]),
+);

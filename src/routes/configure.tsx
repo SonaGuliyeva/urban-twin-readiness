@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import {
   CORE_OBJECTIVE_IDS,
+  EO_FIT_LABEL,
   POLICY_THEMES,
   WATER_CATEGORIES,
   getDatasetsForObjectives,
@@ -248,8 +249,9 @@ function ConfigurePage() {
             objectives, not yet available)
           </summary>
           <p className="mt-3 text-sm text-muted-foreground">
-            Further thematic domains will be added in later versions of the tool, following the same
-            methodology.
+            Objectives follow the problem areas of urban environmental management described by
+            Srinivas (GDRC Concept Note E-259). The tag shows how well open satellite data can
+            support each one; this is a first judgement and will be checked against city documents.
           </p>
           <div className="mt-4 space-y-4">
             {plannedThemes.map((group) => (
@@ -259,9 +261,13 @@ function ConfigurePage() {
                   {group.objectives.map((obj) => (
                     <span
                       key={obj.id}
+                      title={obj.eoFit ? EO_FIT_LABEL[obj.eoFit] : undefined}
                       className="rounded-full border border-border bg-muted/40 px-3 py-1 text-xs text-muted-foreground"
                     >
                       {obj.label}
+                      {obj.eoFit ? (
+                        <span className="ml-1.5 text-[10px] opacity-70">· {obj.eoFit}</span>
+                      ) : null}
                     </span>
                   ))}
                 </div>
