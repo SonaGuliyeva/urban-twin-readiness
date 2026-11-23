@@ -22,13 +22,12 @@ export const POLICY_THEMES: { theme: string; blurb?: string; objectives: PolicyO
     blurb: "Floods and droughts — the focus of the current version.",
     objectives: [
       {
-        id: "uhi",
-        label: "Reduce urban heat",
+        id: "flood-risk",
+        label: "Reduce river and coastal flood risk",
         theme: "Climate & hazards",
         source: "EGCA: Climate change adaptation",
-        sdg: "SDG 11.b",
+        sdg: "SDG 11.5",
         eoFit: "screening",
-        alsoUses: ["thermal-comfort"],
       },
       {
         id: "stormwater",
@@ -39,20 +38,21 @@ export const POLICY_THEMES: { theme: string; blurb?: string; objectives: PolicyO
         eoFit: "screening",
       },
       {
-        id: "flood-risk",
-        label: "Reduce river and coastal flood risk",
-        theme: "Climate & hazards",
-        source: "EGCA: Climate change adaptation",
-        sdg: "SDG 11.5",
-        eoFit: "screening",
-      },
-      {
         id: "drought",
         label: "Prepare for drought and water scarcity",
         theme: "Climate & hazards",
         source: "EGCA: Water / Adaptation",
         sdg: "SDG 11.5",
         eoFit: "screening",
+      },
+      {
+        id: "uhi",
+        label: "Reduce urban heat",
+        theme: "Climate & hazards",
+        source: "EGCA: Climate change adaptation",
+        sdg: "SDG 11.b",
+        eoFit: "screening",
+        alsoUses: ["thermal-comfort"],
       },
       {
         id: "landslides",
