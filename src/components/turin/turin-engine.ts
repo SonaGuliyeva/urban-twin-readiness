@@ -17,13 +17,39 @@ var SETS=[{file:base+"study_area.json",kind:"aoi"},{file:base+"land_use.json",ki
 var LAYER={land:0,wat:1,veg:2,sq:3,road:4,bld:5};
 // In the screening view the legend doubles as a filter: each row can be switched off
 // so that only the objects of interest stay on screen.
-var FILT={"0":true,"1":true,"2":true,"3":true,"wat":true};
+var FILT={};                       // "<mode>:<bucket>" -> false when switched off
+var FKEYS={screening:["0","1","2","3","wat"],
+           heat:["h0","h1","h2","h3","nm","wat"],
+           drought:["d0","d1","d2","wat"],
+           flood:["f0","f1","f2","f3"]};
+// Which legend row an object belongs to, matching colourOf exactly. Roads are coloured
+// by their own criteria count in every view, so outside the screening view they sit in
+// no row of the legend and are never filtered; the same holds for anything unclassified.
 function bucket(f){
-  if(f.kind==="wat")return "wat";
-  var n=(f.kind==="road")?(+f.p.n_criteria||0):(+f.p.N_INDICATORS||0);
-  return String(Math.min(3,n));
+  var p=f.p;
+  if(mode==="screening"){
+    if(f.kind==="wat")return "wat";
+    return String(Math.min(3,(f.kind==="road")?(+p.n_criteria||0):(+p.N_INDICATORS||0)));
+  }
+  if(f.kind==="road")return null;
+  if(mode==="heat"){
+    if(f.kind==="wat")return "wat";
+    var v=p.LST_MEAN; if(v==null)return "nm";
+    return v<38?"h0":(v<41?"h1":(v<44?"h2":"h3"));
+  }
+  if(mode==="drought"){
+    if(f.kind==="wat")return "wat";
+    var y=+p.N_YEARS_STRESSED||0;
+    return y===0?"d0":(y<3?"d1":"d2");
+  }
+  if(mode==="flood"){
+    if(p.FLOODED_2016==="yes")return "f3";
+    var q=+p.PGRA_M_PCT||0;
+    return q<=0?"f0":(q>=100?"f2":"f1");
+  }
+  return null;
 }
-function shown(f){ return mode!=="screening" || FILT[bucket(f)]!==false; }
+function shown(f){ var k=bucket(f); return k===null||FILT[mode+":"+k]!==false; }
 var feats=[],lon0=0,lat0=0,mx=1,my=1,ready=false;
 var yaw=-0.42,elev=0.62,zoom=1,mode="screening",sel=null,dragging=false;
 
@@ -102,36 +128,32 @@ function colourOf(f){
   return SEV[0];
 }
 var LEG={
- screening:["Screening result",[[BASE_COL.bld,"nothing flagged"],[SEV[1],"1 indicator"],[SEV[2],"2 indicators"],[SEV[3],"3 or more"],[BASE_COL.wat,"water, shown as water"]]],
- heat:["Surface temperature, 22 July 2022",[["rgb("+HEAT[0].join(",")+")","34 °C"],["rgb("+HEAT[1].join(",")+")","38 °C"],["rgb("+HEAT[2].join(",")+")","42 °C"],["rgb("+HEAT[3].join(",")+")","45 °C"]]],
- drought:["Years when the greenery was under drought stress, 2018–2025",[[SEV[0],"none"],["rgb(232,214,160)","1 year"],["rgb(201,138,46)","3 years"],["rgb(140,59,30)","5 or more"]]],
+ screening:["Screening result",[[BASE_COL.bld,"nothing flagged"],[SEV[1],"1 indicator"],[SEV[2],"2 indicators"],[SEV[3],"3 or more"],[BASE_COL.wat,"water"]]],
+ heat:["Surface temperature, 22 July 2022",[["rgb(234,196,135)","below 38 °C"],["rgb(212,130,64)","38 to 41 °C"],["rgb(178,73,36)","41 to 44 °C"],["rgb(140,36,22)","44 °C and above"],[BASE_COL.bld,"not measured"],[BASE_COL.wat,"water, not measured"]]],
+ drought:["Years when the greenery was under drought stress, 2018–2025",[[BASE_COL.bld,"none"],["rgb(213,168,92)","1 to 2 years"],["rgb(177,106,40)","3 to 4 years"],[BASE_COL.wat,"water, not assessed"]]],
  flood:["Flood exposure",[[SEV[0],"outside the hazard zone"],["rgb(184,207,224)","partly in the hazard zone"],["rgb(46,108,158)","fully in the hazard zone"],["rgb(30,90,150)","flooded in November 2016"]]]
 };
-var FKEY=["0","1","2","3","wat"];
 function setLegend(){ var L=LEG[mode]; legend.hidden=false;
   root.querySelector("#legend-title").textContent=L[0];
-  var body=root.querySelector("#legend-body"), h;
-  if(mode==="screening"){
-    h=L[1].map(function(r,i){
-      var k=FKEY[i];
-      return '<label class="row"><input type="checkbox" data-b="'+k+'"'+(FILT[k]!==false?" checked":"")+
-             '><span class="sw" style="background:'+r[0]+'"></span>'+r[1]+'</label>';}).join("");
-    var tot=0,vis=0;
-    feats.forEach(function(f){ if(f.kind==="road"||f.kind==="aoi")return; tot++; if(shown(f))vis++; });
-    if(vis!==tot) h+='<div class="shown">'+vis.toLocaleString("en")+' of '+
-                     tot.toLocaleString("en")+' objects shown</div>';
-    body.innerHTML=h;
-    Array.prototype.forEach.call(body.querySelectorAll("input[data-b]"),function(cb){
-      cb.addEventListener("change",function(){
-        FILT[cb.getAttribute("data-b")]=cb.checked;
-        if(sel&&!shown(sel)){ sel=null; show(null); }
-        setLegend(); draw();
-      });
+  var body=root.querySelector("#legend-body"), keys=FKEYS[mode]||[];
+  var h=L[1].map(function(r,i){
+    var k=keys[i];
+    if(!k) return '<div class="row"><span class="sw" style="background:'+r[0]+'"></span>'+r[1]+'</div>';
+    return '<label class="row"><input type="checkbox" data-b="'+k+'"'+
+           (FILT[mode+":"+k]!==false?" checked":"")+
+           '><span class="sw" style="background:'+r[0]+'"></span>'+r[1]+'</label>';}).join("");
+  var tot=0,vis=0;
+  feats.forEach(function(f){ if(f.kind==="road"||f.kind==="aoi")return; tot++; if(shown(f))vis++; });
+  if(vis!==tot) h+='<div class="shown">'+vis.toLocaleString("en")+' of '+
+                   tot.toLocaleString("en")+' objects shown</div>';
+  body.innerHTML=h;
+  Array.prototype.forEach.call(body.querySelectorAll("input[data-b]"),function(cb){
+    cb.addEventListener("change",function(){
+      FILT[mode+":"+cb.getAttribute("data-b")]=cb.checked;
+      if(sel&&!shown(sel)){ sel=null; show(null); }
+      setLegend(); draw();
     });
-  } else {
-    body.innerHTML=L[1].map(function(r){
-      return '<div class="row"><span class="sw" style="background:'+r[0]+'"></span>'+r[1]+'</div>';}).join("");
-  }
+  });
 }
 
 // ---- projection
