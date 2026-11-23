@@ -127,8 +127,8 @@ function ConfigurePage() {
         <p className="text-xs font-semibold text-muted-foreground">Configurator</p>
         <h1 className="mt-2 text-4xl text-foreground sm:text-5xl">Define your assessment</h1>
         <p className="mt-3 max-w-2xl text-base text-muted-foreground">
-          Choose the challenge, say where your city starts, and tell us which data you already have.
-          You get a readiness score and a list of what to add first.
+          Choose your objectives, say where your city starts, and tell us which data you already
+          have. You get a readiness score and a list of what to add first.
         </p>
       </header>
 
@@ -139,142 +139,77 @@ function ConfigurePage() {
           <span className="font-mono text-xs text-muted-foreground">{totalSelected} selected</span>
         </div>
         <p className="mt-2 text-sm text-muted-foreground">
-          Choose a water-related challenge, then select the objectives that matter to your city.
+          Select the objectives that matter to your city. The first version covers the ones that can
+          be selected now.
         </p>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
-          {WATER_CATEGORIES.map((cat) => {
-            const ids = cat.objectiveIds;
-            const nSel = ids.filter((id) => selected.has(id)).length;
-            const allOn = nSel === ids.length;
-            // Colours follow Figure 1-1 of the thesis: blue = water abundance, orange = water scarcity
-            const isFlood = cat.id === "flood";
-            const tone = isFlood
-              ? {
-                  card: "border-flood/40 bg-flood-tint",
-                  text: "text-flood",
-                  on: "border-flood bg-flood/10",
-                  box: "border-flood bg-flood text-white",
-                  hover: "hover:border-flood/50",
-                }
-              : {
-                  card: "border-drought/40 bg-drought-tint",
-                  text: "text-drought",
-                  on: "border-drought bg-drought/10",
-                  box: "border-drought bg-drought text-white",
-                  hover: "hover:border-drought/50",
-                };
-            return (
-              <div key={cat.id} className={`rounded-lg border p-5 ${tone.card}`}>
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className={`text-xs font-semibold ${tone.text}`}>{cat.subtitle}</p>
-                    <h3 className="mt-1 font-serif text-2xl text-foreground">{cat.title}</h3>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setSelected((prev) => {
-                        const next = new Set(prev);
-                        ids.forEach((id) => (allOn ? next.delete(id) : next.add(id)));
-                        return next;
-                      })
-                    }
-                    className="shrink-0 rounded-md border border-border px-3 py-1 text-xs text-muted-foreground hover:bg-muted hover:text-foreground"
-                  >
-                    {allOn ? "Clear" : "Select all"}
-                  </button>
-                </div>
-                <p className="mt-2 text-sm text-muted-foreground">{cat.description}</p>
-
-                <div className="mt-4 space-y-2">
-                  {ids.map((id) => {
-                    const obj = objectiveById.get(id);
-                    if (!obj) return null;
-                    const active = selected.has(id);
-                    return (
-                      <button
-                        key={id}
-                        type="button"
-                        onClick={() => toggle(id)}
+        <div className="mt-6 space-y-6">
+          {POLICY_THEMES.map((group) => (
+            <div key={group.theme}>
+              <h3 className="text-sm font-semibold text-foreground">{group.theme}</h3>
+              <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                {group.objectives.map((obj) => {
+                  const available = CORE_OBJECTIVE_IDS.includes(obj.id);
+                  const active = selected.has(obj.id);
+                  return (
+                    <button
+                      key={obj.id}
+                      type="button"
+                      disabled={!available}
+                      onClick={() => toggle(obj.id)}
+                      aria-pressed={available ? active : undefined}
+                      title={obj.eoFit ? EO_FIT_LABEL[obj.eoFit] : undefined}
+                      className={[
+                        "flex items-start gap-3 rounded-md border px-4 py-3 text-left text-sm transition-all",
+                        !available
+                          ? "cursor-not-allowed border-dashed border-border bg-muted/30 text-muted-foreground"
+                          : active
+                            ? "border-primary bg-primary/10 text-foreground shadow-card"
+                            : "border-border bg-white text-foreground hover:border-primary/50",
+                      ].join(" ")}
+                    >
+                      <span
                         className={[
-                          "group flex w-full items-start gap-3 rounded-md border px-4 py-3 text-left text-sm transition-all",
-                          active
-                            ? `${tone.on} text-foreground shadow-card`
-                            : `border-border bg-white text-foreground ${tone.hover}`,
+                          "mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border",
+                          !available
+                            ? "border-border bg-transparent"
+                            : active
+                              ? "border-primary bg-primary text-white"
+                              : "border-border bg-white",
                         ].join(" ")}
-                        aria-pressed={active}
+                        aria-hidden
                       >
-                        <span
-                          className={[
-                            "mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border transition-colors",
-                            active ? tone.box : "border-border bg-white",
-                          ].join(" ")}
-                          aria-hidden
-                        >
-                          {active && (
-                            <svg
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              className="h-3 w-3"
-                              stroke="currentColor"
-                              strokeWidth="3"
-                            >
-                              <path
-                                d="M5 12l5 5 9-11"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          )}
-                        </span>
-                        <span className="leading-snug">{obj.label}</span>
-                      </button>
-                    );
-                  })}
-                </div>
+                        {available && active && (
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            className="h-3 w-3"
+                            stroke="currentColor"
+                            strokeWidth="3"
+                          >
+                            <path d="M5 12l5 5 9-11" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        )}
+                      </span>
+                      <span className="leading-snug">
+                        {obj.label}
+                        {!available && (
+                          <span className="mt-0.5 block text-xs opacity-70">Planned</span>
+                        )}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
 
-        <p className="mt-4 text-xs text-muted-foreground">
-          Floods and droughts often interact, for example heavy rainfall after a drought. Selecting
-          objectives from both categories produces a combined data profile.
+        <p className="mt-6 text-xs text-muted-foreground">
+          Objectives follow the problem areas of urban environmental management described by
+          Srinivas (GDRC Concept Note E-259). Objectives marked Planned will be added in later
+          versions. Objectives can be combined; the data list merges them.
         </p>
-
-        <details className="mt-8 rounded-md border border-dashed border-border p-4">
-          <summary className="cursor-pointer text-xs font-semibold text-muted-foreground">
-            Planned extensions ({plannedThemes.reduce((n, g) => n + g.objectives.length, 0)} further
-            objectives, not yet available)
-          </summary>
-          <p className="mt-3 text-sm text-muted-foreground">
-            Objectives follow the problem areas of urban environmental management described by
-            Srinivas (GDRC Concept Note E-259). The tag shows how well open satellite data can
-            support each one; this is a first judgement and will be checked against city documents.
-          </p>
-          <div className="mt-4 space-y-4">
-            {plannedThemes.map((group) => (
-              <div key={group.theme}>
-                <p className="text-xs font-semibold text-muted-foreground">{group.theme}</p>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {group.objectives.map((obj) => (
-                    <span
-                      key={obj.id}
-                      title={obj.eoFit ? EO_FIT_LABEL[obj.eoFit] : undefined}
-                      className="rounded-full border border-border bg-muted/40 px-3 py-1 text-xs text-muted-foreground"
-                    >
-                      {obj.label}
-                      {obj.eoFit ? (
-                        <span className="ml-1.5 text-[10px] opacity-70">· {obj.eoFit}</span>
-                      ) : null}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </details>
       </section>
 
       {/* Starting point */}
