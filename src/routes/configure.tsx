@@ -4,7 +4,6 @@ import {
   CORE_OBJECTIVE_IDS,
   EO_FIT_LABEL,
   POLICY_THEMES,
-  WATER_CATEGORIES,
   getDatasetsForObjectives,
   type ImplementationLevel,
 } from "@/data";

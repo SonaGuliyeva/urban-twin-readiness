@@ -9,7 +9,7 @@ export type Priority = "essential" | "recommended" | "optional";
 
 export type SourceType = "satellite" | "ground" | "open-data" | "administrative";
 
-export type EoFit = "strong" | "partial" | "limited";
+export type EoFit = "strong" | "screening" | "partial";
 
 export interface PolicyObjective {
   id: string;
@@ -18,6 +18,8 @@ export interface PolicyObjective {
   theme: string;
   /** Table and problem area in Srinivas the objective comes from */
   source?: string;
+  /** SDG 11 target the objective maps to */
+  sdg?: string;
   /** How well open satellite data can support the objective (draft judgement) */
   eoFit?: EoFit;
   /** Older objective ids whose data lists are merged into this one */
