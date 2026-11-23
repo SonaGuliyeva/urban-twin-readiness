@@ -75,7 +75,10 @@ export const Route = createRootRoute({
       },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "stylesheet", href: appCss }],
+    links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -114,18 +117,32 @@ function SiteHeader() {
           onClick={() => setMenuOpen(false)}
         >
           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-accent-gradient text-primary-foreground">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              className="h-4 w-4"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path
-                d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-6h6v6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+            <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
+              <rect x="3.20" y="18.20" width="2.8" height="2.8" rx="0.55" fill="currentColor" />
+              <rect x="3.20" y="14.90" width="2.8" height="2.8" rx="0.55" fill="currentColor" />
+              <rect x="6.50" y="18.20" width="2.8" height="2.8" rx="0.55" fill="currentColor" />
+              <rect x="6.50" y="14.90" width="2.8" height="2.8" rx="0.55" fill="currentColor" />
+              <rect x="6.50" y="11.60" width="2.8" height="2.8" rx="0.55" fill="currentColor" />
+              <rect x="6.50" y="8.30" width="2.8" height="2.8" rx="0.55" fill="currentColor" />
+              <rect x="9.80" y="18.20" width="2.8" height="2.8" rx="0.55" fill="currentColor" />
+              <rect x="9.80" y="14.90" width="2.8" height="2.8" rx="0.55" fill="currentColor" />
+              <rect x="9.80" y="11.60" width="2.8" height="2.8" rx="0.55" fill="currentColor" />
+              <rect x="9.80" y="8.30" width="2.8" height="2.8" rx="0.55" fill="currentColor" />
+              <rect x="9.80" y="5.00" width="2.8" height="2.8" rx="0.55" fill="#BFF3EC" />
+              <rect x="13.10" y="18.20" width="2.8" height="2.8" rx="0.55" fill="currentColor" />
+              <rect x="13.10" y="14.90" width="2.8" height="2.8" rx="0.55" fill="currentColor" />
+              <rect
+                x="13.10"
+                y="11.60"
+                width="2.8"
+                height="2.8"
+                rx="0.55"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="0.95"
               />
+              <rect x="16.40" y="18.20" width="2.8" height="2.8" rx="0.55" fill="currentColor" />
+              <rect x="16.40" y="14.90" width="2.8" height="2.8" rx="0.55" fill="currentColor" />
             </svg>
           </span>
           <div className="flex min-w-0 flex-col leading-none">
