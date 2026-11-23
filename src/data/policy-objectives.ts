@@ -18,12 +18,12 @@ import type { PolicyObjective, EoFit } from "@/data/types";
  */
 export const POLICY_THEMES: { theme: string; objectives: PolicyObjective[] }[] = [
   {
-    theme: "Climate adaptation",
+    theme: "Climate & hazards",
     objectives: [
       {
         id: "uhi",
         label: "Reduce urban heat",
-        theme: "Climate adaptation",
+        theme: "Climate & hazards",
         source: "EGCA: Climate change adaptation",
         sdg: "SDG 11.b",
         eoFit: "screening",
@@ -32,7 +32,7 @@ export const POLICY_THEMES: { theme: string; objectives: PolicyObjective[] }[] =
       {
         id: "stormwater",
         label: "Manage stormwater and rainfall flooding",
-        theme: "Climate adaptation",
+        theme: "Climate & hazards",
         source: "EGCA: Water / Adaptation",
         sdg: "SDG 11.5",
         eoFit: "screening",
@@ -40,7 +40,7 @@ export const POLICY_THEMES: { theme: string; objectives: PolicyObjective[] }[] =
       {
         id: "flood-risk",
         label: "Reduce river and coastal flood risk",
-        theme: "Climate adaptation",
+        theme: "Climate & hazards",
         source: "EGCA: Climate change adaptation",
         sdg: "SDG 11.5",
         eoFit: "screening",
@@ -48,7 +48,7 @@ export const POLICY_THEMES: { theme: string; objectives: PolicyObjective[] }[] =
       {
         id: "drought",
         label: "Prepare for drought and water scarcity",
-        theme: "Climate adaptation",
+        theme: "Climate & hazards",
         source: "EGCA: Water / Adaptation",
         sdg: "SDG 11.5",
         eoFit: "screening",
@@ -77,29 +77,34 @@ export const POLICY_THEMES: { theme: string; objectives: PolicyObjective[] }[] =
     ],
   },
   {
-    theme: "Green areas, biodiversity & land use",
+    theme: "Land",
     objectives: [
-      {
-        id: "green-infra",
-        label: "Expand green and blue infrastructure",
-        theme: "Green areas, biodiversity & land use",
-        source: "EGCA: Biodiversity, green areas & land use",
-        sdg: "SDG 11.7",
-        eoFit: "strong",
-      },
       {
         id: "land-use",
         label: "Limit land degradation and soil sealing",
-        theme: "Green areas, biodiversity & land use",
+        theme: "Land",
         source: "EGCA: Biodiversity, green areas & land use",
         sdg: "SDG 11.3",
         eoFit: "strong",
         alsoUses: ["spatial-planning", "regeneration"],
       },
+    ],
+  },
+  {
+    theme: "Green & biodiversity",
+    objectives: [
+      {
+        id: "green-infra",
+        label: "Expand green and blue infrastructure",
+        theme: "Green & biodiversity",
+        source: "EGCA: Biodiversity, green areas & land use",
+        sdg: "SDG 11.7",
+        eoFit: "strong",
+      },
       {
         id: "biodiversity",
         label: "Protect biodiversity and nature",
-        theme: "Green areas, biodiversity & land use",
+        theme: "Green & biodiversity",
         source: "EGCA: Biodiversity, green areas & land use",
         sdg: "SDG 11.4",
         eoFit: "screening",
@@ -108,12 +113,12 @@ export const POLICY_THEMES: { theme: string; objectives: PolicyObjective[] }[] =
     ],
   },
   {
-    theme: "Air quality",
+    theme: "Air",
     objectives: [
       {
         id: "air-quality",
         label: "Improve air quality",
-        theme: "Air quality",
+        theme: "Air",
         source: "EGCA: Air quality",
         sdg: "SDG 11.6",
         eoFit: "screening",
