@@ -150,8 +150,15 @@ function ConfigurePage() {
           {POLICY_THEMES.map((group) => (
             <details key={group.theme} className="group rounded-lg border border-border">
               <summary className="flex cursor-pointer items-center justify-between gap-3 px-4 py-3">
-                <span className="text-sm font-semibold text-foreground">{group.theme}</span>
-                <span className="text-xs text-muted-foreground">
+                <span className="min-w-0">
+                  <span className="text-sm font-semibold text-foreground">{group.theme}</span>
+                  {group.blurb ? (
+                    <span className="mt-0.5 block text-xs text-muted-foreground">
+                      {group.blurb}
+                    </span>
+                  ) : null}
+                </span>
+                <span className="shrink-0 text-xs text-muted-foreground">
                   {group.objectives.filter((o) => selected.has(o.id)).length > 0
                     ? `${group.objectives.filter((o) => selected.has(o.id)).length} selected · `
                     : ""}

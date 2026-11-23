@@ -16,9 +16,10 @@ import type { PolicyObjective, EoFit } from "@/data/types";
  *
  * `source` names the EGCA theme; `sdg` the SDG 11 target.
  */
-export const POLICY_THEMES: { theme: string; objectives: PolicyObjective[] }[] = [
+export const POLICY_THEMES: { theme: string; blurb?: string; objectives: PolicyObjective[] }[] = [
   {
     theme: "Climate & hazards",
+    blurb: "Floods and droughts — the focus of the current version.",
     objectives: [
       {
         id: "uhi",
