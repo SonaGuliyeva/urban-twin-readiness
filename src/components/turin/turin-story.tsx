@@ -91,11 +91,27 @@ const CHECKS = [
   },
 ];
 
-function DataTable({ title, rows, tone }: { title: string; rows: Row[]; tone: string }) {
+function Fold({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className={`border-t-4 pt-4 ${tone}`}>
-      <h3 className="font-serif text-xl text-foreground">{title}</h3>
-      <div className="mt-3 overflow-x-auto">
+    <details className="group rounded-lg border border-border bg-card">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 font-serif text-xl text-foreground [&::-webkit-details-marker]:hidden">
+        {title}
+        <span
+          aria-hidden
+          className="text-muted-foreground transition-transform group-open:rotate-180"
+        >
+          &#9662;
+        </span>
+      </summary>
+      <div className="px-5 pb-5">{children}</div>
+    </details>
+  );
+}
+
+function DataTable({ rows }: { rows: Row[] }) {
+  return (
+    <div>
+      <div className="overflow-x-auto">
         <table className="w-full min-w-[44rem] table-fixed border-collapse text-left text-sm">
           <colgroup>
             <col className="w-[17%]" />
@@ -129,7 +145,7 @@ function DataTable({ title, rows, tone }: { title: string; rows: Row[]; tone: st
 
 export function TurinStory() {
   return (
-    <section aria-labelledby="turin-story" className="mt-10">
+    <section aria-labelledby="turin-story" className="mt-12">
       <h2 id="turin-story" className="font-serif text-2xl text-foreground sm:text-3xl">
         How Turin did it
       </h2>
@@ -140,43 +156,47 @@ export function TurinStory() {
         attached it to each road segment.
       </p>
 
-      <div className="mt-8 space-y-10">
-        <DataTable title="What Turin already had" rows={BASE} tone="border-foreground/40" />
-        <DataTable title="What was added" rows={ADDED} tone="border-eo" />
+      <div className="mt-6 space-y-3">
+        <Fold title="What Turin already had">
+          <DataTable rows={BASE} />
+        </Fold>
+        <Fold title="What was added">
+          <DataTable rows={ADDED} />
+        </Fold>
+        <Fold title="How it was put together">
+          <ol className="grid gap-x-8 gap-y-5 md:grid-cols-3">
+            {STEPS.map((s, i) => (
+              <li key={s.t} className="border-t-2 border-primary pt-3">
+                <p className="font-serif text-lg text-foreground">
+                  {i + 1}. {s.t}
+                </p>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{s.d}</p>
+              </li>
+            ))}
+          </ol>
+        </Fold>
+        <Fold title="What it showed">
+          <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
+            Each of the 82 road segments was checked against four criteria. 61 segments (74%) meet
+            at least one. The numbers below are segments out of 82.
+          </p>
+          <ul className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {CHECKS.map((c) => (
+              <li key={c.t} className="rounded-lg border border-border bg-background p-4">
+                <p className="font-serif text-3xl text-primary">{c.n}</p>
+                <p className="mt-1 font-medium text-foreground">{c.t}</p>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{c.d}</p>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-6 max-w-3xl text-sm leading-relaxed text-foreground/85">
+            The same steps were then applied to 5,918 city objects of six classes (buildings,
+            vegetation, pedestrian areas, land use, water bodies and bridges). An eight-year record
+            picked out 2022 and 2025 as the unusually dry summers, without being told which years to
+            look for.
+          </p>
+        </Fold>
       </div>
-
-      <h3 className="mt-12 font-serif text-xl text-foreground">How it was put together</h3>
-      <ol className="mt-4 grid gap-x-8 gap-y-5 md:grid-cols-3">
-        {STEPS.map((s, i) => (
-          <li key={s.t} className="border-t-2 border-primary pt-3">
-            <p className="font-serif text-lg text-foreground">
-              {i + 1}. {s.t}
-            </p>
-            <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{s.d}</p>
-          </li>
-        ))}
-      </ol>
-
-      <h3 className="mt-12 font-serif text-xl text-foreground">What it showed</h3>
-      <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-        Each of the 82 road segments was checked against four criteria. 61 segments (74%) meet at
-        least one. The numbers below are segments out of 82.
-      </p>
-      <ul className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {CHECKS.map((c) => (
-          <li key={c.t} className="rounded-lg border border-border bg-card p-4">
-            <p className="font-serif text-3xl text-primary">{c.n}</p>
-            <p className="mt-1 font-medium text-foreground">{c.t}</p>
-            <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{c.d}</p>
-          </li>
-        ))}
-      </ul>
-      <p className="mt-6 max-w-3xl text-sm leading-relaxed text-foreground/85">
-        The same steps were then applied to 5,918 city objects of six classes (buildings,
-        vegetation, pedestrian areas, land use, water bodies and bridges). An eight-year record
-        picked out 2022 and 2025 as the unusually dry summers, without being told which years to
-        look for.
-      </p>
 
       <p className="mt-6 max-w-3xl rounded-lg border border-recommended/30 bg-recommended/10 p-4 text-sm leading-relaxed text-foreground/85">
         <span className="font-semibold">Where this stands.</span> The result is an enriched 3D
@@ -197,7 +217,7 @@ export function TurinStory() {
         </a>
         ); the environmental enrichment is the work presented in this thesis. Your city can follow
         the same path: keep the detailed data you have, and add free satellite data to see how
-        things change. The 3D view below shows the result on individual city objects.
+        things change. The 3D view above shows the result on individual city objects.
       </p>
     </section>
   );
