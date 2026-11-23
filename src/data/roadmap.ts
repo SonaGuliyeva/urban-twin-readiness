@@ -8,14 +8,14 @@ export const FUTURE_ROADMAP: {
     version: "V1.0",
     title: "Minimum dataset readiness",
     description:
-      "Identifies the minimum datasets, source types and Earth Observation inputs required for a given combination of policy objectives and technical maturity level.",
+      "Identifies the minimum datasets, source types and Earth Observation inputs required for a given combination of environmental objectives and technical maturity level.",
     status: "current",
   },
   {
     version: "V2.0",
     title: "Integration of Open Spatial (OS) layers",
     description:
-      "Couples each policy objective with a curated set of open spatial layers (OSM, Urban Atlas, DEM, administrative boundaries, local portals) ready for ingestion.",
+      "Couples each environmental objective with a curated set of open spatial layers (OSM, Urban Atlas, DEM, administrative boundaries, local portals) ready for ingestion.",
     status: "planned",
   },
   {

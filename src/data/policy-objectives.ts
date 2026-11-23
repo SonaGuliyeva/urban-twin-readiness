@@ -1,7 +1,7 @@
 import type { PolicyObjective, EoFit } from "@/data/types";
 
 /**
- * Policy objectives for UrbanTwinReadiness.
+ * Environmental objectives for UrbanTwinReadiness.
  *
  * The objectives are grouped under the environmental themes of the European Green Capital
  * Award (EGCA), mapped to the targets of SDG 11, and validated against the climate strategies

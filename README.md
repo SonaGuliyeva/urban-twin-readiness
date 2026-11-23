@@ -11,7 +11,7 @@
 
 **UrbanTwinReadiness** is a research-driven web application that helps cities, planners, and institutions identify the **minimum data requirements** for developing **Urban Digital Twins (UDTs)** for environmental management and disaster resilience.
 
-Given a set of policy objectives and a declared technical maturity level, the tool returns a structured, prioritised data-requirement profile: required datasets, source typologies, relevant Earth Observation (EO) platforms, open spatial layers, real-world reference deployments, and a phased acquisition roadmap.
+Given a set of environmental objectives and a declared technical maturity level, the tool returns a structured, prioritised data-requirement profile: required datasets, source typologies, relevant Earth Observation (EO) platforms, open spatial layers, real-world reference deployments, and a phased acquisition roadmap.
 
 > **Note on "minimum":** in this project, *minimum* refers to the **essential-priority datasets** defined by the tool's expert-curated recommendation rules, not to a statistically or empirically validated minimum set. See [Limitations](#limitations).
 
@@ -25,7 +25,7 @@ Cities increasingly need data-driven tools to plan Urban Digital Twins across a 
 
 ## How It Works
 
-### 1. Select Policy Objectives
+### 1. Select Environmental Objectives
 
 The current version focuses on **floods, droughts and the urban water cycle** (6 objectives: flood risk, stormwater and drainage, drought preparedness, water resource monitoring, urban heat, green and blue infrastructure). The list of 28 city objectives follows the problem areas of urban environmental management in Srinivas, *Urban Environmental Management: Concepts, Frameworks, and Practice* (GDRC Concept Note E-259), grouped by challenge: urban risks, water, air, land, waste, food security and energy, plus mobility from the same source's thematic areas. The remaining 22 are planned extensions, shown in the configurator with a draft tag for how well open satellite data can support them.
 
@@ -89,8 +89,8 @@ npx wrangler deploy
 
 ## Roadmap
 
-- **V1.0 — Current.** Minimum dataset readiness. Identifies the minimum datasets, source types and Earth Observation inputs required for a given combination of policy objectives and technical maturity level.
-- **V2.0 — Planned.** Integration of Open Spatial (OS) layers. Couples each policy objective with a curated set of open spatial layers (OSM, Urban Atlas, DEM, administrative boundaries, local portals) ready for ingestion.
+- **V1.0 — Current.** Minimum dataset readiness. Identifies the minimum datasets, source types and Earth Observation inputs required for a given combination of environmental objectives and technical maturity level.
+- **V2.0 — Planned.** Integration of Open Spatial (OS) layers. Couples each environmental objective with a curated set of open spatial layers (OSM, Urban Atlas, DEM, administrative boundaries, local portals) ready for ingestion.
 - **V3.0 — Planned.** Discovery catalog with metadata and access. Adds a structured catalog with provider, resolution, temporal coverage, licence and access endpoint for every dataset and layer.
 - **V4.0 — Planned.** Interactive visualizer. Embeds an interactive map allowing users to explore datasets, inspect metadata and preview integration into an Urban Digital Twin.
 
