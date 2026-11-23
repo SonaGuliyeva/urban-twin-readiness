@@ -8,8 +8,7 @@ const BASE: Row[] = [
   {
     data: "Road network and city objects",
     source: "City of Turin topographic database (1:1000, December 2025 edition)",
-    detail:
-      "Every object has a fixed ID: road segments (Road_ID), buildings, vegetation, pedestrian areas and land-use areas (gml_id)",
+    detail: "Every object has a fixed ID",
     gives: "The frame that every other dataset is attached to.",
   },
   {
