@@ -131,10 +131,10 @@ function ConfigurePage() {
         </p>
       </header>
 
-      {/* Environmental objectives */}
+      {/* Urban environmental objectives */}
       <section className="rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
         <div className="flex items-baseline justify-between">
-          <h2 className="font-serif text-2xl text-foreground">Environmental objectives</h2>
+          <h2 className="font-serif text-2xl text-foreground">Urban environmental objectives</h2>
           <span className="font-mono text-xs text-muted-foreground">{totalSelected} selected</span>
         </div>
         <p className="mt-2 text-sm text-muted-foreground">
