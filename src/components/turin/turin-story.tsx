@@ -8,7 +8,8 @@ const BASE: Row[] = [
   {
     data: "Road network and city objects",
     source: "City of Turin topographic database (1:1000, December 2025 edition)",
-    detail: "Every road segment has a fixed ID (Road_ID)",
+    detail:
+      "Every object has a fixed ID: road segments (Road_ID), buildings, vegetation, pedestrian areas and land-use areas (gml_id)",
     gives: "The frame that every other dataset is attached to.",
   },
   {
@@ -55,12 +56,12 @@ const ADDED: Row[] = [
 
 const STEPS = [
   {
-    t: "Give every road an ID",
-    d: "Turin's own road ID stayed in the 3D model, so every new value knows which segment it belongs to.",
+    t: "Give every object an ID",
+    d: "Turin's own IDs stayed in the 3D model, for road segments and for city objects such as buildings and green areas, so every new value knows which object it belongs to.",
   },
   {
-    t: "Measure around each road",
-    d: "A 10 m strip for the 5 cm photos and a 30 m strip for the satellite pixels, so several pixels count and one odd pixel does not mislead.",
+    t: "Measure around each object",
+    d: "For roads, a 10 m strip for the 5 cm photos and a 30 m strip for the satellite pixels. An object smaller than a satellite pixel is measured over a 30 m ring around it. Either way several pixels count and one odd pixel does not mislead.",
   },
   {
     t: "Store the value with its date",
@@ -153,7 +154,7 @@ export function TurinStory() {
         Turin already had a detailed digital twin of its roads, built for road management. It knew
         where each road is and how its pavement looks, but little about plants, water and heat. The
         study added that environmental information from satellites and official flood maps, and
-        attached it to each road segment.
+        attached it to each road segment and, later, to each city object.
       </p>
 
       <div className="mt-6 space-y-3">
