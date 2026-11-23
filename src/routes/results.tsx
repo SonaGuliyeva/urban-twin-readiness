@@ -164,7 +164,7 @@ function ResultsPage() {
       <div className="mx-auto max-w-2xl px-6 py-24 text-center">
         <h1 className="font-serif text-3xl text-foreground">No objectives selected</h1>
         <p className="mt-3 text-muted-foreground">
-          Return to the configurator and select at least one policy objective to generate a profile.
+          Return to the configurator and select at least one environmental objective to generate a profile.
         </p>
         <Link
           to="/configure"
@@ -212,7 +212,7 @@ function ResultsPage() {
           {city ? `${city} — ` : ""}Urban Digital Twin readiness
         </h1>
         <p className="mt-3 max-w-3xl text-base text-muted-foreground">
-          Generated from {selected.length} policy objective{selected.length === 1 ? "" : "s"} at the{" "}
+          Generated from {selected.length} environmental objective{selected.length === 1 ? "" : "s"} at the{" "}
           <span className="font-medium text-foreground">
             {levelInfo.title.split(" — ")[0].toLowerCase()}
           </span>{" "}

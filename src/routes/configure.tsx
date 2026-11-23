@@ -25,7 +25,7 @@ export const Route = createFileRoute("/configure")({
       {
         name: "description",
         content:
-          "Select your policy objectives and technical maturity level to generate a minimum data requirements profile for your Urban Digital Twin.",
+          "Select your environmental objectives and technical maturity level to generate a minimum data requirements profile for your Urban Digital Twin.",
       },
     ],
   }),
@@ -131,15 +131,19 @@ function ConfigurePage() {
         </p>
       </header>
 
-      {/* Policy objectives */}
+      {/* Environmental objectives */}
       <section className="rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
         <div className="flex items-baseline justify-between">
-          <h2 className="font-serif text-2xl text-foreground">Policy objectives</h2>
+          <h2 className="font-serif text-2xl text-foreground">Environmental objectives</h2>
           <span className="font-mono text-xs text-muted-foreground">{totalSelected} selected</span>
         </div>
         <p className="mt-2 text-sm text-muted-foreground">
           Select the objectives that matter to your city. The first version covers the ones that can
           be selected now.
+        </p>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Objectives aligned with EU and UN environmental policy (European Green Capital Award, SDG
+          11) and validated against city climate strategies.
         </p>
 
         <div className="mt-6 space-y-6">
@@ -381,7 +385,7 @@ function ConfigurePage() {
         </div>
         {!canSubmit && (
           <p className="mt-4 text-xs text-muted-foreground">
-            Select at least one policy objective to continue.
+            Select at least one environmental objective to continue.
           </p>
         )}
       </section>
