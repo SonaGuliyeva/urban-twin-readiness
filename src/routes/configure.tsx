@@ -220,9 +220,8 @@ function ConfigurePage() {
         </div>
 
         <p className="mt-6 text-xs text-muted-foreground">
-          Objectives follow the problem areas of urban environmental management described by
-          Srinivas (GDRC Concept Note E-259). Objectives marked Planned will be added in later
-          versions. Objectives can be combined; the data list merges them.
+          Objectives marked Planned will be added in later versions. Objectives can be combined; the
+          data list merges them.
         </p>
       </section>
 
