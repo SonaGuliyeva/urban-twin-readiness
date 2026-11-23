@@ -1,108 +1,57 @@
 import type { PolicyObjective, EoFit } from "@/data/types";
 
-export interface WaterCategory {
-  id: "flood" | "drought";
-  title: string;
-  subtitle: string;
-  description: string;
-  objectiveIds: string[];
-}
-
 /**
- * Objectives available in the current version, grouped by the two water-related categories.
- * All other objectives are planned extensions.
+ * Policy objectives for UrbanTwinReadiness.
+ *
+ * The objectives are grouped under the environmental themes of the European Green Capital
+ * Award (EGCA), mapped to the targets of SDG 11, and validated against the climate strategies
+ * of eight European cities (Turin, Barcelona, Bologna, Milan, Copenhagen, Paris, Vienna,
+ * Rotterdam). The wording is the author's own, kept short while remaining traceable to each
+ * source. Srinivas (GDRC Concept Note E-259) provides the conceptual background.
+ *
+ * `eoFit` records how well open satellite data can support the objective:
+ *   strong    = observable directly from open Earth observation
+ *   screening = EO provides a useful proxy indicator, not the full picture
+ *   partial   = EO covers only part; local data are needed for the rest
+ *
+ * `source` names the EGCA theme; `sdg` the SDG 11 target.
  */
-export const WATER_CATEGORIES: WaterCategory[] = [
-  {
-    id: "flood",
-    title: "Floods",
-    subtitle: "Water abundance",
-    description:
-      "Heavy rainfall, river flooding and surface runoff, including the role of sealed surfaces and drainage.",
-    objectiveIds: ["flood-risk", "stormwater"],
-  },
-  {
-    id: "drought",
-    title: "Droughts",
-    subtitle: "Water scarcity",
-    description:
-      "Water shortage and its effects on water resources, vegetation and surface heat, which is treated as a drought-related stress.",
-    objectiveIds: ["drought", "water-resources", "uhi", "green-infra"],
-  },
-];
-
-export const CORE_OBJECTIVE_IDS: readonly string[] = WATER_CATEGORIES.flatMap(
-  (c) => c.objectiveIds,
-);
-
 export const POLICY_THEMES: { theme: string; objectives: PolicyObjective[] }[] = [
   {
-    theme: "Urban risks",
+    theme: "Climate adaptation",
     objectives: [
       {
-        id: "flood-risk",
-        label: "Reduce flood risk",
-        theme: "Urban risks",
-        source: "Table 7: Natural hazards (floods, earthquakes, storms)",
-        eoFit: "strong",
+        id: "uhi",
+        label: "Reduce urban heat",
+        theme: "Climate adaptation",
+        source: "EGCA: Climate change adaptation",
+        sdg: "SDG 11.b",
+        eoFit: "screening",
+        alsoUses: ["thermal-comfort"],
       },
       {
         id: "stormwater",
-        label: "Manage stormwater and drainage",
-        theme: "Urban risks",
-        source: "Table 7: Natural hazards (floods, earthquakes, storms)",
-        eoFit: "strong",
+        label: "Manage stormwater and rainfall flooding",
+        theme: "Climate adaptation",
+        source: "EGCA: Water / Adaptation",
+        sdg: "SDG 11.5",
+        eoFit: "screening",
+      },
+      {
+        id: "flood-risk",
+        label: "Reduce river and coastal flood risk",
+        theme: "Climate adaptation",
+        source: "EGCA: Climate change adaptation",
+        sdg: "SDG 11.5",
+        eoFit: "screening",
       },
       {
         id: "drought",
         label: "Prepare for drought and water scarcity",
-        theme: "Urban risks",
-        source: "Table 7: Climate change and environmental risks",
-        eoFit: "strong",
-      },
-      {
-        id: "uhi",
-        label: "Reduce urban heat",
-        theme: "Urban risks",
-        source: "Table 7: Climate change and environmental risks",
-        eoFit: "strong",
-        alsoUses: ["thermal-comfort"],
-      },
-      {
-        id: "green-infra",
-        label: "Expand green and blue infrastructure",
-        theme: "Urban risks",
-        source: "Table 7: Climate change and environmental risks",
-        eoFit: "strong",
-      },
-      {
-        id: "climate-resilience",
-        label: "Plan climate adaptation",
-        theme: "Urban risks",
-        source: "Table 7: Climate change and environmental risks",
-        eoFit: "partial",
-      },
-      {
-        id: "early-warning",
-        label: "Early warning and emergency response",
-        theme: "Urban risks",
-        source: "Table 7: Natural hazards (floods, earthquakes, storms)",
-        eoFit: "partial",
-        alsoUses: ["disaster-response", "emergency-coordination"],
-      },
-      {
-        id: "social-vulnerability",
-        label: "Reduce social vulnerability",
-        theme: "Urban risks",
-        source: "Table 7: Urban vulnerability and informal settlements",
-        eoFit: "partial",
-      },
-      {
-        id: "informal-settlements",
-        label: "Upgrade informal settlements",
-        theme: "Urban risks",
-        source: "Table 7: Urban vulnerability and informal settlements",
-        eoFit: "partial",
+        theme: "Climate adaptation",
+        source: "EGCA: Water / Adaptation",
+        sdg: "SDG 11.5",
+        eoFit: "screening",
       },
     ],
   },
@@ -111,184 +60,86 @@ export const POLICY_THEMES: { theme: string; objectives: PolicyObjective[] }[] =
     objectives: [
       {
         id: "water-resources",
-        label: "Monitor water resources and groundwater",
+        label: "Monitor water resources",
         theme: "Water",
-        source: "Table 2: Groundwater pollution and depletion",
-        eoFit: "strong",
+        source: "EGCA: Water",
+        sdg: "SDG 11.6",
+        eoFit: "partial",
       },
       {
         id: "water-quality",
-        label: "Protect surface, coastal and lake water quality",
+        label: "Protect surface water quality",
         theme: "Water",
-        source: "Table 2: Surface water pollution; coastal and lake pollution",
+        source: "EGCA: Water",
+        sdg: "SDG 11.6",
         eoFit: "partial",
       },
     ],
   },
   {
-    theme: "Land",
+    theme: "Green areas, biodiversity & land use",
     objectives: [
       {
+        id: "green-infra",
+        label: "Expand green and blue infrastructure",
+        theme: "Green areas, biodiversity & land use",
+        source: "EGCA: Biodiversity, green areas & land use",
+        sdg: "SDG 11.7",
+        eoFit: "strong",
+      },
+      {
         id: "land-use",
-        label: "Limit land degradation and urban sprawl",
-        theme: "Land",
-        source: "Table 3: Degradation of land",
+        label: "Limit land degradation and soil sealing",
+        theme: "Green areas, biodiversity & land use",
+        source: "EGCA: Biodiversity, green areas & land use",
+        sdg: "SDG 11.3",
         eoFit: "strong",
         alsoUses: ["spatial-planning", "regeneration"],
       },
       {
         id: "biodiversity",
-        label: "Protect ecosystems and biodiversity",
-        theme: "Land",
-        source: "Table 3: Degradation of ecosystems",
-        eoFit: "strong",
+        label: "Protect biodiversity and nature",
+        theme: "Green areas, biodiversity & land use",
+        source: "EGCA: Biodiversity, green areas & land use",
+        sdg: "SDG 11.4",
+        eoFit: "screening",
         alsoUses: ["nbs"],
-      },
-      {
-        id: "heritage",
-        label: "Protect cultural and historical property",
-        theme: "Land",
-        source: "Table 3: Loss of cultural and historical property",
-        eoFit: "limited",
       },
     ],
   },
   {
-    theme: "Air",
+    theme: "Air quality",
     objectives: [
       {
         id: "air-quality",
-        label: "Improve outdoor air quality",
-        theme: "Air",
-        source: "Table 1: Ambient air pollution",
-        eoFit: "partial",
+        label: "Improve air quality",
+        theme: "Air quality",
+        source: "EGCA: Air quality",
+        sdg: "SDG 11.6",
+        eoFit: "screening",
         alsoUses: ["urban-emissions", "pollution"],
-      },
-      {
-        id: "indoor-air",
-        label: "Reduce indoor air pollution",
-        theme: "Air",
-        source: "Table 1: Indoor air pollution",
-        eoFit: "limited",
-      },
-    ],
-  },
-  {
-    theme: "Energy",
-    objectives: [
-      {
-        id: "energy-access",
-        label: "Improve energy supply and access",
-        theme: "Energy",
-        source: "Table 6: Energy supply and access",
-        eoFit: "limited",
-      },
-      {
-        id: "energy-efficiency",
-        label: "Improve energy efficiency",
-        theme: "Energy",
-        source: "Table 6: Energy inefficiency and excessive consumption",
-        eoFit: "partial",
-      },
-      {
-        id: "renewable-energy",
-        label: "Reduce fossil-fuel dependence",
-        theme: "Energy",
-        source: "Table 6: Dependence on fossil fuels",
-        eoFit: "partial",
-        alsoUses: ["carbon-footprint"],
-      },
-      {
-        id: "critical-infrastructure",
-        label: "Make energy systems resilient",
-        theme: "Energy",
-        source: "Table 6: Energy insecurity and system vulnerability",
-        eoFit: "partial",
-      },
-      {
-        id: "energy-poverty",
-        label: "Reduce energy poverty",
-        theme: "Energy",
-        source: "Table 6: Energy inequity and energy poverty",
-        eoFit: "limited",
-      },
-    ],
-  },
-  {
-    theme: "Mobility",
-    objectives: [
-      {
-        id: "traffic-flows",
-        label: "Make mobility more sustainable",
-        theme: "Mobility",
-        source: "Box 3: Thematic area, transportation systems (not a problem-area table)",
-        eoFit: "partial",
-        alsoUses: ["sustainable-mobility", "transport-emissions"],
-      },
-    ],
-  },
-  {
-    theme: "Waste",
-    objectives: [
-      {
-        id: "solid-waste",
-        label: "Manage solid waste",
-        theme: "Waste",
-        source: "Table 4: Solid waste management",
-        eoFit: "partial",
-      },
-      {
-        id: "hazardous-waste",
-        label: "Manage hazardous and industrial waste",
-        theme: "Waste",
-        source: "Table 4: Hazardous and industrial waste",
-        eoFit: "partial",
-      },
-      {
-        id: "wastewater-sanitation",
-        label: "Treat wastewater and sewage",
-        theme: "Waste",
-        source: "Table 4: Wastewater and sewage",
-        eoFit: "limited",
-      },
-    ],
-  },
-  {
-    theme: "Food security",
-    objectives: [
-      {
-        id: "food-supply",
-        label: "Secure food supply",
-        theme: "Food security",
-        source: "Table 5: Food availability",
-        eoFit: "partial",
-      },
-      {
-        id: "food-access",
-        label: "Improve access to food",
-        theme: "Food security",
-        source: "Table 5: Food access",
-        eoFit: "limited",
-      },
-      {
-        id: "food-waste",
-        label: "Reduce food loss and waste",
-        theme: "Food security",
-        source: "Table 5: Food utilization and waste",
-        eoFit: "limited",
       },
     ],
   },
 ];
 
-/** Challenges that follow Srinivas; mobility is added from his list of thematic areas (Box 3). */
+/** The objectives available (selectable) in the current version. */
+export const CORE_OBJECTIVE_IDS: readonly string[] = [
+  "uhi",
+  "stormwater",
+  "flood-risk",
+  "drought",
+  "water-resources",
+  "green-infra",
+];
+
 export const SOURCE_NOTE =
-  "Srinivas, H. Urban Environmental Management: Concepts, Frameworks, and Practice. GDRC Concept Note E-259.";
+  "Objectives are grouped under the European Green Capital Award themes, mapped to SDG 11, and validated against the climate strategies of eight European cities.";
 
 export const EO_FIT_LABEL: Record<EoFit, string> = {
-  strong: "Strong fit with satellite data",
-  partial: "Partial fit",
-  limited: "Limited fit",
+  strong: "Observable directly from open satellite data",
+  screening: "Open satellite data give a screening indicator",
+  partial: "Open satellite data cover part; local data needed for the rest",
 };
 
 /** Objective ids whose dataset lists are merged into a selected objective. */
