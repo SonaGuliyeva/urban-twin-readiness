@@ -15,6 +15,15 @@ var SETS=[{file:base+"study_area.json",kind:"aoi"},{file:base+"land_use.json",ki
           {file:base+"vegetation.json",kind:"veg"},{file:base+"squares.json",kind:"sq"},
           {file:base+"roads.json",kind:"road"},{file:base+"buildings.json",kind:"bld"}];
 var LAYER={land:0,wat:1,veg:2,sq:3,road:4,bld:5};
+// In the screening view the legend doubles as a filter: each row can be switched off
+// so that only the objects of interest stay on screen.
+var FILT={"0":true,"1":true,"2":true,"3":true,"wat":true};
+function bucket(f){
+  if(f.kind==="wat")return "wat";
+  var n=(f.kind==="road")?(+f.p.n_criteria||0):(+f.p.N_INDICATORS||0);
+  return String(Math.min(3,n));
+}
+function shown(f){ return mode!=="screening" || FILT[bucket(f)]!==false; }
 var feats=[],lon0=0,lat0=0,mx=1,my=1,ready=false;
 var yaw=-0.42,elev=0.62,zoom=1,mode="screening",sel=null,dragging=false;
 
@@ -98,11 +107,31 @@ var LEG={
  drought:["Years when the greenery was under drought stress, 2018–2025",[[SEV[0],"none"],["rgb(232,214,160)","1 year"],["rgb(201,138,46)","3 years"],["rgb(140,59,30)","5 or more"]]],
  flood:["Flood exposure",[[SEV[0],"outside the hazard zone"],["rgb(184,207,224)","partly in the hazard zone"],["rgb(46,108,158)","fully in the hazard zone"],["rgb(30,90,150)","flooded in November 2016"]]]
 };
+var FKEY=["0","1","2","3","wat"];
 function setLegend(){ var L=LEG[mode]; legend.hidden=false;
   root.querySelector("#legend-title").textContent=L[0];
-  var h=L[1].map(function(r){
-    return '<div class="row"><span class="sw" style="background:'+r[0]+'"></span>'+r[1]+'</div>';}).join("");
-  root.querySelector("#legend-body").innerHTML=h;
+  var body=root.querySelector("#legend-body"), h;
+  if(mode==="screening"){
+    h=L[1].map(function(r,i){
+      var k=FKEY[i];
+      return '<label class="row"><input type="checkbox" data-b="'+k+'"'+(FILT[k]!==false?" checked":"")+
+             '><span class="sw" style="background:'+r[0]+'"></span>'+r[1]+'</label>';}).join("");
+    var tot=0,vis=0;
+    feats.forEach(function(f){ if(f.kind==="road"||f.kind==="aoi")return; tot++; if(shown(f))vis++; });
+    if(vis!==tot) h+='<div class="shown">'+vis.toLocaleString("en")+' of '+
+                     tot.toLocaleString("en")+' objects shown</div>';
+    body.innerHTML=h;
+    Array.prototype.forEach.call(body.querySelectorAll("input[data-b]"),function(cb){
+      cb.addEventListener("change",function(){
+        FILT[cb.getAttribute("data-b")]=cb.checked;
+        if(sel&&!shown(sel)){ sel=null; show(null); }
+        setLegend(); draw();
+      });
+    });
+  } else {
+    body.innerHTML=L[1].map(function(r){
+      return '<div class="row"><span class="sw" style="background:'+r[0]+'"></span>'+r[1]+'</div>';}).join("");
+  }
 }
 
 // ---- projection
@@ -142,7 +171,7 @@ function draw(){
   // Flat ground polygons are coplanar, so sorting them by depth alone is arbitrary and a
   // land-use area can land on top of the river. Stack them by layer first; buildings are
   // extruded and still need the painter's algorithm among themselves.
-  var order=feats.filter(function(f){return f.kind!=="aoi";}).sort(function(a,b){
+  var order=feats.filter(function(f){return f.kind!=="aoi"&&shown(f);}).sort(function(a,b){
     var ra=LAYER[a.kind]||0, rb=LAYER[b.kind]||0;
     if(ra!==rb)return ra-rb;
     var ca=Math.cos(yaw),sa=Math.sin(yaw);
@@ -197,9 +226,9 @@ function pick(px,py){
   var order=feats.slice().sort(function(a,b){
     var ya=a.cx*sa+a.cy*ca, yb=b.cx*sa+b.cy*ca; return ya-yb;});
   for(var i=0;i<order.length;i++){ var f=order[i];
-    if(f.kind==="road"||f.kind==="aoi")continue;
+    if(f.kind==="road"||f.kind==="aoi"||!shown(f))continue;
     for(var r=0;r<f.rs.length;r++) if(inPoly(px,py,f.rs[r],f.h))return f; }
-  for(var k=0;k<feats.length;k++){ var g=feats[k]; if(g.kind!=="road")continue;
+  for(var k=0;k<feats.length;k++){ var g=feats[k]; if(g.kind!=="road"||!shown(g))continue;
     for(var q=0;q<g.rs.length;q++){ var rg=g.rs[q];
       for(var m=0;m<rg.length-1;m++){ var a=project(rg[m][0],rg[m][1],0.4),b=project(rg[m+1][0],rg[m+1][1],0.4);
         var dx=b[0]-a[0],dy=b[1]-a[1],L=dx*dx+dy*dy; if(!L)continue;
