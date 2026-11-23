@@ -65,3 +65,7 @@
 .tv-foot table { border-collapse: collapse; margin-top: 8px; font-size: 12px; width: 100%; min-width: 36rem; }
 .tv-foot th, .tv-foot td { text-align: left; padding: 3px 10px 3px 0; border-bottom: 1px solid #ddd7cb; vertical-align: top; }
 .tv-foot th { font-weight: 600; color: #1d2328; }
+.tv .legend label.row { cursor: pointer; user-select: none; }
+.tv .legend label.row input { margin: 0; width: 13px; height: 13px; accent-color: var(--accent); flex: none; }
+.tv .legend label.row:has(input:not(:checked)) { opacity: 0.45; }
+.tv .legend .shown { margin-top: 8px; font-size: 11px; color: var(--ink-soft); }
