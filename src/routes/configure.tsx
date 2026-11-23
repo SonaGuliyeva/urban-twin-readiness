@@ -145,9 +145,23 @@ function ConfigurePage() {
 
         <div className="mt-6 space-y-6">
           {POLICY_THEMES.map((group) => (
-            <div key={group.theme}>
-              <h3 className="text-sm font-semibold text-foreground">{group.theme}</h3>
-              <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            <details
+              key={group.theme}
+              open={group.objectives.some((o) => CORE_OBJECTIVE_IDS.includes(o.id))}
+              className="group rounded-lg border border-border"
+            >
+              <summary className="flex cursor-pointer items-center justify-between gap-3 px-4 py-3">
+                <span className="text-sm font-semibold text-foreground">{group.theme}</span>
+                <span className="text-xs text-muted-foreground">
+                  {group.objectives.filter((o) => selected.has(o.id)).length > 0
+                    ? `${group.objectives.filter((o) => selected.has(o.id)).length} selected · `
+                    : ""}
+                  {group.objectives.filter((o) => CORE_OBJECTIVE_IDS.includes(o.id)).length > 0
+                    ? `${group.objectives.filter((o) => CORE_OBJECTIVE_IDS.includes(o.id)).length} available now`
+                    : `${group.objectives.length} planned`}
+                </span>
+              </summary>
+              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 px-4 pb-4">
                 {group.objectives.map((obj) => {
                   const available = CORE_OBJECTIVE_IDS.includes(obj.id);
                   const active = selected.has(obj.id);
@@ -201,7 +215,7 @@ function ConfigurePage() {
                   );
                 })}
               </div>
-            </div>
+            </details>
           ))}
         </div>
 
