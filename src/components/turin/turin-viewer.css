@@ -5,7 +5,7 @@
   --stage-far: #bcc7c6; --stage-near: #ddd9cf;
   --accent: #0d5f63;
   --s0: #b9bfbe; --s1: #e3a93c; --s2: #cf6b28; --s3: #9e2f1c;
-  --c-bld: #e0dacd; --c-veg: #b5caa4; --c-sq: #e4dbc5; --c-wat: #a9bdc8; --c-road: #6f7a7d;
+  --c-bld: #e0dacd; --c-veg: #b5caa4; --c-sq: #e4dbc5; --c-wat: #9cbdd4; --c-land: #dcd9cc; --c-road: #6f7a7d;
   display: grid; grid-template-rows: auto 1fr;
   height: min(86vh, 900px); min-height: 600px;
   border: 1px solid var(--rule); border-radius: 14px; overflow: hidden;
@@ -55,3 +55,13 @@
   .tv aside { border-left: 0; border-top: 1px solid var(--rule); max-height: 46vh; }
   .tv .hint { display: none; }
 }
+
+.tv-foot { margin-top: 12px; font-size: 13px; color: #5c6670; }
+.tv-foot a { color: inherit; }
+.tv-foot details { margin-top: 8px; }
+.tv-foot summary { cursor: pointer; font-weight: 600; color: #1d2328; }
+.tv-foot summary:focus-visible { outline: 2px solid #0d5f63; outline-offset: 2px; }
+.tv-foot .tv-table { overflow-x: auto; }
+.tv-foot table { border-collapse: collapse; margin-top: 8px; font-size: 12px; width: 100%; min-width: 36rem; }
+.tv-foot th, .tv-foot td { text-align: left; padding: 3px 10px 3px 0; border-bottom: 1px solid #ddd7cb; vertical-align: top; }
+.tv-foot th { font-weight: 600; color: #1d2328; }

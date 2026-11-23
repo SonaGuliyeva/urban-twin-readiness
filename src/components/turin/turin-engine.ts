@@ -3,16 +3,18 @@
 // Imperative canvas engine ported from the published "Turin Object Screening" viewer.
 export function mountTurinViewer(root: HTMLElement, base: string): () => void {
 "use strict";
-var cv=root.querySelector("#tv-c"),ctx=cv.getContext("2d"),panel=root.querySelector("#"+"panel"),
-    loading=root.querySelector("#"+"loading"),legend=root.querySelector("#"+"legend");
+var cv=root.querySelector("#tv-c"),ctx=cv.getContext("2d"),panel=root.querySelector("#panel"),
+    loading=root.querySelector("#loading"),legend=root.querySelector("#legend");
 var css=getComputedStyle(root);
 function tok(n){return css.getPropertyValue(n).trim();}
 var SEV=[tok("--s0"),tok("--s1"),tok("--s2"),tok("--s3")];
-var BASE_COL={bld:tok("--c-bld"),veg:tok("--c-veg"),sq:tok("--c-sq"),road:tok("--c-road"),wat:tok("--c-wat")};
+var BASE_COL={bld:tok("--c-bld"),veg:tok("--c-veg"),sq:tok("--c-sq"),road:tok("--c-road"),wat:tok("--c-wat"),land:tok("--c-land")};
 
-var SETS=[{file:base+"study_area.json",kind:"aoi"},{file:base+"water.json",kind:"wat"},
+var SETS=[{file:base+"study_area.json",kind:"aoi"},{file:base+"land_use.json",kind:"land"},
+          {file:base+"water.json",kind:"wat"},
           {file:base+"vegetation.json",kind:"veg"},{file:base+"squares.json",kind:"sq"},
           {file:base+"roads.json",kind:"road"},{file:base+"buildings.json",kind:"bld"}];
+var LAYER={land:0,wat:1,veg:2,sq:3,road:4,bld:5};
 var feats=[],lon0=0,lat0=0,mx=1,my=1,ready=false;
 var yaw=-0.42,elev=0.62,zoom=1,mode="screening",sel=null,dragging=false;
 
@@ -66,7 +68,7 @@ Promise.all(SETS.map(function(s){return fetch(s.file).then(function(r){return r.
 function counts(){
   var n=0,fl=0;
   feats.forEach(function(f){ if(f.kind==="road"||f.kind==="aoi")return; n++; if(+f.p.N_INDICATORS>0)fl++; });
-  root.querySelector("#"+"counts").innerHTML=
+  root.querySelector("#counts").innerHTML=
     '<div><b>'+n.toLocaleString("en")+'</b>objects</div>'+
     '<div><b>'+fl.toLocaleString("en")+'</b>flagged</div>'+
     '<div><b>'+Math.round(100*fl/n)+'%</b>of the district</div>';
@@ -91,15 +93,16 @@ function colourOf(f){
   return SEV[0];
 }
 var LEG={
- screening:["Screening result",[[BASE_COL.bld,"no criterion met"],[SEV[1],"1 criterion"],[SEV[2],"2 criteria"],[SEV[3],"3 or more"],[BASE_COL.wat,"water, shown as water"]]],
+ screening:["Screening result",[[BASE_COL.bld,"nothing flagged"],[SEV[1],"1 indicator"],[SEV[2],"2 indicators"],[SEV[3],"3 or more"],[BASE_COL.wat,"water, shown as water"]]],
  heat:["Surface temperature, 22 July 2022",[["rgb("+HEAT[0].join(",")+")","34 °C"],["rgb("+HEAT[1].join(",")+")","38 °C"],["rgb("+HEAT[2].join(",")+")","42 °C"],["rgb("+HEAT[3].join(",")+")","45 °C"]]],
- drought:["Years under drought stress, 2018–2025",[[SEV[0],"none"],["rgb(232,214,160)","1 year"],["rgb(201,138,46)","3 years"],["rgb(140,59,30)","5 or more"]]],
- flood:["Flood exposure",[[SEV[0],"outside the hazard zone"],["rgb(184,207,224)","partly in PGRA H+M"],["rgb(46,108,158)","fully in PGRA H+M"],["rgb(30,90,150)","flooded in November 2016"]]]
+ drought:["Years when the greenery was under drought stress, 2018–2025",[[SEV[0],"none"],["rgb(232,214,160)","1 year"],["rgb(201,138,46)","3 years"],["rgb(140,59,30)","5 or more"]]],
+ flood:["Flood exposure",[[SEV[0],"outside the hazard zone"],["rgb(184,207,224)","partly in the hazard zone"],["rgb(46,108,158)","fully in the hazard zone"],["rgb(30,90,150)","flooded in November 2016"]]]
 };
 function setLegend(){ var L=LEG[mode]; legend.hidden=false;
-  root.querySelector("#"+"legend-title").textContent=L[0];
-  root.querySelector("#"+"legend-body").innerHTML=L[1].map(function(r){
+  root.querySelector("#legend-title").textContent=L[0];
+  var h=L[1].map(function(r){
     return '<div class="row"><span class="sw" style="background:'+r[0]+'"></span>'+r[1]+'</div>';}).join("");
+  root.querySelector("#legend-body").innerHTML=h;
 }
 
 // ---- projection
@@ -136,7 +139,12 @@ function draw(){
       for(var k=0;k<rg.length;k++){ var q=project(rg[k][0],rg[k][1],0); k?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]); }
       ctx.closePath(); ctx.stroke(); });
     ctx.setLineDash([]); }
+  // Flat ground polygons are coplanar, so sorting them by depth alone is arbitrary and a
+  // land-use area can land on top of the river. Stack them by layer first; buildings are
+  // extruded and still need the painter's algorithm among themselves.
   var order=feats.filter(function(f){return f.kind!=="aoi";}).sort(function(a,b){
+    var ra=LAYER[a.kind]||0, rb=LAYER[b.kind]||0;
+    if(ra!==rb)return ra-rb;
     var ca=Math.cos(yaw),sa=Math.sin(yaw);
     var ya=a.cx*sa+a.cy*ca, yb=b.cx*sa+b.cy*ca;
     if(yb!==ya)return yb-ya;
@@ -200,7 +208,7 @@ function pick(px,py){
         if(ex*ex+ey*ey<36)return g; } } }
   return null;
 }
-var CLASS={bld:"Building",veg:"Vegetation object",sq:"Pedestrian area",road:"Road segment",wat:"Water body"};
+var CLASS={bld:"Building",veg:"Vegetation object",sq:"Pedestrian area",road:"Road segment",wat:"Water body",land:"Land-use area"};
 function num(v,d,u){ if(v===null||v===undefined||v==="")return null;
   var x=+v; if(isNaN(x))return String(v); return x.toFixed(d===undefined?2:d)+(u||""); }
 function dl(rows){ var out=rows.filter(function(r){return r[1]!=null;});
@@ -209,7 +217,7 @@ function grp(title,body,note,lead){ if(!body)return "";
   return '<div class="grp"><h3>'+title+'</h3>'+(lead?'<p class="lead">'+lead+'</p>':'')+body+
          (note?'<p class="note">'+note+'</p>':'')+'</div>'; }
 function tech(t){ return ' <span class="tech">'+t+'</span>'; }
-var PLURAL={bld:"buildings",veg:"green areas",sq:"pedestrian areas",wat:"water bodies"};
+var PLURAL={bld:"buildings",veg:"green areas",sq:"pedestrian areas",wat:"water bodies",land:"land-use areas"};
 function heatLead(p,kind){
   if(p.LST_MEAN==null)return null;
   var a=p.LST_ANOM_K,r=p.LST_RANK_PCT,parts=[];
@@ -253,7 +261,7 @@ function zWords(z){
 
 function show(f){
   sel=f;
-  if(!f){ panel.innerHTML='<p class="empty">Select an object in the view to see the indicators that were '+
+  if(!f){ panel.innerHTML='<p class="empty">Select an object in the view to see the satellite measurements that were '+
     'derived for it, and the geometry each value was measured over.</p><div class="counts" id="counts"></div>';
     counts(); draw(); return; }
   var p=f.p,road=f.kind==="road";
@@ -262,7 +270,7 @@ function show(f){
   var h='<p class="idline">'+CLASS[f.kind]+'</p><h2>'+(road?(p.TOPONIMO||("Segment "+p.id_int)):p.gml_id)+'</h2>'+
     '<span class="chip" style="background:'+SEV[Math.min(3,n)]+'22;color:var(--ink)">'+
     '<span class="dot" style="background:'+SEV[Math.min(3,n)]+'"></span>'+flag+
-    (n?" &middot; "+n+(n>1?" criteria":" criterion"):"")+'</span>';
+    (n?" &middot; "+n+(n>1?" indicators":" indicator"):"")+'</span>';
   if(!road){
     var appl=0;
     ["FLOOD_EXPOSURE","DROUGHT_HEAT_EXPOSURE","GREEN_INFRA_DEFICIT","DROUGHT_VEG_IMPACT"].forEach(function(k){
@@ -275,7 +283,7 @@ function show(f){
     var Y=function(v){return (v===true||v==="True")?"yes":"no";};
     h+=grp("What was checked",dl([["In the river-flood hazard zone",Y(p.crit_flood)],
       ["Unusually hot in summer",Y(p.crit_thermal)],
-      ["Roadside greenery suffered from drought",Y(p.crit_drought)],
+      ["Greenery along the road suffered from drought",Y(p.crit_drought)],
       ["Little greenery and much sealed surface",Y(p.crit_veg_imperv)]]));
     h+=grp("Measured",dl([["Surface temperature, summer 2022",num(p.LST_MEAN,1," °C")],
       ["Sealed surface",num(p.IMPERV_PCT,1," %")],["Distance to the river",num(p.DIST_RIVER,0," m")]]),
@@ -291,18 +299,18 @@ function show(f){
 
   h+=grp("Summer heat",dl([["Surface temperature, 22 July 2022",num(p.LST_MEAN,1," °C")],
       ["Compared with the district",p.LST_ANOM_K!=null?(Math.abs(p.LST_ANOM_K).toFixed(1)+" K "+(p.LST_ANOM_K>=0?"warmer":"cooler")):null],
-      ["Place among similar objects",p.LST_RANK_PCT!=null?("warmer than "+Math.round(p.LST_RANK_PCT)+" %"):null]]),
+      ["Hotter than other objects of its kind",p.LST_RANK_PCT!=null?("warmer than "+Math.round(p.LST_RANK_PCT)+" %"):null]]),
       ctxNote,heatLead(p,f.kind));
 
-  h+=grp("Drought and greenery, 2018–2025",dl([
+  h+=grp("Drought stress, 2018–2025",dl([
       ["Summers when the greenery suffered",p.N_YEARS_STRESSED!=null?p.N_YEARS_STRESSED+" of 8":null],
       ["Which summers",p.YEARS_STRESSED?String(p.YEARS_STRESSED).split(";").join(", "):null],
       ["Loss of greenness in 2022"+tech("NDVI"),zWords(p.DROUGHT_Z_NDVI)],
       ["Loss of moisture in 2022"+tech("NDMI"),zWords(p.DROUGHT_Z_NDMI)],
       ["How green in August 2022"+tech("0 = bare, 0.8 = dense"),num(p.NDVI_S2_AUG,2)],
-      ["Direction since 2018",trendWords(p.NDVI_TREND_AUG,p.NDVI_TREND_P)],
+      ["Change since 2018",trendWords(p.NDVI_TREND_AUG,p.NDVI_TREND_P)],
       ["Heat and drought in the same summer",p.COMPOUND_HEAT_DROUGHT||null]]),
-      "Measured from Sentinel-2 satellite images. Each summer is compared with the other seven, so no year is assumed in advance to be the dry one. Heat is counted as a drought-related stress, not as a separate hazard.",
+      "Measured from Sentinel-2 satellite images. What is measured is how much greenness an object loses between April and August, with each summer compared against the other seven, so no year is assumed in advance to be the dry one. Two summers stand out, 2022 and 2025, and for different reasons: 2022 was poor from spring onwards, during the Po drought, while 2025 began with the greenest spring of the eight years and lost it during the July heat, in a year when northern Italy was in fact wetter than normal. So a summer counted here means the greenery lost condition, not necessarily that water was short.",
       droughtLead(p));
 
   h+=grp("River flooding",dl([
@@ -322,7 +330,7 @@ function show(f){
 
   var mc=p.FLAG_FREQ_MC!=null?Math.round(100*p.FLAG_FREQ_MC):null;
   h+=grp("How certain is this",dl([
-      ["Still comes out stressed in",mc!=null?mc+" % of 2,000 tests":null]]),
+      ["Still flagged when the thresholds are varied",mc!=null?mc+" % of 2,000 tests":null]]),
       "The thresholds that decide \u201Cstressed\u201D are a judgement. The test moves all of them at once, 2,000 times, within reasonable limits.",
       mc==null?null:(mc>=90?"The result is stable: moving the thresholds barely changes it.":
         (mc<=10?"The result is stable: this object stays below the thresholds.":
@@ -342,9 +350,9 @@ cv.addEventListener("pointerup",endDrag);
 cv.addEventListener("pointercancel",function(){dragging=false;cv.classList.remove("dragging");draw();});
 cv.addEventListener("wheel",function(e){e.preventDefault();zoom=Math.max(0.4,Math.min(14,zoom*(e.deltaY<0?1.12:0.89)));draw();},{passive:false});
 cv.addEventListener("dblclick",function(){yaw=-0.42;elev=0.62;zoom=1;draw();});
-root.querySelectorAll(".modes button").forEach(function(b){
+root.querySelectorAll("[data-mode]").forEach(function(b){
   b.addEventListener("click",function(){
-    root.querySelectorAll(".modes button").forEach(function(o){o.setAttribute("aria-pressed",o===b?"true":"false");});
+    root.querySelectorAll("[data-mode]").forEach(function(o){o.setAttribute("aria-pressed",o===b?"true":"false");});
     mode=b.dataset.mode; setLegend(); draw();});});
 window.addEventListener("resize",resize);
 resize();
