@@ -148,11 +148,7 @@ function ConfigurePage() {
 
         <div className="mt-6 space-y-6">
           {POLICY_THEMES.map((group) => (
-            <details
-              key={group.theme}
-              open={group.objectives.some((o) => CORE_OBJECTIVE_IDS.includes(o.id))}
-              className="group rounded-lg border border-border"
-            >
+            <details key={group.theme} className="group rounded-lg border border-border">
               <summary className="flex cursor-pointer items-center justify-between gap-3 px-4 py-3">
                 <span className="text-sm font-semibold text-foreground">{group.theme}</span>
                 <span className="text-xs text-muted-foreground">
