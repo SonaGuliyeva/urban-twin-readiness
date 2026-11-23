@@ -68,7 +68,9 @@ function AboutPage() {
         <p>
           The current version covers <strong>floods</strong> and <strong>droughts</strong>. Heat is
           treated only as a drought-related stress. Other city objectives, such as air quality,
-          energy and mobility, are planned extensions.
+          energy and mobility, are planned extensions. The full list of 28 objectives follows the
+          problem areas of urban environmental management described by Srinivas (GDRC Concept Note
+          E-259).
         </p>
         <p>
           Satellite data are a fallback, not a replacement. If your city already has better local

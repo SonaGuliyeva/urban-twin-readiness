@@ -27,18 +27,7 @@ Cities increasingly need data-driven tools to plan Urban Digital Twins across a 
 
 ### 1. Select Policy Objectives
 
-The current version focuses on **floods, droughts and the urban water cycle** (6 objectives: flood risk reduction, stormwater and drainage, drought preparedness, water resource monitoring, urban heat island mitigation, green infrastructure planning). The remaining 24 objectives across the other thematic domains are planned extensions and are listed in the configurator but not yet selectable:
-
-- Urban Planning & Development
-- Mobility & Transport
-- Water & Sanitation
-- Green Spaces & Environment
-- Air Quality
-- Disaster Management
-- Energy
-- Public Safety & Security
-- Health & Social Services
-- Climate Risk & Resilience
+The current version focuses on **floods, droughts and the urban water cycle** (6 objectives: flood risk, stormwater and drainage, drought preparedness, water resource monitoring, urban heat, green and blue infrastructure). The list of 28 city objectives follows the problem areas of urban environmental management in Srinivas, *Urban Environmental Management: Concepts, Frameworks, and Practice* (GDRC Concept Note E-259), grouped by challenge: urban risks, water, air, land, waste, food security and energy, plus mobility from the same source's thematic areas. The remaining 22 are planned extensions, shown in the configurator with a draft tag for how well open satellite data can support them.
 
 ### 2. Select Technical Maturity Level
 
@@ -74,7 +63,7 @@ UrbanTwinReadiness was developed iteratively across three platforms, each chosen
 
 1. **base44** (no-code) — an initial prototype used to test whether the core interaction (objectives in → data profile out) made sense to a user, before investing further effort.
 2. **Lovable** (AI-assisted development) — a substantial rebuild into a real, inspectable React/TypeScript codebase. Lovable's built-in GitHub integration made it possible to move the prototype's logic into a version-controlled repository within minutes, enabling the five-level maturity model and dataset recommendation rules to be developed as real, extensible code rather than no-code configuration.
-3. **Independent deployment** — the Lovable-generated codebase was migrated into this **source-available** GitHub repository, licensed under PolyForm Noncommercial 1.0.0, and subsequently developed and deployed outside the Lovable platform. The application is currently deployed as a **Cloudflare Worker** on Cloudflare's **Workers Free plan**, under the author's own Cloudflare account. This removes dependence on base44 or Lovable for application hosting and credit-metered development, while the application still runs on managed serverless infrastructure (Cloudflare) rather than a privately owned server. All subsequent development, the 5-level maturity model, the 10-domain/30-objective taxonomy, direct EO/open-layer deep links, and the roadmap logic, was built directly against this independent codebase.
+3. **Independent deployment** — the Lovable-generated codebase was migrated into this **source-available** GitHub repository, licensed under PolyForm Noncommercial 1.0.0, and subsequently developed and deployed outside the Lovable platform. The application is currently deployed as a **Cloudflare Worker** on Cloudflare's **Workers Free plan**, under the author's own Cloudflare account. This removes dependence on base44 or Lovable for application hosting and credit-metered development, while the application still runs on managed serverless infrastructure (Cloudflare) rather than a privately owned server. All subsequent development, the 5-level maturity model, the 28-objective taxonomy based on Srinivas, direct EO/open-layer deep links, and the roadmap logic, was built directly against this independent codebase.
 
 ### Tech stack
 
