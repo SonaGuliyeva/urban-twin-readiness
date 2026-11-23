@@ -23,7 +23,7 @@ function HomePage() {
           <div>
             <p className="text-sm font-semibold text-primary">UrbanTwinReadiness</p>
             <h1 className="mt-4 mx-auto max-w-3xl text-5xl leading-[1.04] text-foreground sm:text-6xl lg:text-7xl">
-              Open satellite data for your city&rsquo;s digital twin
+              Open satellite data for your city digital twin
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-foreground/80">
               Whether your city already has a digital twin or is only planning one, find out which
