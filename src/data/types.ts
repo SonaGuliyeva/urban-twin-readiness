@@ -26,6 +26,9 @@ export interface PolicyObjective {
   alsoUses?: string[];
 }
 
+/** Whether a dataset is openly available or needs a commercial budget. */
+export type DataCost = "free" | "commercial";
+
 export interface Dataset {
   name: string;
   description: string;
@@ -35,6 +38,8 @@ export interface Dataset {
   provider?: string;
   resolution?: string;
   access?: string;
+  /** "free" (open data) by default; "commercial" when it needs a budget. */
+  cost?: DataCost;
 }
 
 export interface OpenSpatialLayer {

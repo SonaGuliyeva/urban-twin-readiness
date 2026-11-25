@@ -122,8 +122,8 @@ export function ReadinessPanel({
                 your twin
                 {eoGaps > 0 && (
                   <>
-                    ; <span className="font-medium text-eo">{eoGaps}</span> can be obtained free
-                    from satellites
+                    ; <span className="font-medium text-eo">{eoGaps}</span> can be obtained
+                    from satellite data
                   </>
                 )}
                 .
@@ -140,7 +140,7 @@ export function ReadinessPanel({
                     <span className="flex shrink-0 gap-1">
                       {d.source === "satellite" && (
                         <span className="rounded border border-eo/30 bg-eo/10 px-1.5 py-0.5 text-[11px] font-semibold text-eo">
-                          Free
+                          Satellite
                         </span>
                       )}
                       <span
@@ -161,7 +161,7 @@ export function ReadinessPanel({
           {eoGaps > 0 && platforms.length > 0 && (
             <div className="mt-6">
               <p className="text-sm font-semibold text-foreground">
-                Where to get the free satellite data
+                Where to get the satellite data
               </p>
               <ul className="mt-2 grid gap-2 sm:grid-cols-2">
                 {platforms.map((p) => (

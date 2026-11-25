@@ -41,6 +41,7 @@ function ConfigurePage() {
   const [start, setStart] = useState<StartKey>("status");
   const [status, setStatus] = useState<StatusMap>({});
   const [city, setCity] = useState("");
+  const [budget, setBudget] = useState(false);
 
   const toggle = (id: string) =>
     setSelected((prev) => {
@@ -68,8 +69,8 @@ function ConfigurePage() {
 
   // All datasets for the chosen objectives (full pool, independent of level)
   const pool = useMemo(
-    () => getDatasetsForObjectives(Array.from(selected), "predictive"),
-    [selected],
+    () => getDatasetsForObjectives(Array.from(selected), "predictive", budget),
+    [selected, budget],
   );
   const poolNames = useMemo(() => pool.map((d) => d.name), [pool]);
 
@@ -116,6 +117,7 @@ function ConfigurePage() {
         start,
         have: encodeStatus(poolNames, status),
         city: city.trim() || undefined,
+        budget: budget || undefined,
       },
     });
   };
@@ -262,6 +264,51 @@ function ConfigurePage() {
         </div>
       </section>
 
+      {/* Budget */}
+      <section className="mt-8 rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
+        <h2 className="font-serif text-2xl text-foreground">
+          Can the city invest in commercial data?
+        </h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Open satellite data, such as Copernicus and Landsat, is always included. If the city has a
+          budget, the profile also suggests commercial imagery — very-high-resolution, tasked or
+          all-weather — where it adds value.
+        </p>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          {[
+            {
+              on: false,
+              title: "Open data only",
+              desc: "Use freely available satellite data. No spending required.",
+            },
+            {
+              on: true,
+              title: "Budget for commercial data",
+              desc: "Also include paid higher-resolution or tasked imagery where it helps.",
+            },
+          ].map((o) => {
+            const active = budget === o.on;
+            return (
+              <button
+                key={o.title}
+                type="button"
+                onClick={() => setBudget(o.on)}
+                aria-pressed={active}
+                className={[
+                  "rounded-lg border p-4 text-left transition-all",
+                  active
+                    ? "border-primary bg-primary/5 shadow-card"
+                    : "border-border bg-surface-elevated hover:border-primary/40 hover:bg-muted",
+                ].join(" ")}
+              >
+                <span className="font-serif text-lg text-foreground">{o.title}</span>
+                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{o.desc}</p>
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
       {/* Data checklist */}
       <details className="group mt-8 rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
         <summary className="cursor-pointer list-none">
@@ -269,8 +316,7 @@ function ConfigurePage() {
             Optional: mark the data you already have
           </span>
           <span className="mt-1 block text-sm text-muted-foreground">
-            Skip this if you are not sure. You still get the minimum free satellite data to start
-            with.
+            Skip this if you are not sure. You still get the minimum satellite data to start with.
           </span>
         </summary>
         <div className="mt-6">

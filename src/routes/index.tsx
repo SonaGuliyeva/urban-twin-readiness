@@ -23,7 +23,7 @@ function HomePage() {
           <div>
             <p className="text-sm font-semibold text-primary">UrbanTwinReadiness</p>
             <h1 className="mt-4 mx-auto max-w-3xl text-5xl leading-[1.04] text-foreground sm:text-6xl lg:text-7xl">
-              Open satellite data for your city digital twin
+              Satellite data for your city digital twin
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-foreground/80">
               Whether your city already has a digital twin or is only planning one, find out which
@@ -76,7 +76,7 @@ function HomePage() {
             {
               n: "3",
               t: "Get your minimum",
-              d: "You get the open satellite data to add to your twin and where to download it. You can also mark what you already have.",
+              d: "You get the satellite data to add to your twin and where to download it. You can also mark what you already have.",
             },
           ].map((s) => (
             <li key={s.n} className="border-t-2 border-primary pt-5">
