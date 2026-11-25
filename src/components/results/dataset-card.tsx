@@ -12,7 +12,7 @@ const PRIORITY_LABEL: Record<Priority, string> = {
 };
 
 const SOURCE_LABEL: Record<SourceType, string> = {
-  satellite: "Free satellite data",
+  satellite: "Satellite data",
   ground: "Local sensors",
   "open-data": "Open data portal",
   administrative: "City records",
@@ -84,6 +84,11 @@ export function DatasetCard({
         >
           {SOURCE_LABEL[dataset.source]}
         </span>
+        {dataset.cost === "commercial" && (
+          <span className="rounded-md border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-xs font-semibold text-amber-700">
+            Commercial
+          </span>
+        )}
       </div>
 
       {onStatus && (

@@ -33,6 +33,7 @@ type Search = {
   start?: string;
   have?: string;
   city?: string;
+  budget?: boolean;
 };
 
 export const Route = createFileRoute("/results")({
@@ -52,6 +53,7 @@ export const Route = createFileRoute("/results")({
       start: typeof search.start === "string" ? search.start : undefined,
       have: typeof search.have === "string" ? search.have : undefined,
       city: typeof search.city === "string" ? search.city : undefined,
+      budget: search.budget === true || search.budget === "true" || undefined,
     };
   },
   head: () => ({
@@ -68,7 +70,7 @@ export const Route = createFileRoute("/results")({
 });
 
 function ResultsPage() {
-  const { objectives, level, city, start, have } = Route.useSearch();
+  const { objectives, level, city, start, have, budget } = Route.useSearch();
   const ids = objectives ? objectives.split(",").filter(Boolean) : [];
 
   // City's own answers: which datasets are already in its digital twin.
@@ -78,7 +80,7 @@ function ResultsPage() {
   useEffect(() => {
     // Answers given in the configurator arrive in the link and take priority
     if (have) {
-      const names = getDatasetsForObjectives(ids, "predictive").map((d) => d.name);
+      const names = getDatasetsForObjectives(ids, "predictive", budget).map((d) => d.name);
       setStatus(decodeStatus(names, have));
       return;
     }
@@ -88,7 +90,7 @@ function ResultsPage() {
     } catch {
       setStatus({});
     }
-  }, [storeKey, have]);
+  }, [storeKey, have, budget]);
   useEffect(() => {
     try {
       window.sessionStorage.setItem(storeKey, JSON.stringify(status));
@@ -102,7 +104,7 @@ function ResultsPage() {
     .map((id) => allObjectives.find((o) => o.id === id))
     .filter((o): o is NonNullable<typeof o> => Boolean(o));
 
-  const datasets = getDatasetsForObjectives(ids, level);
+  const datasets = getDatasetsForObjectives(ids, level, budget);
   const levelInfo = LEVEL_DESCRIPTIONS[level];
 
   // Minimum step: open satellite datasets for the chosen objectives (one entry per plain title)
@@ -119,8 +121,8 @@ function ResultsPage() {
       }
     >();
     const rank = { essential: 0, recommended: 1, optional: 2 } as const;
-    getDatasetsForObjectives(ids, "predictive")
-      .filter((d) => d.source === "satellite")
+    getDatasetsForObjectives(ids, "predictive", budget)
+      .filter((d) => d.source === "satellite" && d.cost !== "commercial")
       .forEach((d) => {
         const title = PLAIN_DATASETS[d.name]?.title ?? d.name;
         const cur = byTitle.get(title);
@@ -164,7 +166,8 @@ function ResultsPage() {
       <div className="mx-auto max-w-2xl px-6 py-24 text-center">
         <h1 className="font-serif text-3xl text-foreground">No objectives selected</h1>
         <p className="mt-3 text-muted-foreground">
-          Return to the configurator and select at least one environmental objective to generate a profile.
+          Return to the configurator and select at least one environmental objective to generate a
+          profile.
         </p>
         <Link
           to="/configure"
@@ -212,7 +215,8 @@ function ResultsPage() {
           {city ? `${city} — ` : ""}Urban Digital Twin readiness
         </h1>
         <p className="mt-3 max-w-3xl text-base text-muted-foreground">
-          Generated from {selected.length} environmental objective{selected.length === 1 ? "" : "s"} at the{" "}
+          Generated from {selected.length} environmental objective{selected.length === 1 ? "" : "s"}{" "}
+          at the{" "}
           <span className="font-medium text-foreground">
             {levelInfo.title.split(" — ")[0].toLowerCase()}
           </span>{" "}

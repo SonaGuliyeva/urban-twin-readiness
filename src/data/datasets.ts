@@ -1,4 +1,4 @@
-import type { Dataset, ImplementationLevel, Priority, SourceType } from "@/data/types";
+import type { DataCost, Dataset, ImplementationLevel, Priority, SourceType } from "@/data/types";
 import { OBJECTIVE_ALIASES } from "@/data/policy-objectives";
 
 const D = (
@@ -7,7 +7,7 @@ const D = (
   source: SourceType,
   priority: Priority,
   examples: string[],
-  meta?: { provider?: string; resolution?: string; access?: string },
+  meta?: { provider?: string; resolution?: string; access?: string; cost?: DataCost },
 ): Dataset => ({ name, description, source, priority, examples, ...meta });
 
 // Default metadata applied per source type when a dataset does not specify its own.
@@ -41,6 +41,7 @@ function enrichDataset(d: Dataset): Dataset {
     provider: d.provider ?? def.provider,
     resolution: d.resolution ?? def.resolution,
     access: d.access ?? def.access,
+    cost: d.cost ?? "free",
   };
 }
 
@@ -810,7 +811,73 @@ function priorityRank(p: Priority): number {
   return p === "essential" ? 0 : p === "recommended" ? 1 : 2;
 }
 
-export function getDatasetsForObjectives(ids: string[], level: ImplementationLevel): Dataset[] {
+// Commercial (paid) data that becomes available when the city has a budget.
+// These are tasked, very-high-resolution or all-weather products that complement
+// the open Copernicus / Landsat baseline. They are optional and deduplicated by name,
+// so the same product attached to several objectives appears once.
+const VHR_OPTICAL = D(
+  "Very-high-resolution optical imagery (tasked)",
+  "Sub-metre optical imagery that can be tasked on demand, for object-level mapping, change detection and damage assessment beyond what open Sentinel-2 / Landsat resolve.",
+  "satellite",
+  "optional",
+  ["Pléiades Neo", "Maxar WorldView", "Planet SkySat"],
+  {
+    resolution: "0.3–0.5 m, tasked",
+    access: "Commercial (tasking / subscription)",
+    cost: "commercial",
+  },
+);
+const DAILY_OPTICAL = D(
+  "Daily high-cadence optical imagery",
+  "Daily 3 m optical coverage for frequent monitoring of land-cover and vegetation change between the less frequent open acquisitions.",
+  "satellite",
+  "optional",
+  ["Planet PlanetScope"],
+  { resolution: "3 m, daily", access: "Commercial (subscription)", cost: "commercial" },
+);
+const COMMERCIAL_SAR = D(
+  "Commercial SAR tasking",
+  "All-weather, day-and-night radar that can be tasked sub-daily for rapid flood-extent mapping when open Sentinel-1 revisit is too slow.",
+  "satellite",
+  "optional",
+  ["ICEYE", "Capella Space"],
+  { resolution: "0.25–1 m, sub-daily tasking", access: "Commercial (tasking)", cost: "commercial" },
+);
+const HR_THERMAL = D(
+  "High-resolution thermal imagery",
+  "Commercial thermal imagery at building scale, finer than open ECOSTRESS / Landsat thermal, for detailed urban heat and surface-temperature mapping.",
+  "satellite",
+  "optional",
+  ["SatVu HotSat"],
+  { resolution: "3.5 m thermal, tasked", access: "Commercial (tasking)", cost: "commercial" },
+);
+
+const COMMERCIAL_BY_OBJECTIVE: Record<string, Dataset[]> = {
+  "flood-risk": [COMMERCIAL_SAR, VHR_OPTICAL],
+  stormwater: [VHR_OPTICAL],
+  drought: [DAILY_OPTICAL],
+  uhi: [HR_THERMAL, VHR_OPTICAL],
+  "green-infra": [VHR_OPTICAL, DAILY_OPTICAL],
+  biodiversity: [VHR_OPTICAL],
+  "land-use": [VHR_OPTICAL, DAILY_OPTICAL],
+  landslides: [COMMERCIAL_SAR, VHR_OPTICAL],
+  subsidence: [COMMERCIAL_SAR],
+  wildfire: [HR_THERMAL, DAILY_OPTICAL],
+};
+for (const [id, list] of Object.entries(COMMERCIAL_BY_OBJECTIVE)) {
+  DATASETS_BY_OBJECTIVE[id] = [...(DATASETS_BY_OBJECTIVE[id] ?? []), ...list];
+}
+
+/**
+ * Datasets needed for the selected objectives.
+ * @param budget when false (default), commercial datasets are excluded and only
+ *   open data is returned; when true, commercial options are included as well.
+ */
+export function getDatasetsForObjectives(
+  ids: string[],
+  level: ImplementationLevel,
+  budget = false,
+): Dataset[] {
   const map = new Map<string, Dataset>();
   const expanded = ids.flatMap((id) => [id, ...(OBJECTIVE_ALIASES[id] ?? [])]);
   expanded.forEach((id) => {
@@ -822,6 +889,10 @@ export function getDatasetsForObjectives(ids: string[], level: ImplementationLev
     });
   });
   let datasets = Array.from(map.values());
+
+  if (!budget) {
+    datasets = datasets.filter((d) => (d.cost ?? "free") === "free");
+  }
 
   if (level === "status") {
     datasets = datasets.filter((d) => d.priority === "essential" || d.source === "open-data");
