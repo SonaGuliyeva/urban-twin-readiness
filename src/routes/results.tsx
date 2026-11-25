@@ -211,7 +211,7 @@ function ResultsPage() {
   );
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-14">
+    <div className="mx-auto max-w-5xl px-6 py-14">
       {/* Header */}
       <header className="border-b border-border pb-8">
         <p className="text-xs font-semibold text-muted-foreground">Data requirement profile</p>
@@ -226,7 +226,6 @@ function ResultsPage() {
           </span>{" "}
           technical maturity level.
         </p>
-
         <div className="mt-6 flex flex-wrap gap-2">
           {selected.map((o) => (
             <span
@@ -237,7 +236,6 @@ function ResultsPage() {
             </span>
           ))}
         </div>
-
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <Link
             to="/configure"
@@ -252,17 +250,10 @@ function ResultsPage() {
           >
             Export / print
           </button>
-          <a
-            href="/UrbanTwinReadiness-brief.pdf"
-            download
-            className="inline-flex items-center gap-2 rounded-md border border-border bg-surface-elevated px-4 py-2 text-xs font-medium text-foreground transition-colors hover:bg-muted"
-          >
-            Download the brief (PDF)
-          </a>
         </div>
       </header>
 
-      {/* Your answers — a plain recap of what the city told the tool */}
+      {/* Your answers */}
       <section className="mt-8 rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
         <h2 className="font-serif text-2xl text-foreground">Your answers</h2>
         <div className="mt-5 grid gap-5 sm:grid-cols-3">
@@ -293,348 +284,120 @@ function ResultsPage() {
             </p>
           </div>
         </div>
-        <p className="mt-5 border-t border-border pt-4 text-sm leading-relaxed text-muted-foreground">
-          Based on this, below is the satellite data to add
-          {budget ? ", the commercial imagery a budget unlocks," : ""} and a step-by-step path for
-          where to start.
-        </p>
       </section>
 
-      {/* Jump-to section nav — sticky under the main site header */}
-      <nav
-        aria-label="Sections in this profile"
-        className="sticky top-0 z-10 -mx-6 mt-0 flex gap-1 overflow-x-auto border-b border-border bg-background/95 px-6 py-2.5 backdrop-blur supports-[backdrop-filter]:bg-background/80 print:hidden"
-      >
-        {[
-          { id: "readiness", label: "Data to add" },
-          ...(showCommercial ? [{ id: "commercial", label: "Commercial" }] : []),
-          { id: "summary", label: "Summary" },
-          { id: "datasets", label: "Datasets" },
-          { id: "roadmap", label: "Roadmap" },
-          ...(relevantCaseStudies.length > 0 ? [{ id: "in-practice", label: "In practice" }] : []),
-          ...(showHydro ? [{ id: "hydro", label: "Hydro focus" }] : []),
-          { id: "eo-sources", label: "EO & open data" },
-        ].map((s) => (
-          <a
-            key={s.id}
-            href={`#${s.id}`}
-            className="shrink-0 rounded-full px-3 py-1 text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-          >
-            {s.label}
-          </a>
-        ))}
-      </nav>
-
-      {/* The minimum: free satellite data to add to the twin */}
-      <section id="readiness" className="mt-10 scroll-mt-16">
-        <div className="rounded-xl border border-primary/30 bg-primary/5 p-6 shadow-card sm:p-8">
-          <h2 className="font-serif text-3xl text-foreground">
-            The minimum: add free satellite data to your twin
-          </h2>
-          <p className="mt-3 max-w-3xl text-base leading-relaxed text-foreground/85">
-            Open satellite data can bring environmental information into your digital twin. These
-            datasets are a first step for {selected.map((o) => o.label.toLowerCase()).join(", ")}.
-            If your city already has something more detailed (for example a LiDAR terrain model),
-            use your own. The satellite data are the starting point where nothing better exists. At
-            city scale the images are coarse, but they improve every year and give you a regular
-            overview of the whole city.
+      {/* 1. Data to add */}
+      <section className="mt-10">
+        <h2 className="font-serif text-3xl text-foreground">Satellite data to add</h2>
+        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+          These datasets bring environmental information into your digital twin. Where your city
+          already has something more detailed, keep it.
+        </p>
+        {toAdd.length === 0 && (
+          <p className="mt-5 rounded-lg border border-accent/40 bg-accent/10 p-4 text-sm text-foreground/85">
+            Everything on this list is already in your twin. Keep it up to date.
           </p>
-          {toAdd.length === 0 && (
-            <p className="mt-6 rounded-lg border border-accent/40 bg-accent/10 p-4 text-sm text-foreground/85">
-              Everything on this list is already in your twin. The next step is to keep it up to
-              date and to see below what else would make it more useful.
-            </p>
-          )}
-          {toAdd.length > 0 && Object.keys(status).length > 0 && (
-            <p className="mt-6 text-sm font-semibold text-foreground">
-              Add these first ({toAdd.length})
-            </p>
-          )}
-          <ul className="mt-3 grid gap-3 md:grid-cols-2">
-            {toAdd.map((d) => {
-              const plain = PLAIN_DATASETS[d.name];
-              const have = d.names.some((n) => status[n] === "have");
-              const local = d.names.map((n) => LOCAL_ALTERNATIVE[n]).find(Boolean);
-              return (
-                <li
-                  key={d.title}
-                  className={`rounded-lg border border-border bg-card p-4 ${have ? "opacity-70" : ""}`}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <p className="font-medium text-foreground">{d.title}</p>
-                    {have && (
-                      <span className="shrink-0 rounded border border-accent/40 bg-accent/10 px-1.5 py-0.5 text-[11px] font-semibold text-accent">
-                        Already in your twin
-                      </span>
-                    )}
-                  </div>
-                  {plain && (
-                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                      {plain.what}
-                    </p>
+        )}
+        <ul className="mt-5 grid gap-3 md:grid-cols-2">
+          {toAdd.map((d) => {
+            const plain = PLAIN_DATASETS[d.name];
+            const have = d.names.some((n) => status[n] === "have");
+            const local = d.names.map((n) => LOCAL_ALTERNATIVE[n]).find(Boolean);
+            return (
+              <li
+                key={d.title}
+                className={`rounded-lg border border-border bg-card p-4 ${have ? "opacity-70" : ""}`}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <p className="font-medium text-foreground">{d.title}</p>
+                  {have && (
+                    <span className="shrink-0 rounded border border-accent/40 bg-accent/10 px-1.5 py-0.5 text-[11px] font-semibold text-accent">
+                      Already in your twin
+                    </span>
                   )}
-                  {d.examples.length > 0 && (
-                    <p className="mt-2 text-xs text-muted-foreground">
-                      <span className="font-semibold text-foreground/80">Example sources: </span>
-                      {d.examples.slice(0, 3).join(", ")}
-                    </p>
-                  )}
-                  {local && (
-                    <p className="mt-2 rounded-md border border-recommended/30 bg-recommended/10 px-2.5 py-1.5 text-xs leading-relaxed text-foreground/85">
-                      {have
-                        ? "You already have this in your twin. Keep yours unless the satellite version covers more of the city."
-                        : local}
-                    </p>
-                  )}
-                  <DataLinks
-                    links={d.links}
-                    label={local ? "Free fallback" : have ? "Optional source" : "Open the data"}
-                  />
-                </li>
-              );
-            })}
-          </ul>
-          {inTwin.length > 0 && (
-            <details className="mt-4 rounded-lg border border-border bg-card p-4">
-              <summary className="cursor-pointer text-sm font-semibold text-foreground">
-                Already in your twin ({inTwin.length})
-              </summary>
-              <ul className="mt-3 space-y-1.5 text-sm text-muted-foreground">
-                {inTwin.map((d) => (
-                  <li key={d.title}>{d.title}</li>
-                ))}
-              </ul>
-              <p className="mt-3 text-xs text-muted-foreground">
-                Keep yours unless the satellite version covers more of the city.
-              </p>
-            </details>
-          )}
-          <p className="mt-6 text-sm font-semibold text-foreground">Where to download them</p>
-          <ul className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {EO_PLATFORMS.slice(0, 5).map((p) => (
-              <li key={p.name}>
-                <a
-                  href={p.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="block h-full rounded-md border border-border bg-card px-3 py-2 text-sm hover:border-eo/50 hover:bg-muted"
-                >
-                  <span className="font-medium text-eo">{p.name}</span>
-                  <span className="mt-0.5 block text-xs text-muted-foreground">
-                    {p.description}
-                  </span>
-                </a>
+                </div>
+                {plain && (
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{plain.what}</p>
+                )}
+                {d.examples.length > 0 && (
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    <span className="font-semibold text-foreground/80">Example sources: </span>
+                    {d.examples.slice(0, 3).join(", ")}
+                  </p>
+                )}
+                {local && (
+                  <p className="mt-2 rounded-md border border-recommended/30 bg-recommended/10 px-2.5 py-1.5 text-xs leading-relaxed text-foreground/85">
+                    {have
+                      ? "You already have this in your twin. Keep yours unless the satellite version covers more of the city."
+                      : local}
+                  </p>
+                )}
+                <DataLinks
+                  links={d.links}
+                  label={local ? "Free fallback" : have ? "Optional source" : "Open the data"}
+                />
               </li>
-            ))}
-          </ul>
-          <p className="mt-6 text-xs leading-relaxed text-muted-foreground">
-            Based on the author&rsquo;s reviews:{" "}
-            {EVIDENCE_BASE.map((e, i) => (
-              <span key={e.url}>
-                {i > 0 && "; "}
-                <a
-                  href={e.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-eo underline-offset-2 hover:underline"
-                  title={e.citation}
-                >
-                  {e.short}
-                </a>
-              </span>
-            ))}
-            . Priorities are an expert judgement and are meant for screening.
-          </p>
-        </div>
-
-        {Object.keys(status).length > 0 && (
-          <div className="mt-6">
-            <ReadinessPanel
-              datasets={datasets}
-              status={status}
-              onReset={() => setStatus({})}
-              platforms={[]}
-            />
-          </div>
+            );
+          })}
+        </ul>
+        {inTwin.length > 0 && (
+          <details className="mt-4 rounded-lg border border-border bg-card p-4">
+            <summary className="cursor-pointer text-sm font-semibold text-foreground">
+              Already in your twin ({inTwin.length})
+            </summary>
+            <ul className="mt-3 space-y-1.5 text-sm text-muted-foreground">
+              {inTwin.map((d) => (
+                <li key={d.title}>{d.title}</li>
+              ))}
+            </ul>
+          </details>
         )}
       </section>
 
-      {/* Commercial imagery — only when the city indicated a budget */}
+      {/* 2. Commercial imagery â only when the city indicated a budget */}
       {showCommercial && (
-        <section id="commercial" className="mt-10 scroll-mt-16">
-          <div className="rounded-xl border border-amber-500/30 bg-amber-500/5 p-6 shadow-card sm:p-8">
-            <h2 className="font-serif text-3xl text-foreground">
-              With a budget: commercial imagery
-            </h2>
-            <p className="mt-3 max-w-3xl text-base leading-relaxed text-foreground/85">
-              You indicated the city can invest in data. These paid products add resolution, speed
-              or all-weather coverage beyond the open baseline above. Use them where the free data
-              is not enough — the open data stays the foundation.
-            </p>
-            <ul className="mt-6 grid gap-3 md:grid-cols-2">
-              {commercialDatasets.map((d) => (
-                <li key={d.name} className="rounded-lg border border-border bg-card p-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <p className="font-medium text-foreground">{d.name}</p>
-                    <span className="shrink-0 rounded border border-amber-500/40 bg-amber-500/10 px-1.5 py-0.5 text-[11px] font-semibold text-amber-700">
-                      Commercial
-                    </span>
-                  </div>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                    {d.description}
+        <section className="mt-10">
+          <h2 className="font-serif text-3xl text-foreground">With a budget: commercial imagery</h2>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+            You indicated the city can invest in data. These paid products add resolution, speed or
+            all-weather coverage beyond the open baseline. Use them where free data is not enough.
+          </p>
+          <ul className="mt-5 grid gap-3 md:grid-cols-2">
+            {commercialDatasets.map((d) => (
+              <li key={d.name} className="rounded-lg border border-border bg-card p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <p className="font-medium text-foreground">{d.name}</p>
+                  <span className="shrink-0 rounded border border-amber-500/40 bg-amber-500/10 px-1.5 py-0.5 text-[11px] font-semibold text-amber-700">
+                    Commercial
+                  </span>
+                </div>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                  {d.description}
+                </p>
+                {d.examples.length > 0 && (
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    <span className="font-semibold text-foreground/80">Examples: </span>
+                    {d.examples.join(", ")}
                   </p>
-                  {d.examples.length > 0 && (
-                    <p className="mt-2 text-xs text-muted-foreground">
-                      <span className="font-semibold text-foreground/70">Examples: </span>
-                      {d.examples.join(", ")}
-                    </p>
-                  )}
-                  {(d.resolution || d.access) && (
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      {[d.resolution, d.access].filter(Boolean).join(" · ")}
-                    </p>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
+                )}
+                {(d.resolution || d.access) && (
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {[d.resolution, d.access].filter(Boolean).join(" · ")}
+                  </p>
+                )}
+              </li>
+            ))}
+          </ul>
         </section>
       )}
 
-      {/* Summary */}
-      <section id="summary" className="mt-12 grid gap-6 lg:grid-cols-[2fr_1fr]">
-        <article className="rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
-          <p className="text-xs font-semibold text-accent">Summary</p>
-          <h2 className="mt-2 font-serif text-2xl text-foreground">
-            {start === "none" ? "Starting from scratch" : levelInfo.title}
-          </h2>
-          <p className="mt-4 text-base leading-relaxed text-foreground/80">
-            {start === "none"
-              ? "Your city has no digital twin yet. The first step is a static model (level 1) that holds the core layers below. Free satellite data can fill many of them."
-              : levelInfo.short}
-          </p>
-          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-            The selected configuration requires{" "}
-            <span className="font-medium text-foreground">{datasets.length} datasets</span>, of
-            which{" "}
-            <span className="font-medium text-foreground">{essentialCount} are essential</span> and{" "}
-            <span className="font-medium text-foreground">
-              {satelliteCount} can be sourced from Earth Observation
-            </span>
-            .
-          </p>
-
-          <div className="mt-6 border-t border-border pt-6">
-            <p className="text-xs font-semibold text-muted-foreground">
-              {start === "none"
-                ? "Once level 1 is reached, a city can"
-                : "At this level, a city can"}
-            </p>
-            <ul className="mt-3 space-y-2">
-              {levelInfo.capable.map((item) => (
-                <li key={item} className="flex gap-2.5 text-sm leading-relaxed text-foreground/80">
-                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </article>
-
-        <aside className="grid grid-cols-2 gap-4 lg:grid-cols-1">
-          <StatCard label="Datasets identified" value={datasets.length} />
-          <StatCard label="Essential" value={essentialCount} accent="essential" />
-          <StatCard label="Satellite / EO" value={satelliteCount} accent="eo" />
-          <StatCard label="Reference platforms" value={platforms.length} />
-        </aside>
-      </section>
-
-      {/* Turin worked example lives on its own page */}
-      {city?.trim().toLowerCase() === "turin" ? (
-        <section className="mt-10 rounded-xl border border-border bg-card p-6 print:hidden">
-          <h2 className="font-serif text-2xl text-foreground">This profile was actually used</h2>
-          <p className="mt-3 max-w-3xl leading-relaxed text-foreground/85">
-            These are Turin's own answers. The city ended up holding eight of the thirteen essential
-            datasets listed below; the five it did not, radar imagery, soil moisture, precipitation
-            records, evaporative stress and a standardised precipitation index, turned out to be the
-            limits of what the result could then say. Attaching the rest to 5,918 city objects left
-            1,662 of them, 28%, meeting at least one environmental check.
-          </p>
-          <Link
-            to="/turin"
-            className="mt-5 inline-flex items-center rounded-md border border-border bg-surface-elevated px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
-          >
-            See what came out of it &rarr;
-          </Link>
-        </section>
-      ) : (
-        <p className="mt-10 text-sm text-muted-foreground print:hidden">
-          Want to see how a real city did it?{" "}
-          <Link to="/turin" className="font-medium text-primary underline-offset-4 hover:underline">
-            See how Turin added satellite data to its digital twin
-          </Link>
-          .
+      {/* 3. Where to start */}
+      <section className="mt-10">
+        <h2 className="font-serif text-3xl text-foreground">Where to start</h2>
+        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+          You do not need everything at once. A suggested order, starting from the lowest-cost,
+          highest-value sources.
         </p>
-      )}
-
-      {/* Why: situational awareness before the event */}
-      <section className="mt-10 rounded-xl border border-primary/25 bg-primary/5 p-6 sm:p-8">
-        <h2 className="font-serif text-2xl text-foreground">Be ready before the event</h2>
-        <p className="mt-3 max-w-3xl leading-relaxed text-foreground/85">
-          Satellite data are most useful at the start of a response, during early situation
-          assessment, when a fast overview of where conditions are changing matters more than fine
-          detail. If these layers are already in your digital twin, that overview is available the
-          moment a flood or drought develops, and it can be refreshed regularly across the whole
-          city, not only after an alert.
-        </p>
-      </section>
-
-      {/* Datasets */}
-      <section id="datasets" className="mt-12">
-        <SectionHeading eyebrow="Data inventory" title="Minimum required datasets" />
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
-          {datasets.map((d) => (
-            <DatasetCard
-              key={d.name}
-              dataset={d}
-              status={status[d.name]}
-              onStatus={(v) =>
-                setStatus((prev) => {
-                  const next = { ...prev };
-                  if (v) next[d.name] = v;
-                  else delete next[d.name];
-                  return next;
-                })
-              }
-            />
-          ))}
-        </div>
-      </section>
-
-      {/* Interpretation for the City */}
-      <section id="interpretation" className="mt-16">
-        <SectionHeading
-          eyebrow="Interpretation for the city"
-          title="Key limitations at this level"
-        />
-        <div className="mt-6 max-w-2xl">
-          <PathwayCard title="Key limitations" tone="muted" items={levelInfo.missing} />
-        </div>
-      </section>
-
-      {/* City data roadmap — a phased path forward for this specific configuration */}
-      <CollapsibleSection
-        id="roadmap"
-        eyebrow="Roadmap"
-        title={city ? `Recommended path for ${city}` : "Recommended path for your city"}
-        hint="Three phases: essential datasets, recommended datasets, next maturity level"
-      >
-        <p className="max-w-3xl text-base leading-relaxed text-foreground/80">
-          Not every dataset above needs to be acquired at once. This is a suggested sequence for
-          building toward the selected configuration, starting from the lowest-cost, highest-value
-          sources.
-        </p>
-
         <ol className="mt-6 space-y-4">
           <li className="grid gap-3 rounded-lg border border-border bg-card p-5 shadow-card sm:grid-cols-[120px_1fr] sm:gap-6">
             <div>
@@ -646,8 +409,8 @@ function ResultsPage() {
             <div>
               <h3 className="font-serif text-lg text-foreground">Essential datasets</h3>
               <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                These are non-negotiable for the selected objectives — prioritise acquiring them
-                first, favouring open-access sources where available.
+                Non-negotiable for the selected objectives — acquire these first, favouring open
+                sources where available.
               </p>
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {datasets
@@ -663,7 +426,6 @@ function ResultsPage() {
               </div>
             </div>
           </li>
-
           {datasets.some((d) => d.priority === "recommended") && (
             <li className="grid gap-3 rounded-lg border border-border bg-card p-5 shadow-card sm:grid-cols-[120px_1fr] sm:gap-6">
               <div>
@@ -675,9 +437,7 @@ function ResultsPage() {
               <div>
                 <h3 className="font-serif text-lg text-foreground">Recommended datasets</h3>
                 <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                  Once essentials are in place, these sharpen accuracy and add resolution —
-                  typically ground sensors or administrative records requiring a data-sharing
-                  agreement.
+                  Once essentials are in place, these sharpen accuracy and add resolution.
                 </p>
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   {datasets
@@ -694,7 +454,6 @@ function ResultsPage() {
               </div>
             </li>
           )}
-
           <li className="grid gap-3 rounded-lg border border-border bg-card p-5 shadow-card sm:grid-cols-[120px_1fr] sm:gap-6">
             <div>
               <p className="text-xs font-semibold text-accent">Phase 3</p>
@@ -710,8 +469,8 @@ function ResultsPage() {
               </h3>
               <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
                 {nextLevelInfo
-                  ? "Once the data foundation above is in place, these steps move the city toward the next technical maturity level."
-                  : "This configuration already reflects the most advanced technical maturity level. Focus shifts to sustaining data quality and governance."}
+                  ? "Once the data foundation above is in place, these steps move toward the next maturity level."
+                  : "This is already the most advanced maturity level. Focus shifts to sustaining data quality and governance."}
               </p>
               <ul className="mt-3 space-y-1.5">
                 {(nextLevelInfo?.nextSteps ?? levelInfo.nextSteps).map((step) => (
@@ -727,276 +486,19 @@ function ResultsPage() {
             </div>
           </li>
         </ol>
-      </CollapsibleSection>
+      </section>
 
-      {/* Real-world case studies relevant to the selected objectives */}
-      {relevantCaseStudies.length > 0 && (
-        <CollapsibleSection
-          id="in-practice"
-          eyebrow="In practice"
-          title="Cities already doing this"
-          hint={`${relevantCaseStudies.length} documented deployment${relevantCaseStudies.length === 1 ? "" : "s"}`}
-        >
-          <p className="text-sm text-muted-foreground">
-            Publicly documented deployments related to the objectives you selected.
-          </p>
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            {relevantCaseStudies.map((cs) => (
-              <div
-                key={cs.name}
-                className="rounded-xl border border-border bg-card p-5 shadow-card"
-              >
-                <p className="text-xs font-semibold text-muted-foreground">{cs.city}</p>
-                <h3 className="mt-1 font-serif text-lg text-foreground">{cs.name}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-foreground/85">{cs.summary}</p>
-                <p className="mt-3 text-xs text-muted-foreground">Source: {cs.source}</p>
-              </div>
-            ))}
-          </div>
-        </CollapsibleSection>
-      )}
+      <p className="mt-10 text-sm text-muted-foreground print:hidden">
+        Want to see how a real city did it?{" "}
+        <Link to="/turin" className="font-medium text-primary underline-offset-4 hover:underline">
+          See how Turin added satellite data to its digital twin
+        </Link>
+        .
+      </p>
 
-      {/* Hydrological hazards focus — flood and/or drought */}
-      {showHydro && (
-        <CollapsibleSection
-          id="hydro"
-          eyebrow="Hydrological hazards focus"
-          title={
-            hydroHazards.length === 2
-              ? "Flood and drought — EO operational reference"
-              : hydroHazards[0] === "flood"
-                ? "Flood — EO operational reference"
-                : "Drought — EO operational reference"
-          }
-          hint="Sensors, indicators, integration approaches and services"
-        >
-          <p className="max-w-3xl text-base leading-relaxed text-foreground/80">
-            Adapted from a peer-reviewed review of Earth Observation for flood and drought
-            management (Guliyeva &amp; Boccardo, 2026).
-          </p>
-
-          <div className="mt-8">
-            <h3 className="text-xs font-semibold text-accent">
-              EO sensor families and operational roles
-            </h3>
-            <div className="mt-4 overflow-x-auto rounded-lg border border-border bg-card shadow-card">
-              <table className="w-full min-w-[720px] text-left text-sm">
-                <thead className="border-b border-border bg-surface-elevated">
-                  <tr className="text-xs font-semibold text-muted-foreground">
-                    <th className="px-4 py-3">Sensor family</th>
-                    <th className="px-4 py-3">Key missions</th>
-                    <th className="px-4 py-3">Resolution / revisit</th>
-                    <th className="px-4 py-3">Operational role</th>
-                    <th className="px-4 py-3">Limitations</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {hydroSensors.map((f) => (
-                    <tr
-                      key={f.family}
-                      className="border-b border-border/60 align-top last:border-0"
-                    >
-                      <td className="px-4 py-3 font-medium text-foreground">{f.family}</td>
-                      <td className="px-4 py-3 text-muted-foreground">{f.missions.join(", ")}</td>
-                      <td className="px-4 py-3 text-muted-foreground">{f.resolution}</td>
-                      <td className="px-4 py-3 text-foreground/85">
-                        <ul className="space-y-1">
-                          {f.roles
-                            .filter((r) => hydroHazards.includes(r.hazard))
-                            .map((r) => (
-                              <li key={r.hazard}>
-                                <span className="text-xs font-semibold text-accent">
-                                  {r.hazard}
-                                </span>{" "}
-                                — {r.description}
-                              </li>
-                            ))}
-                        </ul>
-                      </td>
-                      <td className="px-4 py-3 text-muted-foreground">{f.limitations}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div className="mt-10">
-            <h3 className="text-xs font-semibold text-accent">
-              EO-derived indicators for hydrological monitoring
-            </h3>
-            <div className="mt-4 overflow-x-auto rounded-lg border border-border bg-card shadow-card">
-              <table className="w-full min-w-[720px] text-left text-sm">
-                <thead className="border-b border-border bg-surface-elevated">
-                  <tr className="text-xs font-semibold text-muted-foreground">
-                    <th className="px-4 py-3">Group</th>
-                    <th className="px-4 py-3">Indicator</th>
-                    {hydroHazards.includes("flood") && <th className="px-4 py-3">Flood</th>}
-                    {hydroHazards.includes("drought") && <th className="px-4 py-3">Drought</th>}
-                    <th className="px-4 py-3">EO sources</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {hydroIndicators.map((i) => (
-                    <tr
-                      key={i.indicator}
-                      className="border-b border-border/60 align-top last:border-0"
-                    >
-                      <td className="px-4 py-3 text-xs font-semibold text-muted-foreground">
-                        {i.group}
-                      </td>
-                      <td className="px-4 py-3 font-medium text-foreground">{i.indicator}</td>
-                      {hydroHazards.includes("flood") && (
-                        <td className="px-4 py-3 text-foreground/85">{i.flood ?? "—"}</td>
-                      )}
-                      {hydroHazards.includes("drought") && (
-                        <td className="px-4 py-3 text-foreground/85">{i.drought ?? "—"}</td>
-                      )}
-                      <td className="px-4 py-3 text-muted-foreground">{i.sources.join(", ")}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div className="mt-10">
-            <h3 className="text-xs font-semibold text-accent">
-              Multi-source EO integration approaches
-            </h3>
-            <div className="mt-4 grid gap-4 md:grid-cols-2">
-              {HYDRO_INTEGRATION_APPROACHES.map((a) => (
-                <div
-                  key={a.approach}
-                  className="rounded-lg border border-border bg-card p-5 shadow-card"
-                >
-                  <div className="flex items-baseline justify-between gap-3">
-                    <h4 className="font-serif text-base text-foreground">{a.approach}</h4>
-                    <span className="text-xs font-semibold text-muted-foreground">{a.scale}</span>
-                  </div>
-                  <p className="mt-2 text-sm text-foreground/85">{a.data}</p>
-                  <p className="mt-2 text-xs italic text-muted-foreground">Example — {a.example}</p>
-                  <p className="mt-3 border-t border-border pt-3 text-xs text-muted-foreground">
-                    {a.performance}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-10">
-            <h3 className="text-xs font-semibold text-accent">
-              Operational EO services for{" "}
-              {hydroHazards.length === 2 ? "flood and drought" : hydroHazards[0]}
-            </h3>
-            <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {hydroServices.map((s) => (
-                <a
-                  key={s.name}
-                  href={s.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group rounded-lg border border-border bg-card p-5 shadow-card transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-elevated"
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <h4 className="font-serif text-base leading-tight text-foreground">{s.name}</h4>
-                    <span className="shrink-0 rounded-full border border-border bg-surface-elevated px-2 py-0.5 text-xs font-semibold text-muted-foreground">
-                      {s.scope}
-                    </span>
-                  </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{s.description}</p>
-                  <p className="mt-3 text-xs font-semibold text-accent">{s.hazards.join(" · ")}</p>
-                </a>
-              ))}
-            </div>
-          </div>
-
-          <p className="mt-6 text-xs text-muted-foreground">
-            Adapted from{" "}
-            <a
-              href={HYDRO_REFERENCE.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline decoration-dotted underline-offset-2 hover:text-foreground"
-            >
-              {HYDRO_REFERENCE.citation}
-            </a>{" "}
-            (DOI: {HYDRO_REFERENCE.doi}).
-          </p>
-        </CollapsibleSection>
-      )}
-
-      {/* Earth Observation sources & open spatial layers (collapsed) */}
-      <CollapsibleSection
-        id="eo-sources"
-        eyebrow="Earth Observation & open data"
-        title="Where to get the data"
-        hint="EO platforms and open spatial layers"
-      >
-        <div>
-          <h3 className="text-xs font-semibold text-accent">Role of satellite and EO data</h3>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-foreground/80">
-            Earth Observation provides repeated, spatially consistent measurements across the entire
-            urban area. It supports the monitoring of variables that are difficult to capture with
-            ground networks alone — atmospheric composition, land surface temperature, vegetation
-            condition, soil moisture, and morphological change.
-          </p>
-          <p className="mt-3 max-w-3xl text-base leading-relaxed text-foreground/80">
-            EO data is most effective when integrated with in-situ sensors and administrative
-            records. The Copernicus programme provides a free, open, and operationally maintained
-            baseline, complemented by national and thematic platforms.
-          </p>
-        </div>
-
-        <div className="mt-10">
-          <h3 className="text-xs font-semibold text-accent">Key Earth Observation sources</h3>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {platforms.map((p) => (
-              <a
-                key={p.name}
-                href={p.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group rounded-lg border border-border bg-card p-5 shadow-card transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-elevated"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <h3 className="font-serif text-lg leading-tight text-foreground">{p.name}</h3>
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    className="mt-1 h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-accent"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M7 17L17 7M9 7h8v8" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </div>
-                <p className="mt-2 text-sm text-muted-foreground">{p.description}</p>
-              </a>
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-10">
-          <h3 className="text-xs font-semibold text-accent">Open spatial layers for integration</h3>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-foreground/80">
-            The following open spatial datasets provide a foundational geospatial baseline for an
-            Urban Digital Twin. They complement Earth Observation products by adding street
-            networks, buildings, terrain and administrative reference layers — and are typically
-            free to access.
-          </p>
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            {OPEN_SPATIAL_LAYERS.map((layer) => (
-              <OSLayerCard key={layer.name} layer={layer} />
-            ))}
-          </div>
-        </div>
-      </CollapsibleSection>
-
-      {/* Footer note */}
-      <p className="mt-16 border-t border-border pt-6 text-xs text-muted-foreground">
-        This profile is a research-based decision-support output. It is intended to inform early
-        scoping and stakeholder discussion, not to replace a formal technical feasibility study.
+      <p className="mt-12 border-t border-border pt-6 text-xs text-muted-foreground">
+        This profile is a research-based decision-support output, intended to inform early scoping
+        and stakeholder discussion, not to replace a formal technical feasibility study.
       </p>
     </div>
   );
