@@ -20,7 +20,7 @@ var LAYER={land:0,wat:1,veg:2,sq:3,brg:4,road:5,bld:6};
 // In the screening view the legend doubles as a filter: each row can be switched off
 // so that only the objects of interest stay on screen.
 var FILT={};                       // "<mode>:<bucket>" -> false when switched off
-var FKEYS={screening:["0","1","2","3","wat"],
+var FKEYS={screening:["0","1","2","3","na","wat"],
            heat:["h0","h1","h2","nm","wat"],
            drought:["d0","d1","d2","wat"],
            flood:["f0","f1","f2","f3"],
@@ -32,6 +32,7 @@ function bucket(f){
   var p=f.p;
   if(mode==="screening"){
     if(f.kind==="wat")return "wat";
+    if(f.kind!=="road"&&!(+p.N_INDICATORS||0)&&(+p.N_EVALUATED||0)===0)return "na";
     return String(Math.min(3,(f.kind==="road")?(+p.n_criteria||0):(+p.N_INDICATORS||0)));
   }
   if(f.kind==="road")return null;
@@ -46,9 +47,9 @@ function bucket(f){
     return y===0?"d0":(y<3?"d1":"d2");
   }
   if(mode==="green"){
-    if(p.GREEN_INFRA_DEFICIT==="yes")return "gd";
-    var k=p.CANOPY_PCT; if(k==null)return "nm";
-    return k>=30?"g0":(k>=10?"g1":"g2");
+    if(p.LOW_SUMMER_GREENNESS==="yes")return "gd";
+    var k=p.NDVI_S2_AUG; if(k==null)return "nm";
+    return k>=0.40?"g0":(k>=0.25?"g1":"g2");
   }
   if(mode==="flood"){
     if(p.FLOODED_2016==="yes")return "f3";
@@ -125,25 +126,27 @@ function colourOf(f){
   var p=f.p;
   if(f.kind==="road"){ return (+p.n_criteria>0)?SEV[Math.min(3,+p.n_criteria)]:BASE_COL.road; }
   if(f.kind==="wat"&&mode!=="flood"){ return BASE_COL.wat; }
-  if(mode==="screening"){ var n=+p.N_INDICATORS||0; return n?SEV[Math.min(3,n)]:(BASE_COL[f.kind]||SEV[0]); }
+  if(mode==="screening"){ var n=+p.N_INDICATORS||0;
+    if(!n&&(+p.N_EVALUATED||0)===0&&f.kind!=="wat")return NODATA;
+    return n?SEV[Math.min(3,n)]:(BASE_COL[f.kind]||SEV[0]); }
   if(mode==="heat"){ var v=p.LST_MEASURED_C; if(v==null)return NODATA;
     return ramp((v-36)/(44-36),HEAT); }
   if(mode==="drought"){ var y=+p.N_YEARS_STRESSED; if(!y)return BASE_COL[f.kind]||SEV[0];
     return ramp(y/5,[rgb("#e8d6a0"),rgb("#c98a2e"),rgb("#8c3b1e")]); }
-  if(mode==="green"){ if(p.GREEN_INFRA_DEFICIT==="yes")return "rgb(158,47,28)";
-    var k=p.CANOPY_PCT; if(k==null)return NODATA;
-    return ramp(Math.min(1,k/45),[rgb("#e7e2d2"),rgb("#9db882"),rgb("#3f6b3a")]); }
+  if(mode==="green"){ if(p.LOW_SUMMER_GREENNESS==="yes")return "rgb(158,47,28)";
+    var k=p.NDVI_S2_AUG; if(k==null)return NODATA;
+    return ramp(Math.min(1,Math.max(0,(k-0.10)/0.45)),[rgb("#e7e2d2"),rgb("#9db882"),rgb("#3f6b3a")]); }
   if(mode==="flood"){ if(p.FLOODED_2016==="yes")return "rgb(30,90,150)";
     var q=+p.PGRA_M_PCT; if(!q)return BASE_COL[f.kind]||SEV[0];
     return ramp(q/100,[rgb("#b8cfe0"),rgb("#2e6c9e")]); }
   return SEV[0];
 }
 var LEG={
- screening:["All four objectives",[[BASE_COL.bld,"nothing flagged"],[SEV[1],"1 indicator"],[SEV[2],"2 indicators"],[SEV[3],"3 or more"],[BASE_COL.wat,"water"]]],
+ screening:["All four objectives",[[BASE_COL.bld,"nothing flagged"],[SEV[1],"1 indicator"],[SEV[2],"2 indicators"],[SEV[3],"3 or more"],[NODATA,"nothing could be checked"],[BASE_COL.wat,"water"]]],
  heat:["Reduce urban heat · surface temperature, 22 July 2022",[["rgb(240,228,195)","below 39 °C"],["rgb(214,142,70)","39 to 41 °C"],["rgb(140,36,22)","41 °C and above"],[NODATA,"not measured on this object"],[BASE_COL.wat,"water, not measured"]]],
  drought:["Prepare for drought · summers under stress, 2018–2025",[[BASE_COL.bld,"none"],["rgb(213,168,92)","1 to 2 years"],["rgb(177,106,40)","3 to 4 years"],[BASE_COL.wat,"water, not assessed"]]],
  flood:["Reduce river flood risk · exposure",[[SEV[0],"outside the hazard zone"],["rgb(184,207,224)","partly in the hazard zone"],["rgb(46,108,158)","fully in the hazard zone"],["rgb(30,90,150)","flooded in November 2016"]]],
- green:["Expand green and blue infrastructure · tree canopy",[["rgb(63,107,58)","30 % and above under tree crowns"],["rgb(157,184,130)","10 to 30 %"],["rgb(231,226,210)","below 10 %"],["rgb(158,47,28)","little greenery and much sealed surface"],[NODATA,"canopy not measured"]]]
+ green:["Expand green and blue infrastructure · summer greenness",[["rgb(63,107,58)","green in August"],["rgb(157,184,130)","partly green"],["rgb(231,226,210)","sparse"],["rgb(158,47,28)","almost bare in August"],[NODATA,"not measured on this object"]]]
 };
 function setLegend(){ var L=LEG[mode]; legend.hidden=false;
   root.querySelector("#legend-title").textContent=L[0];
@@ -335,11 +338,11 @@ function show(f){
     '<span class="dot" style="background:'+SEV[Math.min(3,n)]+'"></span>'+flag+
     (n?" &middot; "+n+(n>1?" indicators":" indicator"):"")+'</span>';
   if(!road){
-    var appl=0;
-    ["FLOOD_EXPOSURE","DROUGHT_HEAT_EXPOSURE","GREEN_INFRA_DEFICIT","DROUGHT_VEG_IMPACT"].forEach(function(k){
-      if(p[k]!=null&&p[k]!=="")appl++; });
-    if(appl)h+='<p class="lead" style="margin-top:10px">Of the '+appl+' checks that apply to this kind of object, '+
-      (n?('it fails '+n+'.'):'it passes all.')+'</p>';
+    var ev=+p.N_EVALUATED||0, ap=+p.N_APPLICABLE||0;
+    h+='<p class="lead" style="margin-top:10px">'+(ev===0
+      ? 'None of the '+ap+' checks for this kind of object could be made here, so nothing is claimed about it.'
+      : ('Of the '+ap+' checks for this kind of object, '+ev+' could be made'+
+         (ev<ap?' with the data available':'')+', and '+(n?('it fails '+n+'.'):'it passes them all.')))+'</p>';
   }
 
   if(road){
@@ -380,7 +383,7 @@ function show(f){
       ["Share inside the hazard zone"+tech("1-in-100 years or more often"),num(p.PGRA_M_PCT,0," %")],
       ["Was it flooded in November 2016",p.FLOODED_2016||null],
       ["Height above the nearest watercourse"+tech("lower means more exposed"),num(p.HAND_MEAN,1," m")],
-      ["Flooding and drought on the same object",p.MULTI_STRESS||null]]),
+      ["Flooding and drought on the same object",p.CO_OCCURRING_STRESSES||null]]),
       "The hazard zone comes from the official flood maps of the Po River District; the 2016 extent was mapped from satellite images by the Copernicus emergency service. Both are outlines on a map, so these shares are exact for this object.",
       floodLead(p));
 

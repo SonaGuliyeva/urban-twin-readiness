@@ -470,7 +470,7 @@ function ResultsPage() {
           <h2 className="font-serif text-2xl text-foreground">This profile was actually used</h2>
           <p className="mt-3 max-w-3xl leading-relaxed text-foreground/85">
             These are Turin's own answers, and most of the data below is what the city went on to
-            add. Attached to 5,918 city objects, it left 1,662 of them, 28%, with at least one
+            add. Attached to 5,918 city objects, it left 1,808 of them, 31%, with at least one
             environmental problem worth looking at.
           </p>
           <Link

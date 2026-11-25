@@ -117,8 +117,9 @@ export const TURIN_SUMMARY = {
  */
 export const OBJECT_SUMMARY = {
   objectCount: 5918,
-  flaggedCount: 1662,
-  flaggedPct: 28,
+  flaggedCount: 1808,
+  flaggedPct: 31,
+  notAssessedCount: 567,
   classes: 6,
   contextTemperatureCount: 3676,
   heatEvaluatedCount: 2242,
