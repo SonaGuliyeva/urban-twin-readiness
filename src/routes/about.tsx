@@ -66,11 +66,11 @@ function AboutPage() {
 
         <h2 className="!mt-12 font-serif text-2xl text-foreground">What it covers now</h2>
         <p>
-          The current version covers <strong>floods</strong> and <strong>droughts</strong>. Heat is
-          treated only as a drought-related stress. Other city objectives, such as air quality,
-          energy and mobility, are planned extensions. The full list of 28 objectives follows the
-          problem areas of urban environmental management described by Srinivas (GDRC Concept Note
-          E-259).
+          The current version covers <strong>floods</strong> and <strong>droughts</strong>, with
+          urban heat as a related stress. Other objectives, such as air quality, land and
+          biodiversity, are planned extensions. The objectives are grouped under the environmental
+          themes of the European Green Capital Award, mapped to the targets of SDG 11, and validated
+          against the climate strategies of eight European cities (see References below).
         </p>
         <p>
           Satellite data are a fallback, not a replacement. If your city already has better local
@@ -425,6 +425,69 @@ function AboutPage() {
         </p>
 
         <h2 className="!mt-12 font-serif text-2xl text-foreground">References</h2>
+        <p className="text-sm text-muted-foreground">
+          The sources the tool&rsquo;s objectives, data and method draw on.
+        </p>
+
+        <h3 className="!mt-8 font-serif text-lg text-foreground">Objective framework and policy</h3>
+        <ul className="list-none space-y-2 text-sm text-muted-foreground">
+          <li>
+            Srinivas, H.,{" "}
+            <em>Urban Environmental Management: Concepts, Frameworks, and Practice</em>. GDRC
+            Research Output, Concept Note Series E-259. Kobe: Global Development Research Center.
+          </li>
+          <li>
+            European Commission, <em>European Green Capital Award — Rules of Contest</em>. Brussels:
+            DG Environment.
+          </li>
+          <li>
+            United Nations (2015),{" "}
+            <em>
+              Sustainable Development Goal 11: Make cities inclusive, safe, resilient and
+              sustainable
+            </em>
+            .
+          </li>
+        </ul>
+
+        <h3 className="!mt-8 font-serif text-lg text-foreground">
+          City climate and environmental strategies
+        </h3>
+        <ul className="list-none space-y-2 text-sm text-muted-foreground">
+          <li>Città di Torino / CMCC, climate risk analysis and Piano di Resilienza Climatica.</li>
+          <li>Ajuntament de Barcelona (2018), Climate Plan 2018–2030.</li>
+          <li>Comune di Bologna, BlueAP — Local Adaptation Strategy.</li>
+          <li>Comune di Milano / CMCC, Piano Aria e Clima and climate risk analysis.</li>
+          <li>City of Copenhagen (2011), Climate Adaptation Plan.</li>
+          <li>Ville de Paris (2024), Plan Climat 2024–2030.</li>
+          <li>City of Vienna, Smart Climate City Strategy and climate adaptation.</li>
+          <li>City of Rotterdam, Climate Change Adaptation Strategy.</li>
+        </ul>
+
+        <h3 className="!mt-8 font-serif text-lg text-foreground">Earth observation</h3>
+        <ul className="list-none space-y-2 text-sm text-muted-foreground">
+          <li>
+            Committee on Earth Observation Satellites,{" "}
+            <em>The CEOS Database: Earth observation satellite missions and instruments</em>.
+            https://database.eohandbook.com
+          </li>
+          <li>
+            Novaspace (2024), <em>Earth Observation Satellite Systems</em>.
+          </li>
+          <li>
+            Guliyeva, S., & Boccardo, P. (2026), &ldquo;Geospatial Technologies for Flood and
+            Drought Management: A Review of Earth Observation Data, Procedures, and their
+            Operational Effectiveness&rdquo;, <em>Aerotecnica Missili & Spazio</em>, 105(5), pp.
+            707–728.
+          </li>
+          <li>
+            Destefanis, T., Guliyeva, S., Boccardo, P., & Fissore, V. (2025), &ldquo;Advancing flood
+            detection and mapping: A review of Earth observation services, 3D data integration, and
+            AI-based techniques&rdquo;, <em>Remote Sensing</em>, 17(17), 2943.
+          </li>
+        </ul>
+
+        <h3 className="!mt-8 font-serif text-lg text-foreground">Digital twins and maturity</h3>
         <ul className="list-none space-y-2 text-sm text-muted-foreground">
           <li>
             Abdelrahman, M. et al. (2025), &ldquo;What is a Digital Twin anyway? Deriving the
