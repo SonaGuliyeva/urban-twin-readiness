@@ -401,26 +401,80 @@ function ResultsPage() {
       {/* 3. Where to start */}
       <CollapsibleSection id="roadmap" eyebrow="Roadmap" title="Where to start">
         <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
-          You do not need everything at once. A suggested order, starting from the lowest-cost,
-          highest-value sources.
+          How cities actually adopt satellite data: the main blockers are skills and budget, not the
+          data itself. Start small and build up.
         </p>
-        <ol className="mt-6 space-y-4">
-          <li className="grid gap-3 rounded-lg border border-border bg-card p-5 shadow-card sm:grid-cols-[120px_1fr] sm:gap-6">
-            <div>
-              <p className="text-xs font-semibold text-accent">Phase 1</p>
-              <span className="mt-2 inline-block rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
-                Start here
-              </span>
+        <ol className="mt-6 space-y-3">
+          {[
+            {
+              label: "Start here",
+              title: "Start with one objective",
+              body: "Pick the most pressing objective rather than trying everything at once.",
+            },
+            {
+              label: "No budget needed",
+              title: "Use the free data first",
+              body: "Bring in the open satellite layers above (Copernicus, Landsat). You can begin without spending.",
+            },
+            {
+              label: "Prove it",
+              title: "Pilot on a small area",
+              body: "Test it on one district or a set of objects before going city-wide, to show the value — as Turin did.",
+            },
+            {
+              label: "Where free is not enough",
+              title: "Fill the gaps",
+              body: "Add commercial imagery where the open data falls short (if you have a budget), and partner with a university or provider for the skills.",
+            },
+            {
+              label: "Keep it going",
+              title: "Scale and sustain",
+              body: "Expand to more objects and objectives, and secure a recurring budget and staff training.",
+            },
+          ].map((step, i) => (
+            <li
+              key={step.title}
+              className="grid gap-3 rounded-lg border border-border bg-card p-5 shadow-card sm:grid-cols-[150px_1fr] sm:gap-6"
+            >
+              <div>
+                <p className="text-xs font-semibold text-accent">Step {i + 1}</p>
+                <span className="mt-2 inline-block rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
+                  {step.label}
+                </span>
+              </div>
+              <div>
+                <h3 className="font-serif text-lg text-foreground">{step.title}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <details className="mt-5 rounded-lg border border-border bg-card p-5">
+          <summary className="cursor-pointer font-serif text-base text-foreground">
+            The datasets, by priority
+          </summary>
+          <div className="mt-4">
+            <p className="text-xs font-semibold text-accent">Essential</p>
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {datasets
+                .filter((d) => d.priority === "essential")
+                .map((d) => (
+                  <span
+                    key={d.name}
+                    className="rounded-full border border-border bg-muted px-2.5 py-1 text-xs text-foreground/80"
+                  >
+                    {d.name}
+                  </span>
+                ))}
             </div>
-            <div>
-              <h3 className="font-serif text-lg text-foreground">Essential datasets</h3>
-              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                Non-negotiable for the selected objectives — acquire these first, favouring open
-                sources where available.
-              </p>
-              <div className="mt-3 flex flex-wrap gap-1.5">
+          </div>
+          {datasets.some((d) => d.priority === "recommended") && (
+            <div className="mt-4">
+              <p className="text-xs font-semibold text-accent">Recommended</p>
+              <div className="mt-2 flex flex-wrap gap-1.5">
                 {datasets
-                  .filter((d) => d.priority === "essential")
+                  .filter((d) => d.priority === "recommended")
                   .map((d) => (
                     <span
                       key={d.name}
@@ -431,67 +485,8 @@ function ResultsPage() {
                   ))}
               </div>
             </div>
-          </li>
-          {datasets.some((d) => d.priority === "recommended") && (
-            <li className="grid gap-3 rounded-lg border border-border bg-card p-5 shadow-card sm:grid-cols-[120px_1fr] sm:gap-6">
-              <div>
-                <p className="text-xs font-semibold text-accent">Phase 2</p>
-                <span className="mt-2 inline-block rounded-full border border-border bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground">
-                  Build capacity
-                </span>
-              </div>
-              <div>
-                <h3 className="font-serif text-lg text-foreground">Recommended datasets</h3>
-                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                  Once essentials are in place, these sharpen accuracy and add resolution.
-                </p>
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {datasets
-                    .filter((d) => d.priority === "recommended")
-                    .map((d) => (
-                      <span
-                        key={d.name}
-                        className="rounded-full border border-border bg-muted px-2.5 py-1 text-xs text-foreground/80"
-                      >
-                        {d.name}
-                      </span>
-                    ))}
-                </div>
-              </div>
-            </li>
           )}
-          <li className="grid gap-3 rounded-lg border border-border bg-card p-5 shadow-card sm:grid-cols-[120px_1fr] sm:gap-6">
-            <div>
-              <p className="text-xs font-semibold text-accent">Phase 3</p>
-              <span className="mt-2 inline-block rounded-full border border-border bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground">
-                Advance
-              </span>
-            </div>
-            <div>
-              <h3 className="font-serif text-lg text-foreground">
-                {nextLevelInfo
-                  ? `Reach ${nextLevelInfo.title.replace(/^Level \d+ . /, "")}`
-                  : "Sustain and refine"}
-              </h3>
-              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                {nextLevelInfo
-                  ? "Once the data foundation above is in place, these steps move toward the next maturity level."
-                  : "This is already the most advanced maturity level. Focus shifts to sustaining data quality and governance."}
-              </p>
-              <ul className="mt-3 space-y-1.5">
-                {(nextLevelInfo?.nextSteps ?? levelInfo.nextSteps).map((step) => (
-                  <li
-                    key={step}
-                    className="flex gap-2.5 text-sm leading-relaxed text-foreground/80"
-                  >
-                    <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent" />
-                    {step}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </li>
-        </ol>
+        </details>
       </CollapsibleSection>
 
       <p className="mt-10 text-sm text-muted-foreground print:hidden">
