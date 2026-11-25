@@ -79,14 +79,10 @@ export function TurinViewer() {
           <div>
             <h1>A first look at each object of the Turin city model</h1>
             <p>
-              Po&ndash;Stura confluence district. Satellite measurements attached to each object of
-              a 3D city model (CityGML): 1,988 buildings, 1,800 land-use areas, 1,258 vegetation
-              objects, 828 pedestrian areas, 39 water bodies, 5 bridges, and the 82 road segments of
-              the published analysis. Each of the four objective views answers one environmental
-              objective a city selects in the assessment, and Result combines them. A temperature is
-              shown on an object only where the object covers a whole thermal pixel; elsewhere the
-              reading belongs to the surroundings and is labelled so. Click any object; the scenes
-              behind every number are listed below.
+              Po&ndash;Stura confluence district: 1,988 buildings, 1,800 land-use areas, 1,258
+              vegetation objects, 828 pedestrian areas, 39 water bodies, 5 bridges and 82 road
+              segments. Each view answers one of the four objectives; Result puts them together.
+              Click any object to see what was measured for it.
             </p>
           </div>
           <div className="modes" role="group" aria-label="Colour the city by">

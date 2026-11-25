@@ -469,11 +469,9 @@ function ResultsPage() {
         <section className="mt-10 rounded-xl border border-border bg-card p-6 print:hidden">
           <h2 className="font-serif text-2xl text-foreground">This profile was actually used</h2>
           <p className="mt-3 max-w-3xl leading-relaxed text-foreground/85">
-            These are Turin's own answers. The city ended up holding eight of the thirteen
-            essential datasets listed below; the five it did not, radar imagery, soil moisture,
-            precipitation records, evaporative stress and a standardised precipitation index,
-            turned out to be the limits of what the result could then say. Attaching the rest to
-            5,918 city objects left 1,662 of them, 28%, meeting at least one environmental check.
+            These are Turin's own answers, and most of the data below is what the city went on to
+            add. Attached to 5,918 city objects, it left 1,662 of them, 28%, with at least one
+            environmental problem worth looking at.
           </p>
           <Link
             to="/turin"

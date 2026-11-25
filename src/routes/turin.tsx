@@ -69,17 +69,13 @@ function TurinPage() {
         <h2 className="font-serif text-2xl text-foreground">Turin's own assessment</h2>
         <p className="mt-3 max-w-3xl leading-relaxed text-foreground/85">
           Before the study, Turin had a static 3D model with terrain, building heights and road
-          condition, and no environmental data in it. Those are the answers to this tool's
-          assessment, for the four objectives above. The profile it produces lists what the city
-          would need to add.
+          condition, and no environmental data in it. Those are its answers to this assessment, for
+          the four objectives above.
         </p>
         <p className="mt-3 max-w-3xl leading-relaxed text-foreground/85">
-          The profile lists thirteen essential datasets. Turin ended up holding eight of them, and
-          the five it did not are the ones the study then missed: with no soil moisture, no
-          precipitation record and no standardised precipitation index, the dry summer of 2025
-          could not be attributed to a water deficit from the city's own data, and with no radar
-          imagery the flood result had to be checked against an external emergency mapping
-          product. The gaps the assessment names are the limitations the work ran into.
+          Most of what the profile asks for is what Turin went on to add. What it left out, rainfall
+          and soil moisture records and radar images, is what the results could not then speak
+          about.
         </p>
         <Link
           to="/results"

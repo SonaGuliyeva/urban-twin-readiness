@@ -140,7 +140,7 @@ function colourOf(f){
 }
 var LEG={
  screening:["All four objectives",[[BASE_COL.bld,"nothing flagged"],[SEV[1],"1 indicator"],[SEV[2],"2 indicators"],[SEV[3],"3 or more"],[BASE_COL.wat,"water"]]],
- heat:["Reduce urban heat · surface temperature, 22 July 2022",[["rgb(240,228,195)","below 39 °C"],["rgb(214,142,70)","39 to 41 °C"],["rgb(140,36,22)","41 °C and above"],[NODATA,"object smaller than one pixel"],[BASE_COL.wat,"water, not measured"]]],
+ heat:["Reduce urban heat · surface temperature, 22 July 2022",[["rgb(240,228,195)","below 39 °C"],["rgb(214,142,70)","39 to 41 °C"],["rgb(140,36,22)","41 °C and above"],[NODATA,"not measured on this object"],[BASE_COL.wat,"water, not measured"]]],
  drought:["Prepare for drought · summers under stress, 2018–2025",[[BASE_COL.bld,"none"],["rgb(213,168,92)","1 to 2 years"],["rgb(177,106,40)","3 to 4 years"],[BASE_COL.wat,"water, not assessed"]]],
  flood:["Reduce river flood risk · exposure",[[SEV[0],"outside the hazard zone"],["rgb(184,207,224)","partly in the hazard zone"],["rgb(46,108,158)","fully in the hazard zone"],["rgb(30,90,150)","flooded in November 2016"]]],
  green:["Expand green and blue infrastructure · tree canopy",[["rgb(63,107,58)","30 % and above under tree crowns"],["rgb(157,184,130)","10 to 30 %"],["rgb(231,226,210)","below 10 %"],["rgb(158,47,28)","little greenery and much sealed surface"],[NODATA,"canopy not measured"]]]

@@ -192,11 +192,9 @@ export function TurinStory() {
           <p className="mt-6 max-w-3xl text-sm leading-relaxed text-foreground/85">
             The same four checks were then applied to 5,918 city objects of six classes (buildings,
             vegetation, pedestrian areas, land use, water bodies and bridges). 1,662 of them, 28%,
-            meet at least one. The share is lower than the 74% of the road network because a check
-            is run only where the sensor resolves the object: 3,676 objects are smaller than a
-            single 30 m thermal pixel, so their temperature describes the surroundings and the heat
-            check is not run on them. An eight-year record picked out 2022 and 2025 as the unusual
-            summers, without being told which years to look for.
+            meet at least one. The share is lower than for the roads because a check is only run on
+            an object the satellite can actually see on its own. An eight-year record picked out
+            2022 and 2025 as the unusual summers, without being told which years to look for.
           </p>
         </Fold>
       </div>
