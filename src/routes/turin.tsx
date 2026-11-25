@@ -1,6 +1,36 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { TurinStory } from "@/components/turin/turin-story";
 import { TurinViewer } from "@/components/turin/turin-viewer";
+import { getDatasetsForObjectives } from "@/data";
+import { encodeStatus, type HaveStatus, type StatusMap } from "@/components/results/readiness";
+
+/**
+ * The objectives, starting point and data Turin held before the study, written as an answer to
+ * this tool's own assessment. The link below opens the resulting profile, so that what the tool
+ * recommends can be read against what Turin in fact added and what came out of it.
+ */
+const TURIN_OBJECTIVES = ["flood-risk", "uhi", "drought", "green-infra"];
+const TURIN_ANSWERS: Record<string, HaveStatus> = {
+  "High-Resolution Digital Elevation Model (DEM/DTM)": "have",
+  "Urban Morphology & Building Heights": "have",
+  "Critical Infrastructure & Exposure Layer": "have",
+  "Park & Green Asset Inventory": "have",
+  "Flood Hazard & Risk Maps": "partial",
+  "Urban Tree Canopy & Green Space Maps": "partial",
+};
+
+function turinSearch() {
+  const pool = getDatasetsForObjectives(TURIN_OBJECTIVES, "status", false);
+  const status: StatusMap = {};
+  for (const d of pool) status[d.name] = TURIN_ANSWERS[d.name] ?? "missing";
+  return {
+    objectives: TURIN_OBJECTIVES.join(","),
+    level: "status" as const,
+    start: "status",
+    have: encodeStatus(pool.map((d) => d.name), status),
+    city: "Turin",
+  };
+}
 
 export const Route = createFileRoute("/turin")({
   head: () => ({
@@ -34,6 +64,31 @@ function TurinPage() {
       </div>
 
       <TurinStory />
+
+      <section className="mt-12 rounded-lg border border-border bg-card p-6">
+        <h2 className="font-serif text-2xl text-foreground">Turin's own assessment</h2>
+        <p className="mt-3 max-w-3xl leading-relaxed text-foreground/85">
+          Before the study, Turin had a static 3D model with terrain, building heights and road
+          condition, and no environmental data in it. Those are the answers to this tool's
+          assessment, for the four objectives above. The profile it produces lists what the city
+          would need to add.
+        </p>
+        <p className="mt-3 max-w-3xl leading-relaxed text-foreground/85">
+          The profile lists thirteen essential datasets. Turin ended up holding eight of them, and
+          the five it did not are the ones the study then missed: with no soil moisture, no
+          precipitation record and no standardised precipitation index, the dry summer of 2025
+          could not be attributed to a water deficit from the city's own data, and with no radar
+          imagery the flood result had to be checked against an external emergency mapping
+          product. The gaps the assessment names are the limitations the work ran into.
+        </p>
+        <Link
+          to="/results"
+          search={turinSearch()}
+          className="mt-5 inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
+        >
+          Open Turin's data profile &rarr;
+        </Link>
+      </section>
 
       <Link
         to="/configure"

@@ -8,20 +8,23 @@ var cv=root.querySelector("#tv-c"),ctx=cv.getContext("2d"),panel=root.querySelec
 var css=getComputedStyle(root);
 function tok(n){return css.getPropertyValue(n).trim();}
 var SEV=[tok("--s0"),tok("--s1"),tok("--s2"),tok("--s3")];
-var BASE_COL={bld:tok("--c-bld"),veg:tok("--c-veg"),sq:tok("--c-sq"),road:tok("--c-road"),wat:tok("--c-wat"),land:tok("--c-land")};
+var BASE_COL={bld:tok("--c-bld"),veg:tok("--c-veg"),sq:tok("--c-sq"),road:tok("--c-road"),wat:tok("--c-wat"),land:tok("--c-land"),brg:tok("--c-road")};
+var NODATA=tok("--nodata");
 
 var SETS=[{file:base+"study_area.json",kind:"aoi"},{file:base+"land_use.json",kind:"land"},
+          {file:base+"bridges.json",kind:"brg"},
           {file:base+"water.json",kind:"wat"},
           {file:base+"vegetation.json",kind:"veg"},{file:base+"squares.json",kind:"sq"},
           {file:base+"roads.json",kind:"road"},{file:base+"buildings.json",kind:"bld"}];
-var LAYER={land:0,wat:1,veg:2,sq:3,road:4,bld:5};
+var LAYER={land:0,wat:1,veg:2,sq:3,brg:4,road:5,bld:6};
 // In the screening view the legend doubles as a filter: each row can be switched off
 // so that only the objects of interest stay on screen.
 var FILT={};                       // "<mode>:<bucket>" -> false when switched off
 var FKEYS={screening:["0","1","2","3","wat"],
-           heat:["h0","h1","h2","h3","nm","wat"],
+           heat:["h0","h1","h2","nm","wat"],
            drought:["d0","d1","d2","wat"],
-           flood:["f0","f1","f2","f3"]};
+           flood:["f0","f1","f2","f3"],
+           green:["g0","g1","g2","gd","nm"]};
 // Which legend row an object belongs to, matching colourOf exactly. Roads are coloured
 // by their own criteria count in every view, so outside the screening view they sit in
 // no row of the legend and are never filtered; the same holds for anything unclassified.
@@ -34,13 +37,18 @@ function bucket(f){
   if(f.kind==="road")return null;
   if(mode==="heat"){
     if(f.kind==="wat")return "wat";
-    var v=p.LST_MEAN; if(v==null)return "nm";
-    return v<38?"h0":(v<41?"h1":(v<44?"h2":"h3"));
+    var v=p.LST_MEASURED_C; if(v==null)return "nm";
+    return v<39?"h0":(v<41?"h1":"h2");
   }
   if(mode==="drought"){
     if(f.kind==="wat")return "wat";
     var y=+p.N_YEARS_STRESSED||0;
     return y===0?"d0":(y<3?"d1":"d2");
+  }
+  if(mode==="green"){
+    if(p.GREEN_INFRA_DEFICIT==="yes")return "gd";
+    var k=p.CANOPY_PCT; if(k==null)return "nm";
+    return k>=30?"g0":(k>=10?"g1":"g2");
   }
   if(mode==="flood"){
     if(p.FLOODED_2016==="yes")return "f3";
@@ -106,7 +114,7 @@ function counts(){
   root.querySelector("#counts").innerHTML=
     '<div><b>'+n.toLocaleString("en")+'</b>objects</div>'+
     '<div><b>'+fl.toLocaleString("en")+'</b>flagged</div>'+
-    '<div><b>'+Math.round(100*fl/n)+'%</b>of the district</div>';
+    '<div><b>'+Math.round(100*fl/n)+'%</b>of all objects</div>';
 }
 
 // ---- colour by mode
@@ -118,20 +126,24 @@ function colourOf(f){
   if(f.kind==="road"){ return (+p.n_criteria>0)?SEV[Math.min(3,+p.n_criteria)]:BASE_COL.road; }
   if(f.kind==="wat"&&mode!=="flood"){ return BASE_COL.wat; }
   if(mode==="screening"){ var n=+p.N_INDICATORS||0; return n?SEV[Math.min(3,n)]:(BASE_COL[f.kind]||SEV[0]); }
-  if(mode==="heat"){ var v=p.LST_MEAN; if(v==null)return BASE_COL[f.kind]||SEV[0];
-    return ramp((v-34)/(45-34),HEAT); }
+  if(mode==="heat"){ var v=p.LST_MEASURED_C; if(v==null)return NODATA;
+    return ramp((v-36)/(44-36),HEAT); }
   if(mode==="drought"){ var y=+p.N_YEARS_STRESSED; if(!y)return BASE_COL[f.kind]||SEV[0];
     return ramp(y/5,[rgb("#e8d6a0"),rgb("#c98a2e"),rgb("#8c3b1e")]); }
+  if(mode==="green"){ if(p.GREEN_INFRA_DEFICIT==="yes")return "rgb(158,47,28)";
+    var k=p.CANOPY_PCT; if(k==null)return NODATA;
+    return ramp(Math.min(1,k/45),[rgb("#e7e2d2"),rgb("#9db882"),rgb("#3f6b3a")]); }
   if(mode==="flood"){ if(p.FLOODED_2016==="yes")return "rgb(30,90,150)";
     var q=+p.PGRA_M_PCT; if(!q)return BASE_COL[f.kind]||SEV[0];
     return ramp(q/100,[rgb("#b8cfe0"),rgb("#2e6c9e")]); }
   return SEV[0];
 }
 var LEG={
- screening:["Screening result",[[BASE_COL.bld,"nothing flagged"],[SEV[1],"1 indicator"],[SEV[2],"2 indicators"],[SEV[3],"3 or more"],[BASE_COL.wat,"water"]]],
- heat:["Surface temperature, 22 July 2022",[["rgb(234,196,135)","below 38 °C"],["rgb(212,130,64)","38 to 41 °C"],["rgb(178,73,36)","41 to 44 °C"],["rgb(140,36,22)","44 °C and above"],[BASE_COL.bld,"not measured"],[BASE_COL.wat,"water, not measured"]]],
- drought:["Years when the greenery was under drought stress, 2018–2025",[[BASE_COL.bld,"none"],["rgb(213,168,92)","1 to 2 years"],["rgb(177,106,40)","3 to 4 years"],[BASE_COL.wat,"water, not assessed"]]],
- flood:["Flood exposure",[[SEV[0],"outside the hazard zone"],["rgb(184,207,224)","partly in the hazard zone"],["rgb(46,108,158)","fully in the hazard zone"],["rgb(30,90,150)","flooded in November 2016"]]]
+ screening:["All four objectives",[[BASE_COL.bld,"nothing flagged"],[SEV[1],"1 indicator"],[SEV[2],"2 indicators"],[SEV[3],"3 or more"],[BASE_COL.wat,"water"]]],
+ heat:["Reduce urban heat · surface temperature, 22 July 2022",[["rgb(240,228,195)","below 39 °C"],["rgb(214,142,70)","39 to 41 °C"],["rgb(140,36,22)","41 °C and above"],[NODATA,"object smaller than one pixel"],[BASE_COL.wat,"water, not measured"]]],
+ drought:["Prepare for drought · summers under stress, 2018–2025",[[BASE_COL.bld,"none"],["rgb(213,168,92)","1 to 2 years"],["rgb(177,106,40)","3 to 4 years"],[BASE_COL.wat,"water, not assessed"]]],
+ flood:["Reduce river flood risk · exposure",[[SEV[0],"outside the hazard zone"],["rgb(184,207,224)","partly in the hazard zone"],["rgb(46,108,158)","fully in the hazard zone"],["rgb(30,90,150)","flooded in November 2016"]]],
+ green:["Expand green and blue infrastructure · tree canopy",[["rgb(63,107,58)","30 % and above under tree crowns"],["rgb(157,184,130)","10 to 30 %"],["rgb(231,226,210)","below 10 %"],["rgb(158,47,28)","little greenery and much sealed surface"],[NODATA,"canopy not measured"]]]
 };
 function setLegend(){ var L=LEG[mode]; legend.hidden=false;
   root.querySelector("#legend-title").textContent=L[0];
@@ -259,7 +271,7 @@ function pick(px,py){
         if(ex*ex+ey*ey<36)return g; } } }
   return null;
 }
-var CLASS={bld:"Building",veg:"Vegetation object",sq:"Pedestrian area",road:"Road segment",wat:"Water body",land:"Land-use area"};
+var CLASS={bld:"Building",veg:"Vegetation object",sq:"Pedestrian area",road:"Road segment",wat:"Water body",land:"Land-use area",brg:"Bridge"};
 function num(v,d,u){ if(v===null||v===undefined||v==="")return null;
   var x=+v; if(isNaN(x))return String(v); return x.toFixed(d===undefined?2:d)+(u||""); }
 function dl(rows){ var out=rows.filter(function(r){return r[1]!=null;});
@@ -268,11 +280,11 @@ function grp(title,body,note,lead){ if(!body)return "";
   return '<div class="grp"><h3>'+title+'</h3>'+(lead?'<p class="lead">'+lead+'</p>':'')+body+
          (note?'<p class="note">'+note+'</p>':'')+'</div>'; }
 function tech(t){ return ' <span class="tech">'+t+'</span>'; }
-var PLURAL={bld:"buildings",veg:"green areas",sq:"pedestrian areas",wat:"water bodies",land:"land-use areas"};
+var PLURAL={bld:"buildings",veg:"green areas",sq:"pedestrian areas",wat:"water bodies",land:"land-use areas",brg:"bridges"};
 function heatLead(p,kind){
-  if(p.LST_MEAN==null)return null;
+  if(p.LST_MEASURED_C==null)return null;
   var a=p.LST_ANOM_K,r=p.LST_RANK_PCT,parts=[];
-  parts.push("On the summer day measured it was "+(+p.LST_MEAN).toFixed(1)+" \u00B0C here");
+  parts.push("On the summer day measured it was "+(+p.LST_MEASURED_C).toFixed(1)+" \u00B0C here");
   if(a!=null)parts.push(Math.abs(a).toFixed(1)+" K "+(a>=0?"warmer":"cooler")+" than the district as a whole");
   if(r!=null)parts.push("warmer than "+Math.round(r)+" % of the "+(PLURAL[kind]||"objects"));
   return parts.join(", ")+".";

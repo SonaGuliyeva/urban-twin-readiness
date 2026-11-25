@@ -465,13 +465,32 @@ function ResultsPage() {
       </section>
 
       {/* Turin worked example lives on its own page */}
-      <p className="mt-10 text-sm text-muted-foreground print:hidden">
-        Want to see how a real city did it?{" "}
-        <Link to="/turin" className="font-medium text-primary underline-offset-4 hover:underline">
-          See how Turin added satellite data to its digital twin
-        </Link>
-        .
-      </p>
+      {city?.trim().toLowerCase() === "turin" ? (
+        <section className="mt-10 rounded-xl border border-border bg-card p-6 print:hidden">
+          <h2 className="font-serif text-2xl text-foreground">This profile was actually used</h2>
+          <p className="mt-3 max-w-3xl leading-relaxed text-foreground/85">
+            These are Turin's own answers. The city ended up holding eight of the thirteen
+            essential datasets listed below; the five it did not, radar imagery, soil moisture,
+            precipitation records, evaporative stress and a standardised precipitation index,
+            turned out to be the limits of what the result could then say. Attaching the rest to
+            5,918 city objects left 1,662 of them, 28%, meeting at least one environmental check.
+          </p>
+          <Link
+            to="/turin"
+            className="mt-5 inline-flex items-center rounded-md border border-border bg-surface-elevated px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
+          >
+            See what came out of it &rarr;
+          </Link>
+        </section>
+      ) : (
+        <p className="mt-10 text-sm text-muted-foreground print:hidden">
+          Want to see how a real city did it?{" "}
+          <Link to="/turin" className="font-medium text-primary underline-offset-4 hover:underline">
+            See how Turin added satellite data to its digital twin
+          </Link>
+          .
+        </p>
+      )}
 
       {/* Why: situational awareness before the event */}
       <section className="mt-10 rounded-xl border border-primary/25 bg-primary/5 p-6 sm:p-8">

@@ -91,15 +91,37 @@ export const TURIN_SEGMENTS: TurinSegment[] = [
   { id: 82, street: "Ponte Diga", lst: 32.9, ndviAir: -0.17, imperviousPct: 92.4, distRiverM: 0.0, envStressed: true, droughtStressed: false, thermalStressed: false },
 ];
 
+// Road-network result exactly as published (Chapter 3). The object-level result for the
+// whole city model is in OBJECT_SUMMARY below.
 export const TURIN_SUMMARY = {
   segmentCount: 82,
-  envStressedCount: 47,
-  droughtStressedCount: 17,
-  thermalStressedCount: 20,
+  envStressedCount: 61,
+  droughtStressedCount: 40,
+  greenDeficitCount: 24,
+  thermalStressedCount: 21,
+  floodExposedCount: 9,
   lstMean: 39.9,
   lstMin: 32.9,
   lstMax: 44.2,
-  thermalThresholdC: 41.3,
+  thermalThresholdC: 41.2,
   acquisitionDate: "22 July 2022",
   source: "SDGSAT-1 TIS + airborne/Sentinel-2 NDVI-NDWI",
+};
+
+/**
+ * The same four checks applied to every object of the city model. A criterion is evaluated only
+ * where the sensor actually resolves the object: 3,676 of the 5,918 objects are smaller than one
+ * 30 m thermal pixel, so for those the temperature describes the surroundings and the heat check
+ * is not run. That is why the share here is lower than the 74 % of the road network, whose 30 m
+ * analysis strips always cover a whole pixel.
+ */
+export const OBJECT_SUMMARY = {
+  objectCount: 5918,
+  flaggedCount: 1662,
+  flaggedPct: 28,
+  classes: 6,
+  contextTemperatureCount: 3676,
+  heatEvaluatedCount: 2242,
+  years: "2018-2025",
+  anomalousSummers: [2022, 2025],
 };

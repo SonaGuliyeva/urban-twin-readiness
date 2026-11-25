@@ -6,6 +6,7 @@
   --accent: #0d5f63;
   --s0: #b9bfbe; --s1: #e3a93c; --s2: #cf6b28; --s3: #9e2f1c;
   --c-bld: #e0dacd; --c-veg: #b5caa4; --c-sq: #e4dbc5; --c-wat: #9cbdd4; --c-land: #dcd9cc; --c-road: #6f7a7d;
+  --nodata: #b4bcc0;
   display: grid; grid-template-rows: auto 1fr;
   height: min(86vh, 900px); min-height: 600px;
   border: 1px solid var(--rule); border-radius: 14px; overflow: hidden;

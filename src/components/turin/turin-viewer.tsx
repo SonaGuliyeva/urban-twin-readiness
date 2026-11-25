@@ -57,10 +57,11 @@ const OTHER_SOURCES: string[][] = [
 ];
 
 const MODES = [
-  { id: "screening", label: "Screening result" },
-  { id: "heat", label: "Surface temperature" },
+  { id: "screening", label: "Result" },
+  { id: "heat", label: "Summer heat" },
   { id: "drought", label: "Drought stress" },
   { id: "flood", label: "Flood exposure" },
+  { id: "green", label: "Green infrastructure" },
 ];
 
 export function TurinViewer() {
@@ -76,13 +77,16 @@ export function TurinViewer() {
       <div ref={rootRef} className="tv">
         <div className="tv-head">
           <div>
-            <h1>Environmental screening of city objects, Turin</h1>
+            <h1>A first look at each object of the Turin city model</h1>
             <p>
               Po&ndash;Stura confluence district. Satellite measurements attached to each object of
-              a 3D city model (CityGML): 1,987 buildings, 1,800 land-use areas, 1,258 vegetation
-              objects, 828 pedestrian areas, the Po and Stura di Lanzo water bodies, and the 82 road
-              segments of the published analysis. Click any object; the scenes behind every number
-              are listed below.
+              a 3D city model (CityGML): 1,988 buildings, 1,800 land-use areas, 1,258 vegetation
+              objects, 828 pedestrian areas, 39 water bodies, 5 bridges, and the 82 road segments of
+              the published analysis. Each of the four objective views answers one environmental
+              objective a city selects in the assessment, and Result combines them. A temperature is
+              shown on an object only where the object covers a whole thermal pixel; elsewhere the
+              reading belongs to the surroundings and is labelled so. Click any object; the scenes
+              behind every number are listed below.
             </p>
           </div>
           <div className="modes" role="group" aria-label="Colour the city by">
@@ -97,7 +101,7 @@ export function TurinViewer() {
           <div className="stage">
             <canvas id="tv-c" />
             <div className="legend" id="legend" hidden>
-              <h3 id="legend-title">Screening result</h3>
+              <h3 id="legend-title">All four objectives</h3>
               <div id="legend-body" />
             </div>
             <div className="hint">
