@@ -151,6 +151,10 @@ function ResultsPage() {
   const toAdd = minimumEO
     .filter((d) => !isInTwin(d))
     .sort((a, b) => a.rank - b.rank || Number(isPartial(a)) - Number(isPartial(b)));
+  // What the city already has, and the commercial options unlocked by a budget.
+  const haveCount = datasets.filter((d) => status[d.name] === "have").length;
+  const commercialDatasets = datasets.filter((d) => d.cost === "commercial");
+  const showCommercial = budget && commercialDatasets.length > 0;
   const LEVEL_ORDER: ImplementationLevel[] = [
     "status",
     "informative",
@@ -258,13 +262,52 @@ function ResultsPage() {
         </div>
       </header>
 
+      {/* Your answers — a plain recap of what the city told the tool */}
+      <section className="mt-8 rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
+        <h2 className="font-serif text-2xl text-foreground">Your answers</h2>
+        <div className="mt-5 grid gap-5 sm:grid-cols-3">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Objectives
+            </p>
+            <p className="mt-1.5 text-sm leading-relaxed text-foreground">
+              {selected.map((o) => o.label).join(", ")}
+            </p>
+          </div>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Data you already have
+            </p>
+            <p className="mt-1.5 text-sm leading-relaxed text-foreground">
+              {Object.keys(status).length === 0
+                ? "Not specified"
+                : `${haveCount} of ${datasets.length} datasets`}
+            </p>
+          </div>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Budget
+            </p>
+            <p className="mt-1.5 text-sm leading-relaxed text-foreground">
+              {budget ? "Open and commercial data" : "Open data only"}
+            </p>
+          </div>
+        </div>
+        <p className="mt-5 border-t border-border pt-4 text-sm leading-relaxed text-muted-foreground">
+          Based on this, below is the satellite data to add
+          {budget ? ", the commercial imagery a budget unlocks," : ""} and a step-by-step path for
+          where to start.
+        </p>
+      </section>
+
       {/* Jump-to section nav — sticky under the main site header */}
       <nav
         aria-label="Sections in this profile"
         className="sticky top-0 z-10 -mx-6 mt-0 flex gap-1 overflow-x-auto border-b border-border bg-background/95 px-6 py-2.5 backdrop-blur supports-[backdrop-filter]:bg-background/80 print:hidden"
       >
         {[
-          { id: "readiness", label: "Readiness" },
+          { id: "readiness", label: "Data to add" },
+          ...(showCommercial ? [{ id: "commercial", label: "Commercial" }] : []),
           { id: "summary", label: "Summary" },
           { id: "datasets", label: "Datasets" },
           { id: "roadmap", label: "Roadmap" },
@@ -416,6 +459,48 @@ function ResultsPage() {
         )}
       </section>
 
+      {/* Commercial imagery — only when the city indicated a budget */}
+      {showCommercial && (
+        <section id="commercial" className="mt-10 scroll-mt-16">
+          <div className="rounded-xl border border-amber-500/30 bg-amber-500/5 p-6 shadow-card sm:p-8">
+            <h2 className="font-serif text-3xl text-foreground">
+              With a budget: commercial imagery
+            </h2>
+            <p className="mt-3 max-w-3xl text-base leading-relaxed text-foreground/85">
+              You indicated the city can invest in data. These paid products add resolution, speed
+              or all-weather coverage beyond the open baseline above. Use them where the free data
+              is not enough — the open data stays the foundation.
+            </p>
+            <ul className="mt-6 grid gap-3 md:grid-cols-2">
+              {commercialDatasets.map((d) => (
+                <li key={d.name} className="rounded-lg border border-border bg-card p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <p className="font-medium text-foreground">{d.name}</p>
+                    <span className="shrink-0 rounded border border-amber-500/40 bg-amber-500/10 px-1.5 py-0.5 text-[11px] font-semibold text-amber-700">
+                      Commercial
+                    </span>
+                  </div>
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                    {d.description}
+                  </p>
+                  {d.examples.length > 0 && (
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      <span className="font-semibold text-foreground/70">Examples: </span>
+                      {d.examples.join(", ")}
+                    </p>
+                  )}
+                  {(d.resolution || d.access) && (
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {[d.resolution, d.access].filter(Boolean).join(" · ")}
+                    </p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
+
       {/* Summary */}
       <section id="summary" className="mt-12 grid gap-6 lg:grid-cols-[2fr_1fr]">
         <article className="rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
@@ -469,11 +554,11 @@ function ResultsPage() {
         <section className="mt-10 rounded-xl border border-border bg-card p-6 print:hidden">
           <h2 className="font-serif text-2xl text-foreground">This profile was actually used</h2>
           <p className="mt-3 max-w-3xl leading-relaxed text-foreground/85">
-            These are Turin's own answers. The city ended up holding eight of the thirteen
-            essential datasets listed below; the five it did not, radar imagery, soil moisture,
-            precipitation records, evaporative stress and a standardised precipitation index,
-            turned out to be the limits of what the result could then say. Attaching the rest to
-            5,918 city objects left 1,662 of them, 28%, meeting at least one environmental check.
+            These are Turin's own answers. The city ended up holding eight of the thirteen essential
+            datasets listed below; the five it did not, radar imagery, soil moisture, precipitation
+            records, evaporative stress and a standardised precipitation index, turned out to be the
+            limits of what the result could then say. Attaching the rest to 5,918 city objects left
+            1,662 of them, 28%, meeting at least one environmental check.
           </p>
           <Link
             to="/turin"
