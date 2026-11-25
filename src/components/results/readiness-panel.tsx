@@ -122,8 +122,8 @@ export function ReadinessPanel({
                 your twin
                 {eoGaps > 0 && (
                   <>
-                    ; <span className="font-medium text-eo">{eoGaps}</span> can be obtained
-                    from satellite data
+                    ; <span className="font-medium text-eo">{eoGaps}</span> can be obtained from
+                    satellite data
                   </>
                 )}
                 .
