@@ -287,9 +287,13 @@ function ResultsPage() {
       </section>
 
       {/* 1. Data to add */}
-      <section className="mt-10">
-        <h2 className="font-serif text-3xl text-foreground">Satellite data to add</h2>
-        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+      <CollapsibleSection
+        id="data-to-add"
+        eyebrow="What to add"
+        title="Satellite data to add"
+        defaultOpen
+      >
+        <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
           These datasets bring environmental information into your digital twin. Where your city
           already has something more detailed, keep it.
         </p>
@@ -352,13 +356,16 @@ function ResultsPage() {
             </ul>
           </details>
         )}
-      </section>
+      </CollapsibleSection>
 
-      {/* 2. Commercial imagery â only when the city indicated a budget */}
+      {/* 2. Commercial imagery — only when the city indicated a budget */}
       {showCommercial && (
-        <section className="mt-10">
-          <h2 className="font-serif text-3xl text-foreground">With a budget: commercial imagery</h2>
-          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+        <CollapsibleSection
+          id="commercial"
+          eyebrow="If you have a budget"
+          title="Commercial imagery"
+        >
+          <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
             You indicated the city can invest in data. These paid products add resolution, speed or
             all-weather coverage beyond the open baseline. Use them where free data is not enough.
           </p>
@@ -388,13 +395,12 @@ function ResultsPage() {
               </li>
             ))}
           </ul>
-        </section>
+        </CollapsibleSection>
       )}
 
       {/* 3. Where to start */}
-      <section className="mt-10">
-        <h2 className="font-serif text-3xl text-foreground">Where to start</h2>
-        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+      <CollapsibleSection id="roadmap" eyebrow="Roadmap" title="Where to start">
+        <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
           You do not need everything at once. A suggested order, starting from the lowest-cost,
           highest-value sources.
         </p>
@@ -486,7 +492,7 @@ function ResultsPage() {
             </div>
           </li>
         </ol>
-      </section>
+      </CollapsibleSection>
 
       <p className="mt-10 text-sm text-muted-foreground print:hidden">
         Want to see how a real city did it?{" "}
