@@ -216,8 +216,8 @@ export function TurinStory() {
           2026
         </a>
         ); the environmental enrichment is the work presented in this thesis. Your city can follow
-        the same path: keep the detailed data you have, and add satellite data to see how
-        things change. The 3D view above shows the result on individual city objects.
+        the same path: keep the detailed data you have, and add satellite data to see how things
+        change. The 3D view above shows the result on individual city objects.
       </p>
     </section>
   );
